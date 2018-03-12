@@ -10,6 +10,8 @@
 
 #include <cstdlib>
 #include <time.h> 
+#include <iostream>
+#include <sstream>
 
 #include "gtest/gtest.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
@@ -29,34 +31,48 @@ int maxReceptors=10;
 int maxPos=1000;
 int maxRays=100;
 
-// Setup simulation with one source and one receptor
-void setup_1source_1recepteur(Simulation* simu,
-							  int nbRaysPerSource=0, 
-							  int accelerator=2,
-							  vec3 source_pos=vec3(5,0,0),
-							  vec3 recepteur_pos=vec3(15,0,0),
-							  leafTreatment::treatment leaf_treatment = leafTreatment::FIRST){
+
+
+// Convert an unsigned int to a string
+std::string toStr (unsigned int i) {
+    std::ostringstream s;
+    s << i;
+    return s.str();
+}
+
+// Setup a simulation 
+void setup( Simulation* simu,
+		   	int nbRaysPerSource=0, 
+			int accelerator=2,
+			const vector<vec3>& source_pos = vector<vec3>(1,vec3(5,0,0)),
+			const vector<vec3>& recepteur_pos = vector<vec3>(1,vec3(15,0,0)),
+			leafTreatment::treatment leaf_treatment = leafTreatment::FIRST)
+{
 
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
 
-	// Init relevant config params:
+	//Init relevant config params:
 	config->NbRaysPerSource = nbRaysPerSource;
 	config->Accelerator = accelerator;
 	config->KeepDebugRay=true;
 	
-	// Add a source:
-	Source source;
-	source.setPosition(source_pos);
-	source.setSampler(new UniformSphericSampler2(nbRaysPerSource)); 
-	source.setInitialRayCount(config->NbRaysPerSource);
-	source.setName("src1");
-	simu->addSource(source);
+	// Add sources:
+	for(unsigned int i=0;i<source_pos.size();i++){
+		Source source;
+		source.setPosition(source_pos[i]);
+		source.setSampler(new UniformSphericSampler2(nbRaysPerSource)); 
+		source.setInitialRayCount(config->NbRaysPerSource);
+		source.setName("src"+ toStr(i+1));
+		simu->addSource(source);
+	}
 
-	// Add a receptor:
-	Recepteur r(recepteur_pos,(decimal)0.3);
-	r.setName("rcpt1");
-	simu->addRecepteur(r);
+	// Add receptors:
+	for(unsigned int i=0;i<recepteur_pos.size();i++){
+		Recepteur r(recepteur_pos[i],(decimal)0.3);
+		r.setName("rcpt"+ toStr(i+1));
+		simu->addRecepteur(r);
+	}
 
 	// Create a solver
 	TYANIME3DRayTracerSolverAdapter* solver=new TYANIME3DRayTracerSolverAdapter();
@@ -74,7 +90,6 @@ void setup_1source_1recepteur(Simulation* simu,
 	simu->setEngine();
 }
 
-
 // Setup simulation with a random number of sources/receptors with random position and throwing a random number of rays
 void setup_random(Simulation* simu,
 	std::vector<Source>& sources,
@@ -84,7 +99,8 @@ void setup_random(Simulation* simu,
 	int nbRaysPerSource=-1,
 	unsigned int nbSources=-1,
 	unsigned int nbRecepteurs=-1,
-	int accelerator=2){
+	int accelerator=2)
+{
 
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
@@ -111,9 +127,9 @@ void setup_random(Simulation* simu,
 		source.setId(sources.size());
 		source.setSampler(new UniformSphericSampler2(nbRaysPerSource)); 
 		source.setInitialRayCount(config->NbRaysPerSource);
-		source.setName("src"+sources.size());
+		source.setName("src"+toStr(sources.size()+1));
 
-		//check that the new source is not too close from other sources
+		// check that the new source is not too close from other sources
 		bool keepSource=true;
 		for(unsigned int i=0;i<sources.size();i++){
 			if(sources.at(i).getPosition().distance(pos)<10){
@@ -135,10 +151,10 @@ void setup_random(Simulation* simu,
 		vec3 pos=vec3((decimal)(rand() % 1000 + 1),(decimal)(rand() % maxPos + 1),(decimal)(rand() % maxPos + 1));
 
 		Recepteur recepteur(pos,3);
-		recepteur.setName("rcpt"+recepteurs.size());
+		recepteur.setName("rcpt"+toStr(recepteurs.size()+1));
 		recepteur.setId(recepteurs.size());
 
-		//check that the new receptor is not too close from other receptors
+		// check that the new receptor is not too close from other receptors
 		bool keepReceptor=true;
 		for(unsigned int i=0;i<recepteurs.size();i++){
 			if(recepteurs.at(i).getPosition().distance(pos)<10){
@@ -170,18 +186,16 @@ void setup_random(Simulation* simu,
 
 	// Engine setup (DefaultEngine):
 	simu->setEngine();
-
 }
 
-// Test source in simple scene with one source and opne receptor
-TEST(test_simulation_1source_1recepteur, test_source)
-{
+// Test source in simple scene with one source and one receptor
+TEST(test_simulation_1source_1recepteur, test_source){
 
 	// Create a ray tracer
 	Simulation simu;
 
 	// Setup
-	setup_1source_1recepteur(&simu,10);
+	setup(&simu,10);
 
 	// Throw rays
 	simu.launchSimulation();
@@ -194,54 +208,52 @@ TEST(test_simulation_1source_1recepteur, test_source)
 	Source source=sources.at(0);
 
 	
-	EXPECT_EQ("src1",source.getName());						//Test name
-	EXPECT_EQ(0,source.getId());							//Test id
-	EXPECT_TRUE(source.getPosition().compare(vec3(5,0,0))); //Test position
-	EXPECT_EQ(10,source.getInitialRayCount());				//Test initial number of rays
-	EXPECT_EQ(0,source.getNbRayLeft());						//Test nb rays left
+	EXPECT_EQ("src1",source.getName());						// Test name
+	EXPECT_EQ(0,source.getId());							// Test id
+	EXPECT_TRUE(source.getPosition().compare(vec3(5,0,0))); // Test position
+	EXPECT_EQ(10,source.getInitialRayCount());				// Test initial number of rays
+	EXPECT_EQ(0,source.getNbRayLeft());						// Test nb rays left
 
 	// Clean simulation
 	simu.clean();
 }
 
-// Test receptor in simple scene with one source and opne receptor
-TEST(test_simulation_1source_1recepteur, test_recepteur)
-{
+// Test receptor in simple scene with one source and one receptor
+TEST(test_simulation_1source_1recepteur, test_recepteur){
 
 	// Create a ray tracer
 	Simulation simu;
 
 	// Setup
-	setup_1source_1recepteur(&simu);
+	setup(&simu);
 
 	// Throw rays
 	simu.launchSimulation();
 
-	std::vector<Recepteur>& recepteurs=simu.getRecepteurs();
+	std::vector<Recepteur> recepteurs=simu.getRecepteurs();
 
 	// Test number of receptors
 	EXPECT_EQ(1,recepteurs.size());
 
 	Recepteur recepteur=recepteurs.at(0);
 
-	//Test name, id and pos
-	EXPECT_EQ("rcpt1",recepteur.getName());						//Test name
-	EXPECT_EQ(recepteur.getId(),0);								//Test id
-	EXPECT_TRUE(recepteur.getPosition().compare(vec3(15,0,0)));	//Test position
+	// Test name, id and pos
+	EXPECT_EQ("rcpt1",recepteur.getName());						// Test name
+	EXPECT_EQ(recepteur.getId(),0);								// Test id
+	EXPECT_TRUE(recepteur.getPosition().compare(vec3(15,0,0)));	// Test position
 
 	// Clean simulation
 	simu.clean();
 }
 
-// Test valid ray in simple scene with one source and opne receptor
-TEST(test_simulation_1source_1recepteur, test_valid_ray)
-{
+// Test valid ray in simple scene with one source and one receptor
+TEST(test_simulation_1source_1recepteur, test_valid_ray){
 
 	// Create a ray tracer
 	Simulation simu;
 
 	// Setup
-	setup_1source_1recepteur(&simu);
+	setup(&simu);
 
 	// Throw rays
 	simu.launchSimulation();
@@ -262,33 +274,128 @@ TEST(test_simulation_1source_1recepteur, test_valid_ray)
 	Recepteur* ray_recepteur=(static_cast<Recepteur*>(valid_ray->getRecepteur()));
 
 	// Test original source versus valid_ray source 
-	EXPECT_EQ(source.getName(),ray_source->getName());							//Test name
-	EXPECT_TRUE(source.getPosition().compare(ray_source->getPosition()));		//Test position
-	EXPECT_EQ(source.getId(),ray_source->getId());								//Test id
+	EXPECT_EQ(source.getName(),ray_source->getName());							// Test name
+	EXPECT_TRUE(source.getPosition().compare(ray_source->getPosition()));		// Test position
+	EXPECT_EQ(0,ray_source->getId());								// Test id
 
 	// Test original receptor versus valid_ray receptor
-	EXPECT_EQ(recepteur.getName(),ray_recepteur->getName());					//Test name
-	EXPECT_TRUE(recepteur.getPosition().compare(ray_recepteur->getPosition()));	//Test position
-	//EXPECT_EQ(recepteur.getId(),ray_recepteur->getId());						//ray_recepteur id is invalid
+	EXPECT_EQ(recepteur.getName(),ray_recepteur->getName());					// Test name
+	EXPECT_TRUE(recepteur.getPosition().compare(ray_recepteur->getPosition()));	// Test position
+	EXPECT_EQ(0,ray_recepteur->getId());						// ray_recepteur id is invalid
 
 	// Test ray 
-	EXPECT_EQ(0,valid_ray->getNbEvents());	//Test number of events
-	EXPECT_EQ(0,valid_ray->getDiff());		//Test number of diffractions
-	EXPECT_EQ(0,valid_ray->getReflex());	//Test number of reflections
-	EXPECT_EQ(10,valid_ray->getLongueur());	//Test length
+	EXPECT_EQ(0,valid_ray->getNbEvents());	// Test number of events
+	EXPECT_EQ(0,valid_ray->getDiff());		// Test number of diffractions
+	EXPECT_EQ(0,valid_ray->getReflex());	// Test number of reflections
+	EXPECT_EQ(10,valid_ray->getLongueur());	// Test length
 
 	// Clean simulation
 	simu.clean();
-
 }
 
-// Test with one obstacle between the source and the receptor
-TEST(test_simulation_1source_1recepteur, test_obstacle)
-{
+// Test valid ray in simple scene with one source and three aligned receptors
+TEST(test_simulation_1source_3recepteur, test_3_aligned_receptors){
+
 	// Create a ray tracer
 	Simulation simu;
 
-	//Create dummy material
+
+	vector<vec3> pos_recepteurs;
+	pos_recepteurs.push_back(vec3(10,5,0));
+	pos_recepteurs.push_back(vec3(15,5,0));
+	pos_recepteurs.push_back(vec3(20,5,0));
+
+	// Setup
+	setup(&simu,0,2,vector<vec3>(1,vec3(0,5,0)),pos_recepteurs,leafTreatment::ALL_BEFORE_TRIANGLE );
+
+	// Throw rays
+	simu.launchSimulation();
+
+	std::vector<Source>& sources=simu.getSources();
+	std::vector<Recepteur>& recepteurs=simu.getRecepteurs();
+
+	Source source=sources.at(0);
+	Recepteur recepteur=recepteurs.at(0);
+
+	std::deque<Ray*>* valid_rays=simu.getSolver()->getValidRays();
+
+	Recepteur* ray_recepteur;
+	EXPECT_EQ(3,valid_rays->size());		// Test number of valid rays
+
+	for(unsigned int i=0;i<valid_rays->size();i++){
+		Ray* valid_ray=valid_rays->at(i);
+		Source* ray_source=valid_ray->getSource();
+		ray_recepteur=(static_cast<Recepteur*>(valid_ray->getRecepteur()));
+		
+		EXPECT_EQ("src1",ray_source->getName());							// Test source name
+		EXPECT_TRUE(ray_source->getPosition().compare(vec3(0,5,0)));		// Test source position
+		EXPECT_EQ(0,ray_source->getId());									// Test source id
+
+		EXPECT_EQ("rcpt"+toStr(i+1),ray_recepteur->getName());					// Test receptor name
+		EXPECT_TRUE(ray_recepteur->getPosition().compare(pos_recepteurs[i]));	// Test receptor position
+		EXPECT_EQ(i,ray_recepteur->getId());									// Test receptor id
+	}
+
+	// Clean simulation
+	simu.clean();
+}
+
+
+TEST(){
+}
+// Test valid ray in simple scene with one source and three aligned receptors
+TEST(test_simulation_1source_2recepteur, close_receptors){
+
+	// Create a ray tracer
+	Simulation simu;
+
+
+	vector<vec3> pos_recepteurs;
+	pos_recepteurs.push_back(vec3(1000,1000,1000));
+	pos_recepteurs.push_back(vec3(1000.1,1000.1,1000.1));
+
+	// Setup
+	setup(&simu,0,2,vector<vec3>(1,vec3(0,5,0)),pos_recepteurs,leafTreatment::ALL_BEFORE_TRIANGLE );
+
+	// Throw rays
+	simu.launchSimulation();
+
+	std::vector<Source>& sources=simu.getSources();
+	std::vector<Recepteur>& recepteurs=simu.getRecepteurs();
+
+	Source source=sources.at(0);
+	Recepteur recepteur=recepteurs.at(0);
+
+	std::deque<Ray*>* valid_rays=simu.getSolver()->getValidRays();
+
+	Recepteur* ray_recepteur;
+	EXPECT_EQ(2,valid_rays->size());		// Test number of valid rays
+
+	for(unsigned int i=0;i<valid_rays->size();i++){
+		Ray* valid_ray=valid_rays->at(i);
+		Source* ray_source=valid_ray->getSource();
+		ray_recepteur=(static_cast<Recepteur*>(valid_ray->getRecepteur()));
+		
+		EXPECT_EQ("src1",ray_source->getName());							// Test source name
+		EXPECT_TRUE(ray_source->getPosition().compare(vec3(0,5,0)));		// Test source position
+		EXPECT_EQ(0,ray_source->getId());									// Test source id
+
+		EXPECT_EQ("rcpt"+toStr(i+1),ray_recepteur->getName());					// Test receptor name
+		EXPECT_TRUE(ray_recepteur->getPosition().compare(pos_recepteurs[i]));	// Test receptor position
+		EXPECT_EQ(i,ray_recepteur->getId());									// Test receptor id
+	}
+
+	// Clean simulation
+	simu.clean();
+}
+
+
+// Test with one obstacle between the source and the receptor
+TEST(test_simulation_1source_1recepteur, test_obstacle){
+	// Create a ray tracer
+	Simulation simu;
+
+	// Create dummy material
 	Material* mat=new Material();
 
 	// Add an obstacle between the source and the receptor
@@ -299,7 +406,7 @@ TEST(test_simulation_1source_1recepteur, test_obstacle)
 	simu.getScene()->addTriangle(p1,p2,p3,mat);
 
 	// Setup
-	setup_1source_1recepteur(&simu);
+	setup(&simu);
 	
 	// Throw rays
 	simu.launchSimulation();
@@ -313,10 +420,8 @@ TEST(test_simulation_1source_1recepteur, test_obstacle)
 	simu.clean();
 }
 
-
 // Test the reflection of rays with a source traped between two triangles and a maximum of 4 reflections
-TEST(test_simulation_1source_1recepteur, test_reflection1)
-{
+TEST(test_simulation_1source_1recepteur, test_reflection1){
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
 	config->MaxReflexion=4;
@@ -324,7 +429,7 @@ TEST(test_simulation_1source_1recepteur, test_reflection1)
 	// Create a ray tracer
 	Simulation simu;
 
-	//Create dummy material
+	// Create dummy material
 	Material* mat=new Material();
 
 	// Add triangle obstacles 5 units to right and 5 units to the left of the source (wich is at x=5)
@@ -342,7 +447,7 @@ TEST(test_simulation_1source_1recepteur, test_reflection1)
 	simu.getScene()->addTriangle(p4,p5,p6,mat);
 
 	// Setup
-	setup_1source_1recepteur(&simu);
+	setup(&simu);
 	
 	// Throw rays
 	simu.launchSimulation();
@@ -359,48 +464,48 @@ TEST(test_simulation_1source_1recepteur, test_reflection1)
 	std::vector<Source> sources=simu.getSources();
 	std::vector<Recepteur> recepteurs=simu.getRecepteurs();
 
-	EXPECT_EQ(1,sources.size());		 //Test number of sources
-	EXPECT_EQ(1,recepteurs.size());		 //Test number of receptors
+	EXPECT_EQ(1,sources.size());		 // Test number of sources
+	EXPECT_EQ(1,recepteurs.size());		 // Test number of receptors
 
 	Source source=sources.at(0);
 	Recepteur recepteur=recepteurs.at(0);
 
-	//Possible directions of the ray
+	// Possible directions of the ray
 	vec3 dir_right=vec3(1,0,0);
 	vec3 dir_left=vec3(-1,0,0);
 
 	// Test ray 
-	EXPECT_EQ(0,ray->getDiff());									//Test number of diffractions
-	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				//Test number of reflections
-	EXPECT_TRUE(ray->getDirection().compare(dir_right));					//Test ray final direction									
-	EXPECT_EQ(35,ray->getLongueur());								//Test ray length
+	EXPECT_EQ(0,ray->getDiff());									// Test number of diffractions
+	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				// Test number of reflections
+	EXPECT_TRUE(ray->getDirection().compare(dir_right));			// Test ray final direction									
+	EXPECT_EQ(35,ray->getLongueur());								// Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
-	//Test number of events
+	// Test number of events
 	EXPECT_EQ(config->MaxReflexion,ray->getNbEvents());						
 	EXPECT_EQ(config->MaxReflexion,events->size());		 
 
-	//Test events
+	// Test events
 	std::shared_ptr<Event> e=events->at(0);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	// Test incoming direction
 
 	e=events->at(1);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		// Test incoming direction
 	
 	e=events->at(2);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	// Test incoming direction
 
 	e=events->at(3);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		// Test incoming direction
 	
 	
 	// Clean simulation
@@ -408,15 +513,14 @@ TEST(test_simulation_1source_1recepteur, test_reflection1)
 }
 
 // Test the reflection of a ray reflected multiple times before hiting the receptor
-TEST(test_simulation_1source_1recepteur, test_reflection2)
-{
+TEST(test_simulation_1source_1recepteur, test_reflection2){
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
 	
 	// Create a ray tracer
 	Simulation simu;
 
-	//Create dummy material
+	// Create dummy material
 	Material* mat=new Material();
 
 	// Add 3 triangles, one reflecting the ray upward, one reflecting rightward and one downward to the receptor
@@ -439,7 +543,7 @@ TEST(test_simulation_1source_1recepteur, test_reflection2)
 	simu.getScene()->addTriangle(p7,p8,p9,mat);
 
 	// Setup
-	setup_1source_1recepteur(&simu,0,2,vec3(-10,0,0),vec3(10,0,0));
+	setup(&simu,0,0,vector<vec3>(1,vec3(-10,0,0)),vector<vec3>(1,vec3(10,0,0)));
 	
 	// Throw rays
 	simu.launchSimulation();
@@ -462,61 +566,60 @@ TEST(test_simulation_1source_1recepteur, test_reflection2)
 	Source source=sources.at(0);
 	Recepteur recepteur=recepteurs.at(0);
 
-	//Possible directions of the ray
+	// Possible directions of the ray
 	vec3 dir_right=vec3(1,0,0);
 	vec3 dir_top=vec3(0,1,0);
 	vec3 dir_down=vec3(0,-1,0);
 
 	// Test ray 
-	EXPECT_EQ(0,ray->getDiff());						//Test number of diffractions
-	EXPECT_EQ(3,ray->getReflex());						//Test number of reflections
-	EXPECT_TRUE(ray->getDirection().compare(dir_down));	//Test ray final direction									
-	EXPECT_EQ(40,ray->getLongueur());					//Test ray length
+	EXPECT_EQ(0,ray->getDiff());						// Test number of diffractions
+	EXPECT_EQ(3,ray->getReflex());						// Test number of reflections
+	EXPECT_TRUE(ray->getDirection().compare(dir_down));	// Test ray final direction									
+	EXPECT_EQ(40,ray->getLongueur());					// Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
-	//Test number of events
+	// Test number of events
 	EXPECT_EQ(3,ray->getNbEvents());						
 	EXPECT_EQ(3,events->size());		 
 
-	//Test events
+	// Test events
 	std::shared_ptr<Event> e=events->at(0);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	// Test incoming direction
 
 	e=events->at(1);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
-	EXPECT_TRUE(vec3(0,10,0).compare(e.get()->getPosition()));			//Test position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_top));		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					// Test type
+	EXPECT_TRUE(vec3(0,10,0).compare(e.get()->getPosition()));			// Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_top));		// Test incoming direction
 
 	e=events->at(2);
-	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());								//Test type
-	//EXPECT_TRUE(vec3(10,10,0).compare(e.value->getPosition()));					//Test position  - Does not pass because of an accumulation of small errors in the directions of reflected rays
-	EXPECT_TRUE(vec3(10,10,0).compare(e.get()->getPosition(),(decimal).00001));		//Test distance with expected position
-	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));				//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());								// Test type
+	// EXPECT_TRUE(vec3(10,10,0).compare(e.value->getPosition()));					// Test position  - Does not pass because of an accumulation of small errors in the directions of reflected rays
+	EXPECT_TRUE(vec3(10,10,0).compare(e.get()->getPosition(),(decimal).00001));		// Test distance with expected position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));				// Test incoming direction
 	
 	// Clean simulation
 	simu.clean();
 }
 
 // Test the diffraction of a ray reflected multiple times before hiting the receptor
-TEST(test_simulation_1source_1recepteur, test_diffraction)
-{
-	tympan::LPSolverConfiguration solver_config =tympan::SolverConfiguration::get();
-	solver_config->NbRayWithDiffraction=50;
-	solver_config->UsePostFilters=false;
-	solver_config->UsePathDifValidation=false;
-	solver_config->DiffractionFilterRayAtCreation=false;
+TEST(test_simulation_1source_1recepteur, test_diffraction){
+	
 
 	// Create a ray tracer
 	Simulation simu;
 
+	//Configure the solver
+	tympan::LPSolverConfiguration solver_config =tympan::SolverConfiguration::get();
+	solver_config->UsePostFilters=false;						//Disable selectors
+	solver_config->UsePathDifValidation=false;					//Do not test for path difference when validating intersections
+
+	//Configure the ray tracer 
 	AcousticRaytracerConfiguration* ray_tracer_config = simu.getConfiguration();
-	ray_tracer_config->NbRayWithDiffraction=50;
-	ray_tracer_config->UsePostFilter=false;
-	ray_tracer_config->UsePathDifValidation=false;
-	ray_tracer_config->DiffractionFilterRayAtCreation=false;
+	ray_tracer_config->NbRayWithDiffraction=50;					//Set number of rays thrown when a ray is diffracted	
+	ray_tracer_config->DiffractionFilterRayAtCreation=false;	//Filter rays not thrown in the shadow of the obstacle when a ray is diffracted
 
 	// Create dummy material
 	Material material;
@@ -546,7 +649,7 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 	simu.getScene()->addTriangle(p5,p8,p6,&material);
 	
 	// Setup
-	setup_1source_1recepteur(&simu,0,0,vec3(-10,(decimal)50.2,(decimal)25),vec3(60,(decimal)50.2,(decimal)25),leafTreatment::ALL_BEFORE_VISIBLE);
+	setup(&simu,0,0,vector<vec3>(1,vec3(-10.f,50.2f,25.f)),vector<vec3>(1,vec3(60.f,50.2f,25.f)),leafTreatment::ALL_BEFORE_VISIBLE);
 	simu.getRecepteurs().at(0).setRadius((decimal)0.2);
 	
 	// Throw rays
@@ -578,13 +681,15 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 	EXPECT_EQ(1,rays[0]); // 1 direct ray
 	EXPECT_EQ(2,rays[1]); // 2 rays diffracted once (one per diffraction edge)
 	EXPECT_EQ(1,rays[2]); // 1 ray diffracted twice
-	EXPECT_EQ(0,rays[3]); // 0 reflected rays expected
+	EXPECT_EQ(0,rays[3]); // 0 reflected rays expected	
+
+	//Reset the solver configuration
+	tympan::SolverConfiguration::set(new tympan::SolverConfiguration());
 	
 }
 
 // Test simulation with 0 source and 0 receptor
-TEST(test_simulation_0source_0receptor, test_0source_0receptor)
-{
+TEST(test_simulation_0source_0receptor, test_0source_0receptor){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -621,8 +726,7 @@ TEST(test_simulation_0source_0receptor, test_0source_0receptor)
 }
 
 // Test simulation with 0 source and 1 receptor
-TEST(test_simulation_0source_1receptor, test_0source_1receptor)
-{
+TEST(test_simulation_0source_1receptor, test_0source_1receptor){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -659,8 +763,7 @@ TEST(test_simulation_0source_1receptor, test_0source_1receptor)
 }
 
 // Test simulation with 1 source and 0 receptor
-TEST(test_simulation_1source_0receptor, test_1source_0receptor)
-{
+TEST(test_simulation_1source_0receptor, test_1source_0receptor){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -698,9 +801,8 @@ TEST(test_simulation_1source_0receptor, test_1source_0receptor)
 	simu.clean();
 }
 
-// Test sources in randomly generated scene
-TEST(test_simulation_random_init, test_sources)
-{
+// Test sources in a randomly generated scene
+TEST(test_simulation_random_init, test_sources){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -727,10 +829,10 @@ TEST(test_simulation_random_init, test_sources)
 		Source src_original=sources.at(i);
 		Source src_after_simulation=sources_after_simulation.at(i);
 
-		//  Test source
-		EXPECT_EQ(src_original.getName(),src_after_simulation.getName());					// Test name
-		EXPECT_EQ(src_original.getId(),src_after_simulation.getId());						// Test id
-		EXPECT_TRUE(src_original.getPosition().compare(src_after_simulation.getPosition()));	// Test position
+		// Test source
+		EXPECT_EQ("src"+toStr(i+1),src_after_simulation.getName());							// Test name
+		EXPECT_EQ(i,src_after_simulation.getId());											// Test id
+		EXPECT_TRUE(src_original.getPosition().compare(src_after_simulation.getPosition()));// Test position
 		EXPECT_EQ(nbRaysPerSource,src_after_simulation.getInitialRayCount());				// Test number of rays per source
 		EXPECT_EQ(0,src_after_simulation.getNbRayLeft());									// Test number of rays left
 
@@ -740,9 +842,8 @@ TEST(test_simulation_random_init, test_sources)
 	simu.clean();
 }
 
-// Test receptors with in randomly generated scene
-TEST(test_simulation_random_init, test_recepteurs)
-{
+// Test receptors in a randomly generated scene
+TEST(test_simulation_random_init, test_recepteurs){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -767,9 +868,9 @@ TEST(test_simulation_random_init, test_recepteurs)
 		Recepteur rcpt_original=recepteurs.at(i);
 		Recepteur rcpt_after_simulation=recepteurs_after_simulation.at(i);
 
-		//  Test recepteur
-		EXPECT_EQ(rcpt_original.getName(),rcpt_after_simulation.getName());						// Test name
-		EXPECT_EQ(rcpt_original.getId(),rcpt_after_simulation.getId());							// Test id
+		// Test recepteur
+		EXPECT_EQ("rcpt"+toStr(i+1),rcpt_after_simulation.getName());								// Test name
+		EXPECT_EQ(i,rcpt_after_simulation.getId());												// Test id
 		EXPECT_TRUE(rcpt_original.getPosition().compare(rcpt_after_simulation.getPosition()));	// Test position
 
 	}
@@ -778,10 +879,8 @@ TEST(test_simulation_random_init, test_recepteurs)
 	simu.clean();
 }
 
-
 // Test number of rays per source equals zero
-TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_equals_0)
-{
+TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_equals_0){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -833,13 +932,10 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_equals_0)
 
 	// Clean simulation
 	simu.clean();
-
 }
 
-
 // Test valid rays in randomly generated scene
-TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_random)
-{
+TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_random){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -890,12 +986,10 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_random)
 
 	// Clean simulation
 	simu.clean();
-
 }
 
 // Test debug rays in randomly generated scene
-TEST(test_simulation_random_init, test_debug_rays_nbRaysPerSource_random)
-{
+TEST(test_simulation_random_init, test_debug_rays_nbRaysPerSource_random){
 
 	// Create a ray tracer
 	Simulation simu;
@@ -948,5 +1042,12 @@ TEST(test_simulation_random_init, test_debug_rays_nbRaysPerSource_random)
 
 	// Clean simulation
 	simu.clean();
+}
 
+typedef std::pair<unsigned int, unsigned int> segment;
+typedef std::map<unsigned int , segment > mapColinearSegments;
+
+TEST(t1,t2){
+	std::vector<bool> isGround(10,false);
+	cerr<<"haha"<<endl;
 }
