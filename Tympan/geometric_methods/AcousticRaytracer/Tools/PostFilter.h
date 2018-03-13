@@ -124,6 +124,8 @@ protected:
         return tabRays.erase(iter);
     }
 
+
+
 protected:
 
 	std::deque<Ray*> *_tabRays;	//!< Rays tab: pointers list of rays

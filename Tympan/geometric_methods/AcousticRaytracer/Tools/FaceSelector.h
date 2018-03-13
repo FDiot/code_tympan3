@@ -186,6 +186,13 @@ public:
         }
     }
 
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
+
 protected:
     std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath; //!< Histories of all selected rays so far
     TYPEHISTORY modeHistory;	//!< TYPEHISTORY used by this Selector (by default, HISTORY_FACE)
