@@ -185,6 +185,14 @@ public :
     */ 
     void setOperator(OPERATOR _op) { op = _op; }
 
+
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
+
 protected:
     int maxReflectionOrder;		//!< Reflection maximal number for this Selector criteria
     bool acceptGround;			//!< Flag to accept or not the reflection on the ground
