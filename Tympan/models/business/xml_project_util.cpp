@@ -69,6 +69,23 @@ void save_project(const char* filename, const LPTYProjet& project)
     }
 }
 
+std::vector<LPTYElement> load_elements(const char* filename)
+{
+    TYXMLManager xmlManager;
+    LPTYElementArray elements;
+    TYElement::setRegenerateID(true); // Force le renouvellement de  l'ID des elements charges
+
+    // Load XML file
+    int is_loaded = xmlManager.load(filename, elements);
+    if (is_loaded != 1)
+    {
+        throw tympan::invalid_data("XML file could not be loaded ")
+            << tympan_source_loc
+            << boost::errinfo_file_name(filename);
+    }
+
+    TYElement::setRegenerateID(false);
+    return elements;
+}
+
 } /* namespace tympan */
-
-

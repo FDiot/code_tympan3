@@ -3,7 +3,7 @@ import json
 from io import StringIO
 import os
 
-from tympan.models import filter_output
+from tympan.models import filter_output, Spectrum
 from tympan.models import _solver as cysolver
 from tympan import _business2solver
 
@@ -23,6 +23,51 @@ for category, options in _CONFIG_MODEL.items():
     for option in options:
         _SOLVER_CONFIG_ATTRS.append((options[option]['type'], option))
 _CONFIG_MAP = dict((optname, _CONVERTERS[opttype]) for opttype, optname in _SOLVER_CONFIG_ATTRS)
+
+
+class Source(object):
+    """An acoustic source.
+
+    Parameters
+    ----------
+
+    position : tuple
+        (x, y, z) coordinates
+    spectrum : Spectrum
+        acoustic power spectrum
+    shift : int, optional
+        the number of the first frequence for which a DB value is given
+        (frequences start at 16 Hz and end at 16000Hz, 31 values in total)
+    directivity: Directivity, optional
+        source directivity
+    """
+
+    def __init__(self, position, spectrum, directivity=None):
+        self.position = position
+        self.spectrum= spectrum
+        if directivity is None:
+            directivity = cysolver.Directivity()
+        self.directivity = directivity
+
+
+class Receptor(object):
+    """An acoustic receptor.
+
+    Parameters
+    ----------
+
+    position : tuple
+        (x, y, z) coordinates
+    """
+
+    def __init__(self, position):
+        self.position = position
+        self._spectrum = Spectrum()
+
+    @property
+    def spectrum(self):
+        """Acoustic power spectrum of this Receptor."""
+        return self._spectrum
 
 
 class Model(object):
@@ -48,26 +93,13 @@ class Model(object):
             model._converter.build_receptors(model._model)
         return model
 
-    def add_source(self, position, spectrum_values, shift=0, directivity=None):
-        """Add an acoustic source to the model
+    def add_source(self, source):
+        """Add an acoustic source to the model."""
+        return self._model._add_source(
+            source.position, source.spectrum, source.directivity)
 
-        Params:
-
-            - position is a (x, y, z) tuple
-            - spectrum_values is a np array containing the DB values of a power
-              spectrum
-            - shift is the number of the first frequence for which a DB value
-              is given (frequences start at 16 Hz and end at 16000Hz,
-              31 values in total).
-
-        Add the corresponding acoustic source to the solver model (the acoustic
-        source is created with a SphericalFaceDirectivity)
-        """
-        directivity = directivity or cysolver.Directivity()
-        return self._model._add_source(position, spectrum_values, shift, directivity)
-
-    def add_receptor(self, x, y ,z):
-        return self._model.add_receptor(x, y, z)
+    def add_receptor(self, receptor):
+        return self._model.add_receptor(*receptor.position)
 
     def export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model
@@ -189,7 +221,8 @@ def _set_solver_config(parameters_fp):
     """Setup solver configuration"""
     parser = configparser.RawConfigParser()
     parser.optionxform = str  # keep param names case
-    parser.readfp(parameters_fp)
+    # Deprecated soon: parser.readfp(parameters_fp)
+    parser.read_file(parameters_fp)
     solver_config = cysolver.Configuration.get()
     errors = []
     for section in parser.sections():

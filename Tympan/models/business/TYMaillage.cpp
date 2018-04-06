@@ -236,6 +236,51 @@ int TYMaillage::fromXML(DOM_Element domElement)
     return 1;
 }
 
+void TYMaillage::exportCSV(const std::string& fileName)
+{
+    std::fstream f;
+    f.open(fileName, std::ios::out);
+
+    if (f.is_open())
+    {
+
+        f << "X" << ";" << "Y" << ";" << "Z" << ";"  << "Lp" << "\n";
+
+        TYTabLPPointCalcul& tabPoints = getPtsCalcul();
+        double value = 0.0;
+        LPTYPointCalcul pPtCalcul = NULL;
+        TYSpectre spectre;
+
+        for (int i = 0; i < tabPoints.size(); i++)
+        {
+            pPtCalcul = tabPoints[i];
+
+            // Valeur du scalaire pour la color map
+            switch (getDataType())
+            {
+                case TYMaillage::ValGlobalDBA:
+                default:
+                    value = pPtCalcul->getValA();
+                    break;
+                case TYMaillage::ValGlobalDBLin:
+                    value = pPtCalcul->getValLin();
+                    break;
+                case TYMaillage::DataFreq:
+                    spectre = *pPtCalcul->getSpectre();
+                    value = spectre.getValueReal(getDataFreq());
+                    break;
+            }
+
+            f << pPtCalcul->getCoordSIG()._x << ";" 
+              << pPtCalcul->getCoordSIG()._y << ";"
+              << pPtCalcul->getCoordSIG()._z << ";"
+              << value << "\n";
+        }
+    }
+
+    f.close();
+}
+
 void TYMaillage::updateFromCalcul(LPTYCalcul pCalcul)
 {
     std::vector<LPTYSpectre> *tabSpectre = pCalcul->getSpectrumDatas( getID() );

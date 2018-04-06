@@ -1,6 +1,47 @@
+import abc
 import sys
 import os
 from contextlib import contextmanager
+
+from ._common import (
+    Spectrum,
+)
+
+
+class Infrastructure(metaclass=abc.ABCMeta):
+    """Infrastructure"""
+
+    def __init__(self):
+        pass
+
+    @abc.abstractproperty
+    def name(self):
+        """Name of infrastructure"""
+
+    @abc.abstractproperty
+    def is_emitting(self):
+        """Emissivity of infrastructure"""
+
+    @abc.abstractmethod
+    def export_mesh(self):
+        """Return points, triangles"""
+
+    @abc.abstractproperty
+    def material_by_face(self):
+        """Return a material_by_face mapping"""
+
+
+class Building(Infrastructure):
+    """Building Infrastructure"""
+
+
+class Screen(Infrastructure):
+    """Screen Infrastructure"""
+
+
+class Machine(Infrastructure):
+    """Machine Infrastructure"""
+
 
 @contextmanager
 def filter_output(verbose=False, to=os.devnull, err_to=None):

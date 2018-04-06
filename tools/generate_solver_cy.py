@@ -4,22 +4,27 @@ generated code to handle SolverConfiguration class
 
 import json
 import os
+from os import path
 
 
-_CONFIG_MODEL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir,
-                                  'resources', 'solver_config_datamodel.json')
+ROOT_DIR = path.join(path.dirname(path.abspath(__file__)), os.pardir)
+
+_CONFIG_MODEL_FILE = path.join(ROOT_DIR,
+                               'resources', 'solver_config_datamodel.json')
 with open(_CONFIG_MODEL_FILE) as stream:
     _CONFIG_MODEL = json.load(stream)
 _SOLVER_CONFIG_ATTRIBUTES = []
-for options in _CONFIG_MODEL.itervalues():
+for options in _CONFIG_MODEL.values():
     for option in options:
         _SOLVER_CONFIG_ATTRIBUTES.append((options[option]['type'], option))
 
+def python_model_file(fname):
+    return path.join(ROOT_DIR, 'python', 'tympan', 'models', fname)
 
-with open('_solver.pxd', 'w') as output_stream:
+with open(python_model_file('_solver.pxd'), 'w') as output_stream:
     output_stream.write('''"""THIS FILE IS GENERATED, DON'T EDIT IT"""
 ''')
-    with open('_solver.pxd.in') as input_stream:
+    with open(python_model_file('_solver.pxd.in')) as input_stream:
         output_stream.write(input_stream.read())
     output_stream.write('''
 cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
@@ -29,10 +34,10 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         output_stream.write('        %s %s\n' % (attrtype, attrname))
 
 
-with open('_solver.pyx', 'w') as output_stream:
+with open(python_model_file('_solver.pyx'), 'w') as output_stream:
     output_stream.write('''"""THIS FILE IS GENERATED, DON'T EDIT IT"""
 ''')
-    with open('_solver.pyx.in') as input_stream:
+    with open(python_model_file('_solver.pyx.in')) as input_stream:
         output_stream.write(input_stream.read())
     output_stream.write('''
 cdef class Configuration:
