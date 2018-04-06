@@ -128,7 +128,7 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
     vec3 posLastEvent;
     switch (events.size())
     {
-        case 0: // Chemin direct source-recepteur
+        case 0: // Chemin direct source-lastPos
 			closestPoint = ref.closestPointOnLine(posSource, lastPos);
             return posSource.distance(closestPoint);
             break;
@@ -155,7 +155,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 {
     if (source == NULL)
     {
-        std::cerr << "Error : ray without source or receptor computePertinentLength" << endl;
+        std::cerr << "Error : ray without source (computePertinentLength)" << endl;
         return 0.;
     }
 
@@ -170,7 +170,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 
     switch (events.size())
     {
-        case 0: // Chemin direct source-recepteur
+        case 0: 
             // needs only computing of full (true) length
             return computeTrueLength(ref, lastPos, closestPoint);
             break;
@@ -274,6 +274,7 @@ decimal Ray::getSolidAngle( bool &diffraction)
 
 		if ( e && ( e->getType() == DIFFRACTION ) )
 		{
+			
 			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
 		}
 		else // else is done to be explicit

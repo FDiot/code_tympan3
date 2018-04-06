@@ -1,0 +1,7 @@
+echo "Configuring environment to run Code_TYMPAN GUI and Python scripts"
+export PATH=@TYMPAN_EXE_FULL_PATH@:$PATH
+export TYMPAN_SOLVERDIR=@TYMPAN_EXE_FULL_PATH@/plugins
+export LD_LIBRARY_PATH=@TYMPAN_EXE_FULL_PATH@/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=@TYMPAN_EXE_FULL_PATH@/cython:$PYTHONPATH
+export CGAL_BINDINGS_PATH=@TYMPAN_EXE_FULL_PATH@/cython/CGAL
+

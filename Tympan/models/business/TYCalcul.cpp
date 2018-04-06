@@ -1161,6 +1161,11 @@ void TYCalcul::setPtCtrlStatus(const TYUUID& id_pt, bool bStatus)
 
 }
 
+std::vector<LPTYSpectre> *TYCalcul::getSpectrumDatas(TYMaillage *pMaillage)
+{
+    return getSpectrumDatas( pMaillage->getID() );
+}
+
 std::vector<LPTYSpectre> *TYCalcul::getSpectrumDatas(const TYUUID& id)
 {
     TYMapIdTabSpectre::iterator it = _noiseMapsSpectrums.find(id);

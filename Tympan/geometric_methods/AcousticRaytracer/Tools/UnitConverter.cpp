@@ -25,9 +25,9 @@ void fromRadianToCarthesien(decimal theta, decimal phi, vec3& result)
     result.z = sin(theta);
 }
 
+
 void fromRadianToCarthesien2(decimal tetha, decimal phi, vec3& result)
 {
-    //std::cout<<"phi : "<<phi<<", tetha : "<<tetha<<std::endl;
     result.x = sin(tetha) * cos(phi);
     result.y = sin(tetha) * sin(phi);
     result.z = cos(tetha);

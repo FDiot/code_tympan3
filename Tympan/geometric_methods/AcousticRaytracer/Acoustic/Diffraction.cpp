@@ -18,7 +18,7 @@
 #include "Tools/UnitConverter.h"
 #include "Diffraction.h"
 
-
+// Filter diffraction rays that are not in the shadow zone (i.e area not hit by direct rays)
 bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T)
 {
 	decimal FT = from * T;
@@ -157,6 +157,7 @@ bool Diffraction::getResponse(vec3& r, bool force)
 		r = localRepere.vectorFromLocalToGlobal(localResponse);
 
 		bRep = (*responseValidator)(from, N1, N2, r);
+
 	}
 	while(!bRep);
 
