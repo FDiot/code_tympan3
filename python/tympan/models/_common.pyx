@@ -32,6 +32,13 @@ cdef otriangle2triangle(OTriangle* tri):
     triangle.thisptr = tri
     return triangle
 
+cdef OPoint3D cypoint2cpp(cy_point):
+    """ Build a TYPoint from a Point3D object """
+    cpp_point = cy.declare(OPoint3D)
+    cpp_point._x = cy_point.x
+    cpp_point._y = cy_point.y
+    cpp_point._z = cy_point.z
+    return cpp_point
 
 cdef class Spectrum:
 
@@ -102,6 +109,15 @@ cdef class Point3D:
     def __init__(self, x=0, y=0, z=0):
         self.thisobj._x = x
         self.thisobj._y = y
+        self.thisobj._z = z
+
+    def set_x(self, x):
+        self.thisobj._x = x
+
+    def set_y(self, y):
+        self.thisobj._y = y
+
+    def set_z(self, z):
         self.thisobj._z = z
 
     @property
