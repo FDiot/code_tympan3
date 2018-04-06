@@ -184,11 +184,13 @@ cdef extern from "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h":
 cdef extern from "Tympan/models/business/infrastructure/TYMachine.h":
     cdef cppclass TYMachine (TYAcousticVolumeNode):
         TYMachine()
+        vector[TYPoint]& sommets()
 
 cdef extern from "Tympan/models/business/infrastructure/TYBatiment.h":
     cdef cppclass TYBatiment(TYAcousticVolumeNode):
         TYBatiment()
         bool getIsRayonnant()
+        vector[TYPoint]& sommets()
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -322,6 +324,7 @@ cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
 cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
+        double getEpaisseur()
         double getEcartType()
         double getLongueur()
 

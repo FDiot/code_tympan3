@@ -69,7 +69,16 @@ cdef tyelement_name(TYElement* elem):
     except UnicodeDecodeError:
         return str.decode('cp1252')
 
-cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
+cdef cpp2cypoints(vector[TYPoint] cpp_points):
+    """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
+    """
+    points = []
+    for i in xrange(cpp_points.size()):
+            cy_point = cy.declare(tycommon.Point3D, tycommon.opoint3d2point3d(cpp_points[i]))
+            points.append(cy_point)
+    return points
+
+cdef cpp2cypoints_global(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
 
     Convert them to a global scale with the transform matrix 'matrix'
@@ -378,6 +387,12 @@ cdef class Ground:
         return self.thisptr.getRealPointer().getResistivite()
 
     @property
+    def width(self):
+        """Ground width (floating point value)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getEpaisseur()
+
+    @property
     def deviation(self):
         """Ground deviation (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
@@ -438,7 +453,11 @@ cdef class User_source:
     @property
     def name(self):
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        str = self.thisptr.getRealPointer().getName().toStdString()
+        try:
+            return str.decode()
+        except UnicodeDecodeError:
+            return str.decode('cp1252')
 
     @cy.locals(pos=tycommon.Point3D)
     def set_position(self, pos):
@@ -517,6 +536,13 @@ cdef class Engine:
         assert self.thisgeonodeptr.getRealPointer() != NULL
         return self.thisgeonodeptr.getRealPointer().getHauteur()
 
+    @property
+    def sommets(self):
+        """The sequence of vertexes forming the engine ('Point3D' objects)
+        """
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getRealPointer().sommets())
+        return cpp2cypoints(cpp_points)
+
 
 cdef class Building:
 
@@ -569,12 +595,24 @@ cdef class Building:
     def getIsRayonnant(self):
         return self.thisptr.getRealPointer().getIsRayonnant()
 
+    @property
+    def sommets(self):
+        """The sequence of vertexes forming the building ('Point3D' objects)
+        """
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getRealPointer().sommets())
+        return cpp2cypoints(cpp_points)
+
 cdef class Site:
 
     @property
     def elem_id(self):
         """SiteNode id"""
         return tyelement_id(self.thisptr.getRealPointer())
+
+    @property
+    def name(self):
+        """SiteNode name"""
+        return tyelement_name(self.thisptr.getRealPointer())
 
     @property
     def subsites(self):
@@ -773,7 +811,7 @@ cdef class Site:
         topo = cy.declare(cy.pointer(TYTopographie),
                           self.thisptr.getRealPointer().getTopographie().getRealPointer())
         cpp_points = cy.declare(vector[TYPoint], topo.getEmprise())
-        points = cpp2cypoints(cpp_points, self.matrix)
+        points = cpp2cypoints_global(cpp_points, self.matrix)
         cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]], topo.getListCrbNiv())
         make_level_curve = self.thisptr.getRealPointer().getUseEmpriseAsCrbNiv()
         if make_level_curve or cpp_lcurves.empty():
@@ -1075,12 +1113,17 @@ cdef class MaterialArea:
         """The list of points delimiting the material area in a global scale"""
         # retrieve material area points
         cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
 
     @property
     def elem_id(self):
         """The MaterialArea id"""
         return tyelement_id(self.thisptr)
+
+    @property
+    def name(self):
+        """The MaterialArea name"""
+        return tyelement_name(self.thisptr)
 
     def has_vegetation(self):
         """True if the material area has vegetation"""
@@ -1110,7 +1153,7 @@ cdef class LevelCurve:
         """
         # retrieve level curve points
         cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
 
     @property
     def altitude(self):
@@ -1123,6 +1166,11 @@ cdef class LevelCurve:
     def elem_id(self):
         """The LevelCurve id"""
         return tyelement_id(self.thisptr)
+
+    @property
+    def name(self):
+        """The LevelCurve name"""
+        return tyelement_name(self.thisptr)
 
 
 cdef class Lake:
@@ -1157,7 +1205,19 @@ cdef class Lake:
         lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
         cpp_points = cy.declare(
             vector[TYPoint], lev_curve.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
+
+    @property
+    def name(self):
+        """The Lake name"""
+        return tyelement_name(self.thisptr)
+
+    @property
+    def level_curve(self):
+        """The lake's level curve as a 'LevelCurve' cython object"""
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        return lev_curve
 
 
 cdef class Result:
