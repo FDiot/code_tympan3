@@ -61,6 +61,14 @@ cdef tyelement_id(TYElement* elem):
     """The id of the element contained in the TYGeometryNode as a string"""
     return elem.getID().toString().toStdString().decode()
 
+cdef tyelement_name(TYElement* elem):
+    """The name of the element contained in the TYGeometryNode as a string"""
+    str = elem.getName().toStdString()
+    try:
+        return str.decode()
+    except UnicodeDecodeError:
+        return str.decode('cp1252')
+
 cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
 
@@ -72,6 +80,27 @@ cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
         cy_point = cy.declare(tycommon.Point3D, tycommon.opoint3d2point3d(cpp_point))
         points.append(cy_point)
     return points
+
+cdef TYPoint cypoint2cpp(cy_point):
+    """ Build a TYPoint from a Point3D object """
+    cpp_point = cy.declare(TYPoint)
+    cpp_point._x = cy_point.x
+    cpp_point._y = cy_point.y
+    cpp_point._z = cy_point.z
+    return cpp_point
+
+
+cdef vector[TYPoint] cypoints2cpp(cy_points):
+    """ Build a list of TYPoint from Point3D objects """
+    cpp_points = cy.declare(vector[TYPoint])
+    cpp_point = cy.declare(TYPoint)
+    for point in cy_points :
+        cpp_point._x = point.x
+        cpp_point._y = point.y
+        cpp_point._z = point.z
+        cpp_points.push_back(cpp_point)
+    return cpp_points
+
 
 ctypedef TYElement* (*downcast_func_type)(TYElement *)
 
@@ -102,17 +131,41 @@ cdef find_parent_id(TYElement * elem, downcast_func_type func):
         dest = func(elem)
     return tyelement_id(dest)
 
+cdef find_parent_name(TYElement * elem, downcast_func_type func):
+    """Find the name of the parent of the element `elem` corresponding to the downcast function
+    `func`
+    """
+    dest = cy.declare(cy.pointer(TYElement), NULL)
+    while dest == NULL:
+        elem = elem.getParent()
+        if elem == NULL:
+            return
+        dest = func(elem)
+    return tyelement_name(dest)
+
 cdef find_volume_id(TYElement * elem):
     """Find the identifier of the volume containing the element
     """
     acoustic_volume_id = find_parent_id(elem, get_volume)
     return acoustic_volume_id
 
+cdef find_volume_name(TYElement * elem):
+    """Find the name of the volume containing the element
+    """
+    acoustic_volume_name = find_parent_name(elem, get_volume)
+    return acoustic_volume_name
+
 cdef find_surface_node_id(TYElement * elem):
     """Find the identifier of the surface node containing the element
     """
     acoustic_surface_node_id = find_parent_id(elem, get_surface_node)
     return acoustic_surface_node_id
+
+cdef find_surface_node_name(TYElement * elem):
+    """Find the name of the surface node containing the element
+    """
+    acoustic_surface_node_name = find_parent_name(elem, get_surface_node)
+    return acoustic_surface_node_name
 
 def init_tympan_registry():
     """Trigger the registration of Tympan business classes (TY* classes).
@@ -133,8 +186,84 @@ cdef class Element:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        str = self.thisptr.getRealPointer().getName().toStdString()
+        try:
+            return str.decode()
+        except UnicodeDecodeError:
+            return str.decode('cp1252')
 
+    def setName(self, name):
+        """Set the name of the element"""
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setName(name.encode('utf-8'))
+
+    def getParent(self):
+        """Return element parent if any """
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = self.thisptr.getRealPointer().getParent()
+        elem = Element()
+        elem.thisptr = SmartPtr[TYElement](cpp_elem)
+        return elem
+
+cdef class Element_array:
+    thisptr = cy.declare(vector[SmartPtr[TYElement]])
+
+    def __cinit__(self):
+        self.thisptr = vector[SmartPtr[TYElement]]()
+
+    def from_xml(self, file_name):
+        # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+        # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+        pystring = file_name.encode('utf-8')
+        self.thisptr = load_elements(pystring)
+
+    @property
+    def user_sources(self):
+        ret = []
+        cpp_src = cy.declare(cy.pointer(TYUserSourcePonctuelle))
+        for elm in self.thisptr:
+            cpp_src = downcast_user_source_ponctuelle(elm.getRealPointer())
+            if cpp_src != NULL :
+                cy_source = User_source()
+                cy_source.thisptr = SmartPtr[TYUserSourcePonctuelle](cpp_src)
+                ret.append(cy_source)
+        return ret
+
+    @property
+    def engines(self):
+        ret = []
+        cpp_engine = cy.declare(cy.pointer(TYMachine))
+        for elm in self.thisptr:
+            cpp_engine = downcast_machine(elm.getRealPointer())
+            if cpp_engine != NULL :
+                cy_engine = Engine()
+                cy_engine.thisptr = SmartPtr[TYMachine](cpp_engine)
+                ret.append(cy_engine)
+        return ret
+
+    @property
+    def buildings(self):
+        ret = []
+        cpp_building = cy.declare(cy.pointer(TYBatiment))
+        for elm in self.thisptr:
+            cpp_building = downcast_batiment(elm.getRealPointer())
+            if cpp_building != NULL :
+                cy_building = Building()
+                cy_building.thisptr = SmartPtr[TYBatiment](cpp_building)
+                ret.append(cy_building)
+        return ret
+
+    @property
+    def sites(self):
+        ret = []
+        cpp_site = cy.declare(cy.pointer(TYSiteNode))
+        for elm in self.thisptr:
+            cpp_site = downcast_sitenode(elm.getRealPointer())
+            if cpp_site != NULL :
+                cy_site = Site()
+                cy_site.thisptr = SmartPtr[TYSiteNode](cpp_site)
+                ret.append(cy_site)
+        return ret
 
 cdef class AcousticSurface:
     thisptr = cy.declare(cy.pointer(TYAcousticSurface))
@@ -189,6 +318,40 @@ cdef class AcousticSurface:
         """
         return find_volume_id(self.thisptr)
 
+    def volume_name(self):
+        """Find the name of the volume containing the acoustic surface
+        """
+        return find_volume_name(self.thisptr)
+
+    def surface_node_id(self):
+        """Find the identifier of the surface node
+        """
+        return find_surface_node_id(self.thisptr)
+
+    def surface_node_name(self):
+        """Find the name of the surface node
+        """
+        return find_surface_node_name(self.thisptr)
+
+    def element_name(self):
+        """Return the infrastructure element name"""
+        elem = Element()
+        elem = self.getParent().getParent()
+        if self.surface_node_name() == None:
+            return elem.name
+        else:
+            return elem.getParent().name
+
+    @property
+    def getIsRayonnant(self):
+        return self.thisptr.getIsRayonnant()
+
+    def getParent(self):
+        """Return element parent if any """
+        cpp_elem = self.thisptr.getParent()
+        elem = Element()
+        elem.thisptr = SmartPtr[TYElement](cpp_elem)
+        return elem
 
 cdef class Material:
 
@@ -261,6 +424,150 @@ cdef class Vegetation:
         """Vegetation id"""
         return tyelement_id(self.thisptr.getRealPointer())
 
+
+cdef class User_source:
+
+    def __cinit__(self):
+        self.thisgeonodeptr = SmartPtr[TYGeometryNode] (new TYGeometryNode())
+
+    @property
+    def getID(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getID().toString().toStdString().decode()
+
+    @property
+    def name(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
+
+    @cy.locals(pos=tycommon.Point3D)
+    def set_position(self, pos):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setPos(SmartPtr[TYPoint](new TYPoint(cypoint2cpp(pos))))
+
+    @property
+    def position(self):
+        assert self.thisptr.getRealPointer() != NULL
+        smartptr_typoint = cy.declare(SmartPtr[TYPoint],
+                             self.thisptr.getRealPointer().getPos())
+        ptr_opoint3D = cy.declare(cy.pointer(tycommon.OPoint3D),
+                                  smartptr_typoint.getRealPointer().downcast_opoint())
+        cpp_pos = cy.declare(tycommon.OPoint3D, deref(ptr_opoint3D))
+        return tycommon.opoint3d2point3d(cpp_pos)
+
+    def set_hauteur(self, hauteur):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setHauteur(hauteur)
+
+    @property
+    def hauteur(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getHauteur()
+
+
+cdef class Engine:
+
+    def __cinit__(self):
+        self.thisgeonodeptr = SmartPtr[TYGeometryNode] (new TYGeometryNode())
+
+    @property
+    def getID(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getID().toString().toStdString()
+
+    @property
+    def name(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
+
+    def setName(self, name):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setName(name.encode('utf-8'))
+
+    @cy.locals(pos=tycommon.Point3D)
+    def set_position(self, pos):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(pos))
+
+    @property
+    def position(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        cpp_pos = cy.declare(tycommon.OPoint3D,
+                             self.thisgeonodeptr.getRealPointer().position())
+        return tycommon.opoint3d2point3d(cpp_pos)
+
+    @cy.locals(rot=tycommon.Point3D)
+    def set_rotation(self, rot):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(rot))
+
+    @property
+    def rotation(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        cpp_rot = cy.declare(tycommon.OPoint3D,
+                             self.thisgeonodeptr.getRealPointer().rotation())
+        return tycommon.opoint3d2point3d(cpp_rot)
+
+    def set_hauteur(self, hauteur):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setHauteur(hauteur)
+
+    @property
+    def hauteur(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        return self.thisgeonodeptr.getRealPointer().getHauteur()
+
+
+cdef class Building:
+
+    def __cinit__(self):
+        self.thisgeonodeptr = SmartPtr[TYGeometryNode] (new TYGeometryNode())
+
+    @property
+    def name(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
+
+    def setName(self, name):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setName(name.encode('utf-8'))
+
+    @cy.locals(pos=tycommon.Point3D)
+    def set_position(self, pos):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(pos))
+
+    @property
+    def position(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        cpp_pos = cy.declare(tycommon.OPoint3D,
+                             self.thisgeonodeptr.getRealPointer().position())
+        return tycommon.opoint3d2point3d(cpp_pos)
+
+    @cy.locals(rot=tycommon.Point3D)
+    def set_rotation(self, rot):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(rot))
+
+    @property
+    def rotation(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        cpp_rot = cy.declare(tycommon.OPoint3D,
+                             self.thisgeonodeptr.getRealPointer().rotation())
+        return tycommon.opoint3d2point3d(cpp_rot)
+
+    def set_hauteur(self, hauteur):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        self.thisgeonodeptr.getRealPointer().setHauteur(hauteur)
+
+    @property
+    def hauteur(self):
+        assert self.thisgeonodeptr.getRealPointer() != NULL
+        return self.thisgeonodeptr.getRealPointer().getHauteur()
+
+    @property
+    def getIsRayonnant(self):
+        return self.thisptr.getRealPointer().getIsRayonnant()
 
 cdef class Site:
 
@@ -479,6 +786,142 @@ cdef class Site:
             return (points, level_curve)
         return (points, None)
 
+    def add_levelcurve(self, points, alti):
+        """ Allow to add a level curve in a site from PYTHON """
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = cypoints2cpp(points)
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_lcurve = cy.declare(SmartPtr[TYCourbeNiveau])
+        cpp_lcurve = SmartPtr[TYCourbeNiveau]( new TYCourbeNiveau(cpp_points, alti) )
+        topo.addCrbNiv(cpp_lcurve)
+
+    @cy.locals(curve=LevelCurve)
+    def delete_levelcurve(self, curve):
+        cpp_lcurve = cy.declare(SmartPtr[TYCourbeNiveau],
+                                SmartPtr[TYCourbeNiveau](curve.thisptr))
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        topo.remCrbNiv(cpp_lcurve)
+
+
+    @cy.locals(source=User_source, position=tycommon.Point3D)
+    def add_user_source(self, source, position, height):
+        cpp_point = cy.declare(SmartPtr[TYPoint])
+        cpp_point = SmartPtr[TYPoint](new TYPoint(cypoint2cpp(position)))
+        source_copy = cy.declare(cy.pointer(TYUserSourcePonctuelle), new TYUserSourcePonctuelle())
+        source_copy.deepCopy(source.thisptr.getRealPointer(), False)
+        source_copy.setPos(cpp_point)
+        source_copy.setHauteur(height)
+        geonode = cy.declare(SmartPtr[TYGeometryNode],
+                             SmartPtr[TYGeometryNode](new TYGeometryNode()))
+        geonode.getRealPointer().setElement(source_copy)
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        infra.addSrc(geonode)
+
+    @property
+    def user_sources(self):
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        cpp_tab = cy.declare(vector[SmartPtr[TYGeometryNode]],
+                             infra.getSrcs())
+        cy_sources = []
+        cpp_source_node = cy.declare(SmartPtr[TYGeometryNode])
+        for cpp_source_node in cpp_tab:
+            src_ptr = cy.declare(cy.pointer(TYUserSourcePonctuelle))
+            src_ptr = downcast_user_source_ponctuelle(
+                                cpp_source_node.getRealPointer().getElement())
+            cy_source = User_source()
+            cy_source.thisptr = SmartPtr[TYUserSourcePonctuelle](src_ptr)
+            cy_source.thisgeonodeptr = cpp_source_node
+            cy_sources.append(cy_source)
+        return cy_sources
+
+    @property
+    def engines(self):
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        cpp_tab = cy.declare(vector[SmartPtr[TYGeometryNode]],
+                             infra.getListMachine())
+        cy_sources = []
+        cpp_source_node = cy.declare(SmartPtr[TYGeometryNode])
+        for cpp_source_node in cpp_tab:
+            src_ptr = cy.declare(cy.pointer(TYMachine))
+            src_ptr = downcast_machine(
+                                cpp_source_node.getRealPointer().getElement())
+            cy_source = Engine()
+            cy_source.thisptr = SmartPtr[TYMachine](src_ptr)
+            cy_source.thisgeonodeptr = cpp_source_node
+            cy_sources.append(cy_source)
+        return cy_sources
+
+    @property
+    def buildings(self):
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        cpp_tab = cy.declare(vector[SmartPtr[TYGeometryNode]],
+                             infra.getListBatiment())
+        cy_sources = []
+        cpp_source_node = cy.declare(SmartPtr[TYGeometryNode])
+        for cpp_source_node in cpp_tab:
+            src_ptr = cy.declare(cy.pointer(TYBatiment))
+            src_ptr = downcast_batiment(
+                                cpp_source_node.getRealPointer().getElement())
+            cy_source = Building()
+            cy_source.thisptr = SmartPtr[TYBatiment](src_ptr)
+            cy_source.thisgeonodeptr = cpp_source_node
+            cy_sources.append(cy_source)
+        return cy_sources
+
+    @cy.locals(engine=Engine, position=tycommon.Point3D, rotation=tycommon.Point3D)
+    def add_engine(self, engine, position, rotation, height):
+        engine_copy = cy.declare(cy.pointer(TYMachine), new TYMachine())
+        engine_copy.deepCopy(engine.thisptr.getRealPointer(), False)
+        geonode = cy.declare(SmartPtr[TYGeometryNode],
+                             SmartPtr[TYGeometryNode](new TYGeometryNode()))
+        geonode.getRealPointer().setElement(engine_copy)
+        geonode.getRealPointer().setPosition(position.thisobj)
+        geonode.getRealPointer().setRotation(rotation.thisobj)
+        geonode.getRealPointer().setHauteur(height)
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        infra.addMachine(geonode)
+
+    @cy.locals(building=Building, position=tycommon.Point3D, rotation=tycommon.Point3D)
+    def add_building(self, building, position, rotation, height):
+        building_copy = cy.declare(cy.pointer(TYBatiment), new TYBatiment())
+        building_copy.deepCopy(building.thisptr.getRealPointer(), False)
+        geonode = cy.declare(SmartPtr[TYGeometryNode],
+                             SmartPtr[TYGeometryNode](new TYGeometryNode()))
+        geonode.getRealPointer().setElement(building_copy)
+        geonode.getRealPointer().setPosition(position.thisobj)
+        geonode.getRealPointer().setRotation(rotation.thisobj)
+        geonode.getRealPointer().setHauteur(height)
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        infra.addBatiment(geonode)
+
+    @cy.locals(site=Site, position=tycommon.Point3D, rotation=tycommon.Point3D)
+    def add_sub_site(self, site, position, rotation):
+        site_copy = cy.declare(cy.pointer(TYSiteNode), new TYSiteNode())
+        site_copy.deepCopy(site.thisptr.getRealPointer(), False)
+        geonode = cy.declare(SmartPtr[TYGeometryNode],
+                             SmartPtr[TYGeometryNode](new TYGeometryNode()))
+        geonode.getRealPointer().setElement(site_copy)
+        geonode.getRealPointer().setPosition(position.thisobj)
+        geonode.getRealPointer().setRotation(rotation.thisobj)
+        self.thisptr.getRealPointer().addSiteNode(geonode)
+
+    def set_landtake(self, points, useAsLevelCurve=True, alti=0.):
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = cypoints2cpp(points)
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        topo.setEmprise(cpp_points, True)
+        self.thisptr.getRealPointer().setUseEmpriseAsCrbNiv(useAsLevelCurve)
+        self.thisptr.getRealPointer().setAltiEmprise(alti)
+
     @property
     def lakes(self):
         """The lakes of the topography as a list of 'Lake' cython objects"""
@@ -534,6 +977,85 @@ cdef class Site:
             lcurves.append(lcurve)
         return lcurves
 
+    @cy.locals(pos=tycommon.Point3D)
+    def set_position(self, pos):
+        mat = cy.declare(tycommon.OMatrix, self.matrix)
+        cpp_geonode = cy.declare(TYGeometryNode)
+        cpp_geonode.setMatrix(mat)
+        cpp_pos = cy.declare(tycommon.OPoint3D, tycommon.cypoint2cpp(pos))
+        cpp_geonode.setPosition(cpp_pos)
+        self.matrix = cpp_geonode.getMatrix()
+
+    @property
+    def position(self):
+        cpp_geonode = cy.declare(TYGeometryNode)
+        cpp_geonode.setMatrix(self.matrix)
+        cpp_pos = cy.declare(tycommon.OPoint3D,
+                             cpp_geonode.position())
+        return tycommon.opoint3d2point3d(cpp_pos)
+
+    @cy.locals(rot=tycommon.Point3D)
+    def set_rotation(self, rot):
+        mat = cy.declare(tycommon.OMatrix, self.matrix)
+        cpp_geonode = cy.declare(TYGeometryNode)
+        cpp_geonode.setMatrix(mat)
+        cpp_rot = cy.declare(tycommon.OPoint3D, tycommon.cypoint2cpp(rot))
+        cpp_geonode.setPosition(cpp_rot)
+        self.matrix = cpp_geonode.getMatrix()
+
+    @property
+    def rotation(self):
+        cpp_geonode = cy.declare(TYGeometryNode)
+        cpp_geonode.setMatrix(self.matrix)
+        cpp_rot = cy.declare(tycommon.OPoint3D,
+                             cpp_geonode.rotation())
+        return tycommon.opoint3d2point3d(cpp_rot)
+
+    def set_sig_type(self, type_sig):
+        self.thisptr.getRealPointer().setSIGType(type_sig)
+
+    def set_sig_x(self, x):
+        self.thisptr.getRealPointer().setSIG_X(x)
+
+    def set_sig_y(self, y):
+        self.thisptr.getRealPointer().setSIG_Y(y)
+
+    def set_sig_offset(self, offset):
+        self.thisptr.getRealPointer().setSIG_OFFSET(offset)
+
+    @property
+    def sig_type(self):
+        return self.thisptr.getRealPointer().getSIGType()
+
+    @property
+    def sig_x(self):
+        return self.thisptr.getRealPointer().getSIG_X()
+
+    @property
+    def sig_y(self):
+        return self.thisptr.getRealPointer().getSIG_Y()
+
+    @property
+    def sig_offset(self):
+        return self.thisptr.getRealPointer().getSIG_OFFSET()
+
+    def getEmprise(self):
+        topo = cy.declare(cy.pointer(TYTopographie),
+                          self.thisptr.getRealPointer().getTopographie().getRealPointer())
+        cpp_points = cy.declare(vector[TYPoint], topo.getEmprise())
+        xmin = 1e8
+        xmax = -xmin
+        ymin = xmin
+        ymax = -ymin
+        for cpp_point in cpp_points:
+            x = cpp_point._x
+            y = cpp_point._y
+            xmax = x if x > xmax else xmax
+            ymax = y if y > ymax else ymax
+            xmin = x if x < xmin else xmin
+            ymin = y if y < ymin else ymin
+
+        return xmin, xmax, ymin, ymax
 
 cdef class MaterialArea:
     thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
@@ -726,6 +1248,9 @@ cdef class Mesh:
     thisgeonodeptr =  cy.declare(SmartPtr[TYGeometryNode])
     matrix = cy.declare(tycommon.OMatrix) # local to global transformation
 
+    def export_csv(self, file_name):
+        self.thisptr.exportCSV(file_name.encode())
+
     @property
     def is_active(self):
         """True if the mesh is in an active state, false otherwise"""
@@ -746,6 +1271,11 @@ cdef class Mesh:
             rec.parent_mesh = self
             receptors.append(rec)
         return receptors
+
+    @property
+    def getDataType(self):
+        """Return the type to set the unit"""
+        return self.thisptr.getDataType()
 
 
 cdef class Receptor:
@@ -835,6 +1365,41 @@ cdef class Computation:
         tyspectre = new TYSpectre(spectrum.thisobj)
         self.thisptr.getRealPointer().setSpectre(receptor.thisptr.getRealPointer(), tyspectre)
 
+    @cy.locals(mesh=Mesh)
+    def add_noise_map(self, mesh):
+        self.thisptr.getRealPointer().addMaillage(mesh.thisptr)
+
+    @cy.locals(mesh=Mesh)
+    def get_noise_map_spectrums(self, mesh):
+        cpp_spectrums = cy.declare(vector[SmartPtr[TYSpectre]])
+        cpp_spectrums = deref(self.thisptr.getRealPointer().getSpectrumDatas(mesh.thisptr))
+        spectrums = []
+        cpp_spectre = cy.declare(SmartPtr[TYSpectre])
+        for cpp_spectre in cpp_spectrums:
+            tyspectre = cy.declare(cy.pointer(TYSpectre),
+                                   cpp_spectre.getRealPointer())
+            ospectre_ptr = cy.declare(cy.pointer(tycommon.OSpectre),
+                                      tyspectre.downcast_ospectre())
+            ospectre = cy.declare(tycommon.OSpectre,
+                                  deref(ospectre_ptr))
+            cyspectre = tycommon.Spectrum()
+            cyspectre = tycommon.ospectre2spectrum(ospectre)
+            spectrums.append(cyspectre)
+        return spectrums
+
+    @cy.locals(mesh=Mesh)
+    def set_noise_map_spectrums(self, mesh, spectrums):
+        cpp_spectrums = cy.declare(cy.pointer(vector[SmartPtr[TYSpectre]]))
+        cpp_spectrums = self.thisptr.getRealPointer().getSpectrumDatas(mesh.thisptr)
+        assert(cpp_spectrums.size() == len(spectrums))
+        cpp_spectrums.clear()
+        cy_spectrum = cy.declare(tycommon.Spectrum)
+        for cy_spectrum in spectrums:
+            ospectre = cy.declare(tycommon.OSpectre, cy_spectrum.thisobj)
+            spectrum_ptr = cy.declare(SmartPtr[TYSpectre],
+                                      SmartPtr[TYSpectre](new TYSpectre(ospectre)))
+            cpp_spectrums.push_back(spectrum_ptr)
+
     @property
     def result(self):
         """Return an acoustic result (business representation)"""
@@ -856,7 +1421,7 @@ cdef class Computation:
         assert self.thisptr.getRealPointer() != NULL
         cpp_elem = cy.declare(cy.pointer(TYElement),
                               downcast_Element(self.thisptr.getRealPointer()))
-        cpp_elem.setName(name)
+        cpp_elem.setName(name.encode('utf-8'))
 
     def set_solver(self, solverdir, name):
         """`solver_name` will be used to solve this computation"""
@@ -891,6 +1456,14 @@ cdef class Project:
         """Update site altimetry and project"""
         self.site.update_altimetry(*args)
         self.update()
+
+    def add_user_receptor(self, point, height, name):
+        cpp_point = cy.declare(TYPoint, cypoint2cpp(point))
+        cpp_receptor = cy.declare(SmartPtr[TYPointControl],
+                                  SmartPtr[TYPointControl](new TYPointControl(cpp_point)))
+        cpp_receptor.getRealPointer().setHauteur(height)
+        cpp_receptor.getRealPointer().setName(name.encode("utf-8"))
+        self.thisptr.getRealPointer().addPointControl(cpp_receptor)
 
     @cy.locals(comp=Computation)
     def add_computation(self):
