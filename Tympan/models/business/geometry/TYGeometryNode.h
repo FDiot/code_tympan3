@@ -192,28 +192,34 @@ public:
      * Determine la matrice de passage du repere absolu vers le repere local.
      */
     OMatrix globalToLocal() const;
-
-    /*!
-     * \brief Get/Set the position of the element
+    
+    /**
+     * @brief Set the position of the element
      */
     void setPosition(const OPoint3D& pos);
-
+    
+    /**
+     * @brief Get the position of the element
+     */
     OPoint3D position() { return _repere._origin; }
 
-    /*!
-     * \brief Get/Set the rotation angle along axis x, y & z represented as an OPoint3D
+    /**
+     * @brief Set the rotation angle along axis x, y & z represented as an OPoint3D
      */
     void setRotation(const OPoint3D& rot);
 
+    /**
+     * @brief Get the rotation angle along axis x, y & z represented as an OPoint3D
+     */
     OPoint3D rotation(); 
 
     /**
-     * get/set de la hauteur par rapport au sol
+     * @brief Get the height above the ground
      */
     double getHauteur() { return _hauteur; }
 
     /**
-     * get/set de la hauteur par rapport au sol
+     * \brief Set the heigth above the ground
      */
     void setHauteur(const double& hauteur) { _hauteur = hauteur; }
 
