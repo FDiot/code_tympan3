@@ -32,6 +32,13 @@ cdef otriangle2triangle(OTriangle* tri):
     triangle.thisptr = tri
     return triangle
 
+cdef OPoint3D cypoint2cpp(cy_point):
+    """ Build a TYPoint from a Point3D object """
+    cpp_point = cy.declare(OPoint3D)
+    cpp_point._x = cy_point.x
+    cpp_point._y = cy_point.y
+    cpp_point._z = cy_point.z
+    return cpp_point
 
 cdef class Spectrum:
 
@@ -39,9 +46,23 @@ cdef class Spectrum:
         """Build a Spectrum, possibly out of ndarray `values`"""
         if values is None:
             return
-        assert len(values) == 31
-        #self.thisobj = OSpectre(&values[0], 31, 0)
-        self.thisobj = OSpectre(<double *> values.data, 31, 0)
+        self.thisobj = OSpectre(<double *> values.data, len(values), 0)
+        self.thisobj.setEtat(SPECTRE_ETAT_DB)
+        self.thisobj.setType(SPECTRE_TYPE_LW)
+
+    @classmethod
+    def constant(cls, value):
+        """Build a Spectrum instance from a constant `value`."""
+        return cls(np.ones(31) * value)
+
+    def __len__(self):
+        return len(self.values)
+
+    def __mul__(self, other):
+        newvalues = self.values * other
+        if newvalues is NotImplemented:
+            return NotImplemented
+        return self.__class__(newvalues)
 
     @property
     def nvalues(self):
@@ -88,6 +109,15 @@ cdef class Point3D:
     def __init__(self, x=0, y=0, z=0):
         self.thisobj._x = x
         self.thisobj._y = y
+        self.thisobj._z = z
+
+    def set_x(self, x):
+        self.thisobj._x = x
+
+    def set_y(self, y):
+        self.thisobj._y = y
+
+    def set_z(self, z):
         self.thisobj._z = z
 
     @property

@@ -6,7 +6,7 @@ import os
 import sys
 from tympan.models.project import Project
 from tympan.models.solver import Model, Solver
-
+from _util import ty_solverdir
 
 def load_tympan_xml(tympan_xml):
     '''

@@ -36,8 +36,8 @@ with user-defined sources:
     # build solver model, but don't use the project sources
     model = Model.from_project(project, set_sources=False)
     # Manually define the sources (position and spectrum) depending on your needs
-    model.add_source((0, 0, 0), np.array([100.0] * 31, dtype=float))
-    model.add_source((100, 50, 0), np.array([150.0] * 31, dtype=float))
+    model.add_source(Source((0, 0, 0), np.array([100.0] * 31, dtype=float)))
+    model.add_source(Source((100, 50, 0), np.array([150.0] * 31, dtype=float)))
     solver = Solver.from_project(project)
     result = solver.solve(model)
     # retrieve combined spectra per receptor

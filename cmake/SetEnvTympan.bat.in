@@ -1,0 +1,8 @@
+@echo off
+echo "Configuring environment to run Code_TYMPAN GUI and Python scripts"
+set PATH=@TYMPAN_EXE_FULL_PATH@;%PATH% 
+set TYMPAN_SOLVERDIR=@TYMPAN_EXE_FULL_PATH@\plugins
+set PYTHONPATH=@TYMPAN_EXE_FULL_PATH@\cython;%PYTHONPATH%
+set PYTHONIOENCODING=UTF8
+set CGAL_BINDINGS_PATH=@TYMPAN_EXE_FULL_PATH@\cython\CGAL
+
