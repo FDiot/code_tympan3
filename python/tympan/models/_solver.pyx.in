@@ -86,19 +86,16 @@ cdef class ProblemModel:
              for (p1, p2, p3), m in zip_longest(triangles, materials)])
         return nodes_idx, triangles_idx
 
-    @cy.locals(spectrum_values=np.ndarray, directivity=Directivity)
-    def _add_source(self, position, spectrum_values, shift, directivity):
+    @cy.locals(spectrum=tycommon.Spectrum, directivity=Directivity)
+    def _add_source(self, position, spectrum, directivity):
         """Add an acoustic source to the model"""
-        # position
         pos = cy.declare(tycommon.OPoint3D,
                          tycommon.OPoint3D(position[0], position[1], position[2]))
-        # spectrum
-        nb_val = spectrum_values.shape[0]
-        spec = cy.declare(tycommon.OSpectre,
-                          tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift))
-        spec.setEtat(tycommon.SPECTRE_ETAT_DB)
-        spec.setType(tycommon.SPECTRE_TYPE_LW)
-        source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(),
+        spectrum_state = spectrum.thisobj.getEtat()
+        assert spectrum_state == tycommon.SPECTRE_ETAT_DB, spectrum_state
+        spectrum_type = spectrum.thisobj.getType()
+        assert spectrum_type == tycommon.SPECTRE_TYPE_LW, spectrum_type
+        source_idx = self.thisptr.get().make_source(pos, spectrum.thisobj.toGPhy(),
                                                     directivity.thisptr)
         return source_idx
 

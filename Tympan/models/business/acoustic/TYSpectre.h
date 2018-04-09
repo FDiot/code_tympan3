@@ -158,7 +158,10 @@ public:
      **/
     static const float getFreqNorm(int freqIndex);
 
-
+    /**
+     * @brief : return spectrum casted as OSpectre
+     */
+    OSpectre* downcast_ospectre() { return dynamic_cast<OSpectre*>(this); }
     // Membres
 public:
 
