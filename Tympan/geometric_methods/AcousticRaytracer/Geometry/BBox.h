@@ -170,6 +170,7 @@ public:
         return p.x >= pMin.x && p.y >= pMin.y && p.z >= pMin.z && p.x <= pMax.x && p.y <= pMax.y && p.z <= pMax.z;
     }
 
+ 
     /*!
     * \brief Test the intersection of a BBox with this one.
     * \return Return true if they intersect. Also true if the BBox is included into the other.
@@ -281,7 +282,7 @@ public:
     decimal diag() { return sqrt((pMax.x - pMin.x) * (pMax.x - pMin.x) + (pMax.y - pMin.y) * (pMax.y - pMin.y) + (pMax.z - pMin.z) * (pMax.z - pMin.z)); }
 
     /// Return true if the point pt is inside the BBox
-    bool Inside(vec3& pt) const
+    bool Inside(const vec3& pt) const
     {
         return (pt.x >= pMin.x && pt.x <= pMax.x &&
                 pt.y >= pMin.y && pt.y <= pMax.y &&

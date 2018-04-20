@@ -45,19 +45,35 @@ public:
 		computeDTheta(); 
 	}
 
+    /**
+ 	* \brief Computes the next response of the event in function of the number of responses left
+ 	*/ 
 	virtual bool getResponse(vec3& r, bool force = false);
 
     /// Filter generated response (or not)
 	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &);
-	/// Get theta
+
+	/// Get the angle of the next response around Keller's cone. (returns only angles that result in a response pointing outside the obstacle)
 	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&);
 
-	/// Set/Get aperture angle
+	/**
+ 	* \brief Set the aperture angle of the cone of Keller
+ 	*/  
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
+
+    /**
+ 	* \brief Get the aperture angle of the cone of Keller
+ 	*/  
     decimal getAngleOuverture() { return angleOuverture; }
-    /// Get the angle between 2 rays to send
+
+    /**
+ 	* \brief Get the angle between 2 consecutive responses
+ 	*/  
 	decimal getDeltaTheta() const { return delta_theta; }
-	/// Get the incident angle
+	
+	/**
+ 	* \brief Get the angle between the incident ray and the diffraction edge
+ 	*/ 
     virtual double getAngle() { return angleArrive; }
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
     /// Get the local frame
@@ -70,19 +86,30 @@ public:
 #endif //_ALLOW_TARGETING_
 
 protected:
-	/// Build local frame
+
+	/**
+ 	* \brief Build local frame
+ 	*/ 
     void buildRepere();
-    /// Compute incident ray angle
+    
+    /**
+ 	* \brief Compute the angle between the incident ray and the diffraction edge
+ 	*/ 
     void computeAngle();
-    /// Compute the angle step between two rays to send
+
+    /**
+ 	* \brief Compute the angle step between two responses in function of the aperture angle and the number of responses left
+ 	* 
+ 	*/ 
 	void computeDTheta() 
 	{
+		//Angles should span the aperture angle of the diffraction edge
 		delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); 
 	}
 
     Repere localRepere;				//!< Local frame
 
-    decimal angleOuverture;			//!< Aperture angle of the cone
+    decimal angleOuverture;			//!< Angle formed by the two faces of the diffraction edge
     decimal angleArrive;			//!< Incident ray angle
 
 	decimal delta_theta;			//!< Angle step between two rays to send

@@ -52,7 +52,7 @@ public:
     }
 #else
     /// Base constructor
-    Source(std::string _name = "unknown source") : Base(), sampler(NULL) { name = _name;}
+    Source(std::string _name = "unknown source") : Base(), sampler(NULL) { name = _name; nbRayLeft=0 ;initialRayCount=0;id=-1; indice=-1; }
     /// Copy constructor
     Source(const Source& other) : Base(other)
     {

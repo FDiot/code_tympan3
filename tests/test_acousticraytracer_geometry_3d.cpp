@@ -466,7 +466,258 @@ TEST(test_ovector3d,get_rotation_oz_oy){
 }
 
 
+/****************************************************************************
+Older OVector3D tests from test_m_c_vector3d.cpp written by Denis THOMASSON
+*****************************************************************************/
 
+TEST(test_ovector3d_old, sum)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+    OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul de la somme
+    OVector3D v3 = v1 + v2;
+
+    ASSERT_TRUE(v3._x == 3.0);
+    ASSERT_TRUE(v3._y == 5.0);
+    ASSERT_TRUE(v3._z == 7.0);
+}
+
+TEST(test_ovector3d_old, subtraction)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+    OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
+
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul de la soustraction
+    OVector3D v3 = v1 - v2;
+
+    ASSERT_TRUE(v3._x == 1.0);
+    ASSERT_TRUE(v3._y == 1.0);
+    ASSERT_TRUE(v3._z == 1.0);
+}
+
+TEST(test_ovector3d_old, product1)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+    OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
+
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul du produit
+    OVector3D v3 = v1 * v2;
+
+    ASSERT_TRUE(v3._x == 2.0);
+    ASSERT_TRUE(v3._y == 6.0);
+    ASSERT_TRUE(v3._z == 12.0);
+}
+
+TEST(test_ovector3d_old, product2){
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+    double a = 2.0;
+
+    OVector3D v1(p1);
+
+    // Calcul du produit
+    OVector3D v3 = a * v1;
+
+    ASSERT_TRUE(v3._x == 4.0);
+    ASSERT_TRUE(v3._y == 6.0);
+    ASSERT_TRUE(v3._z == 8.0);
+}
+
+TEST(test_ovector3d_old, cross_product)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 4.0, 3.0);
+    OPoint3D p2 = OPoint3D(2.0, 2.0, 2.0);
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul du produit vectoriel
+    OVector3D v3 = v1.cross(v2);
+
+    ASSERT_TRUE(v3._x ==  2.0);
+    ASSERT_TRUE(v3._y ==  2.0);
+    ASSERT_TRUE(v3._z == -4.0);
+}
+
+TEST(test_ovector3d_old, dot_product)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+    OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
+
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul du produit scalaire
+    double res = v1.scalar(v2);
+
+    ASSERT_TRUE(res == 20.0);
+}
+
+TEST(test_ovector3d_old, norme)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(3.0, 4.0, 0.0);
+
+    OVector3D v1(p1);
+
+    // Calcul de la norme
+    double res = v1.norme();
+
+    ASSERT_TRUE(res == 5.0);
+}
+
+TEST(test_ovector3d_old, normal)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(3.0, 2.0, 3.0);
+    OPoint3D p2 = OPoint3D(4.0, 2.0, 3.0);
+    OPoint3D p3 = OPoint3D(3.0, 3.0, 3.0);
+
+    OVector3D v1(p1), v2(p2), v3(p3);
+
+    // Calcul de la normale
+    OVector3D v4 = v1.normal(v2, v3);
+
+    ASSERT_TRUE(v4._x == 0.0);
+    ASSERT_TRUE(v4._y == 0.0);
+    ASSERT_TRUE(v4._z == 1.0);
+}
+
+TEST(test_ovector3d_old, normalize)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(3.0, 4.0, 0.0);
+
+    OVector3D v1(p1);
+
+    // Calcul de la soustraction
+    v1.normalize();
+
+    ASSERT_TRUE(v1._x == 0.6);
+    ASSERT_TRUE(v1._y == 0.8);
+    ASSERT_TRUE(v1._z == 0.0);
+}
+
+TEST(test_ovector3d_old, invert)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(3.0, -4.0, 5.0);
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur inverse
+    v1.invert();
+
+    ASSERT_TRUE(v1._x == -3.0);
+    ASSERT_TRUE(v1._y ==  4.0);
+    ASSERT_TRUE(v1._z == -5.0);
+}
+TEST(test_ovector3d_old, angle)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, sqrt(2.0) / 2.0, 0.0);
+    OPoint3D p2 = OPoint3D(-sqrt(2.0) / 2.0, sqrt(2.0) / 2.0, 0.0);
+
+    OVector3D v1(p1), v2(p2);
+
+    // Calcul de l'angle
+    double res = v1.angle(v2);
+
+	EXPECT_DOUBLE_EQ(M_PI / 2.0, res);
+}
+
+TEST(test_ovector3d_old, oz_rotation)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, 0.0, sqrt(2.0) / 2.0);
+    double alpha = M_PI;
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur tourné par Oz
+    OVector3D v2 = v1.getRotationOz(alpha);
+
+    ASSERT_TRUE(ABS(v2._x - (-sqrt(2.0) / 2.0)) < 1.0E-6) ;   //(v2._x == ( -sqrt(2.0)/2.0 ) );
+    ASSERT_TRUE(ABS(v2._y) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._z - (sqrt(2.0) / 2.0)) < 1.0E-6);      // v2._z == (  sqrt(2.0)/2.0 ) );
+}
+
+TEST(test_ovector3d_old, oy_rotation)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, 0.0, sqrt(2.0) / 2.0);
+    double alpha = M_PI;
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur tourné par Oz
+    OVector3D v2 = v1.getRotationOy(alpha);
+
+    ASSERT_TRUE(ABS(v2._x - (-sqrt(2.0) / 2.0)) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._y) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._z - (-sqrt(2.0) / 2.0)) < 1.0E-6);
+}
+
+TEST(test_ovector3d_old, oz_rotation_base2)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, 0.0, sqrt(2.0) / 2.0);
+    double alpha = M_PI;
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur tourné par Oz
+    OVector3D v2 = v1.getRotationOzBase2(alpha);
+
+    ASSERT_TRUE(ABS(v2._x - (-sqrt(2.0) / 2.0)) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._y) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._z - (sqrt(2.0) / 2.0)) < 1.0E-6);
+}
+
+TEST(test_ovector3d_old, oy_rotation_base2)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, 0.0, sqrt(2.0) / 2.0);
+    double alpha = M_PI;
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur tourné par Oz
+    OVector3D v2 = v1.getRotationOyBase2(alpha);
+
+    ASSERT_TRUE(ABS(v2._x - (-sqrt(2.0) / 2.0)) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._y) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._z - (-sqrt(2.0) / 2.0)) < 1.0E-6);
+}
+
+TEST(test_ovector3d_old, oy_oz_ration)
+{
+    // Création des vecteurs
+    OPoint3D p1 = OPoint3D(sqrt(2.0) / 2.0, 0.0, sqrt(2.0) / 2.0);
+    double alpha = M_PI, theta = M_PI / 2;
+
+    OVector3D v1(p1);
+
+    // Calcul du vecteur tourné par Oz puis Oy
+    OVector3D v2 = v1.getRotationOzOy(alpha, theta);
+
+    ASSERT_TRUE(ABS(v2._x - (sqrt(2.0) / 2.0)) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._y) < 1.0E-6);
+    ASSERT_TRUE(ABS(v2._z - (sqrt(2.0) / 2.0)) < 1.0E-6);
+}
 
 
 /***********************************************************************
@@ -1216,14 +1467,14 @@ TEST(test_3d_osegment3d,length_of_curved_path){
 	double R=17.32;
 	OSegment3D segment=OSegment3D(A,B);
 	
-	EXPECT_FLOAT_EQ(2*R*asin(3/(2*R)),segment.lengthOfCurvedPath(R));
+	EXPECT_DOUBLE_EQ(2*R*asin(3/(2*R)),segment.lengthOfCurvedPath(R));
 
 	R=8.24;
 	A=OPoint3D(11,-9,-2);
 	B=OPoint3D(7,-9,1);
 	segment=OSegment3D(A,B);
 	
-	EXPECT_FLOAT_EQ(2*R*asin(5/(2*R)),segment.lengthOfCurvedPath(R));
+	EXPECT_DOUBLE_EQ(2*R*asin(5/(2*R)),segment.lengthOfCurvedPath(R));
 }
 
 // Test the symetrieOf function
@@ -1402,11 +1653,35 @@ TEST(test_3d_ohplane3d,intersects){
 }
 
 /***********************************************************************
-						        BBox
+						        OBox
 ************************************************************************/
 
+TEST(test_3d_obox,test_constructors){
 
-TEST(test_3d_bbox,test_is_inside)
+	//default constructor
+	OBox box;
+	EXPECT_EQ(OPoint3D(0,0,0),box._min);
+	EXPECT_EQ(OPoint3D(0,0,0),box._max);
+
+	//min-max constructor
+	box=OBox(OCoord3D(-1,-2,-3),OCoord3D(1,2,3));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box._max);
+
+	//double constructor
+	OBox box2=OBox(-1,-2,-3,1,2,3);
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box2._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box2._max);
+	EXPECT_EQ(box,box2);
+
+	//copy constructor
+	box2=OBox(box);
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box2._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box2._max);
+	EXPECT_EQ(box,box2);
+}
+
+TEST(test_3d_obox,test_is_inside)
 {
     // Création des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1429,7 +1704,7 @@ TEST(test_3d_bbox,test_is_inside)
 }
 
 
-TEST(test_3d_bbox,test_is_inside_2d)
+TEST(test_3d_obox,test_is_inside_2d)
 {
     // Création des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1458,7 +1733,7 @@ TEST(test_3d_bbox,test_is_inside_2d)
 }
 
 
-TEST(test_3d_bbox,test_is_in_contact)
+TEST(test_3d_obox,test_is_in_contact)
 {
     // 1st box creation
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1487,7 +1762,7 @@ TEST(test_3d_bbox,test_is_in_contact)
 }
 
 
-TEST(test_3d_bbox, test_enlarge)
+TEST(test_3d_obox, test_enlarge)
 {
     // Création d'une boite vide
     OBox box;
@@ -1510,7 +1785,7 @@ TEST(test_3d_bbox, test_enlarge)
 }
 
 
-TEST(test_3d_bbox, test_enlarge_box)
+TEST(test_3d_obox, test_enlarge_box)
 {
     // 1st box creation
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1531,7 +1806,7 @@ TEST(test_3d_bbox, test_enlarge_box)
 }
 
 
-TEST(test_3d_bbox,test_translate)
+TEST(test_3d_obox,test_translate)
 {
     // Création de la box initiale
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1551,11 +1826,81 @@ TEST(test_3d_bbox,test_translate)
 
 
 /***********************************************************************
-						        BBox2
+						        OBox2
 ************************************************************************/
+TEST(test_3d_obox2,test_constructors){
 
+	//default constructor
+	OBox2 box;
+	EXPECT_EQ(OPoint3D(0,0,0),box._min);
+	EXPECT_EQ(OPoint3D(0,0,0),box._max);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(0.,box._length);
+	EXPECT_DOUBLE_EQ(0.,box._width);
+	EXPECT_DOUBLE_EQ(0.,box._height);
 
-TEST(test_3d_bbox2, test_is_inside)
+	//length-width-height constructor
+	box=OBox2(4,8,12);
+	EXPECT_EQ(OPoint3D(-2,-4,-6),box._min);
+	EXPECT_EQ(OPoint3D(2,4,6),box._max);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-2,-4,-6),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-2,4,-6),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(2,4,-6),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(2,-4,-6),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(2,-4,6),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-2,-4,6),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-2,4,6),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(2,4,6),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(4.,box._length);
+	EXPECT_DOUBLE_EQ(8.,box._width);
+	EXPECT_DOUBLE_EQ(12.,box._height);
+
+	//from OBox constructor
+	box=OBox2(OBox(OCoord3D(-1,-2,-3),OCoord3D(1,2,3)));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-1,2,-3),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(1,2,-3),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(1,-2,-3),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(1,-2,3),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-1,-2,3),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-1,2,3),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(1,2,3),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(2.,box._length);
+	EXPECT_DOUBLE_EQ(4.,box._width);
+	EXPECT_DOUBLE_EQ(6.,box._height);
+
+	//copy constructor
+	OBox box2=OBox2(box);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-1,2,-3),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(1,2,-3),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(1,-2,-3),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(1,-2,3),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-1,-2,3),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-1,2,3),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(1,2,3),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(2.,box._length);
+	EXPECT_DOUBLE_EQ(4.,box._width);
+	EXPECT_DOUBLE_EQ(6.,box._height);
+	EXPECT_EQ(box,box2);
+}
+
+TEST(test_3d_obox2, test_is_inside)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1579,7 +1924,7 @@ TEST(test_3d_bbox2, test_is_inside)
     EXPECT_FALSE(resu);
 }
 
-TEST(test_3d_bbox2, test_is_inside_2d)
+TEST(test_3d_obox2, test_is_inside_2d)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1608,7 +1953,7 @@ TEST(test_3d_bbox2, test_is_inside_2d)
     EXPECT_FALSE(resu);
 }
 
-TEST(test_3d_bbox2,test_translate)
+TEST(test_3d_obox2,test_translate)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1630,7 +1975,7 @@ TEST(test_3d_bbox2,test_translate)
     EXPECT_EQ( box2._H, OPoint3D( 4.0, -1.0, -1.0 ) );
 }
 
-TEST(test_3d_bbox2, test_box_rotation_oz_oy)
+TEST(test_3d_obox2, test_box_rotation_oz_oy)
 {
     //box centered on the origin
     OCoord3D pt1(-1.0, -1.0, -1.0);
@@ -1662,4 +2007,3 @@ TEST(test_3d_bbox2, test_box_rotation_oz_oy)
     EXPECT_EQ( box2._H, OPoint3D( -.4142135624, 1, 2) );
 
 }
-

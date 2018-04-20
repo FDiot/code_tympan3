@@ -48,7 +48,7 @@ public:
 
     /// Get/Set the Intersection choice
     leafTreatment::treatment getIntersectionChoice() { return intersectionChoice; }
-    void setIntersectionChoice(leafTreatment::treatment _intersectionChoice = leafTreatment::FIRST) { intersectionChoice = _intersectionChoice; }
+    void setIntersectionChoice(leafTreatment::treatment _intersectionChoice = leafTreatment::FIRST) { intersectionChoice = _intersectionChoice; defineLeafFunction(); }
     /// Build this accelerator
     virtual bool build() { return false; }
     /// Run this accelerator

@@ -632,7 +632,7 @@ QString OPreferenceManager::uintToString(const size_t& val)
 QString OPreferenceManager::uintToString(const unsigned long& val)
 {
     char buffer[_strBufferSize];
-    sprintf(buffer, "%d", val);
+    sprintf(buffer, "%lu", val);
     QString str(buffer);
     return str;
 }
@@ -649,7 +649,7 @@ QString OPreferenceManager::uintToString(const size_t& val)
 QString OPreferenceManager::uintToString(const unsigned long& val)
 {
     char buffer[_strBufferSize];
-    sprintf(buffer, "%d", val);
+    sprintf(buffer, "%lu", val);
     QString str(buffer);
     return str;
 }

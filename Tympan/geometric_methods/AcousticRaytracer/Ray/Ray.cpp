@@ -30,56 +30,36 @@ void Ray::computeLongueur()
     }
 
     longueur = 0;
-    // Sum distance between each events (starting from the source). Add the distance between
-    // last event and the receptor if any.
-    switch (events.size())
+
+    if (events.size()==0) //No events
     {
-        case 0:
 
             if (recepteur == NULL)
             {
+                //If the ray has not reached a receptor, the length is 0
                 longueur = 0;
                 return;
-            }
-            else
-            {
+
+            }else{
+                
+                //If the ray has reached a receptor, the length is the distance between the source dans the receptor
                 vec3 posSource = vec3(source->getPosition());
                 vec3 posRecep = vec3(((Recepteur*)(recepteur))->getPosition());
                 longueur = posSource.distance(posRecep);
                 return;
             }
-            break;
 
-        case 1:
-            if (recepteur == NULL)
-            {
-                vec3 posSource = vec3(source->getPosition());
-                vec3 posEvent = vec3(events.at(0)->getPosition());
-                longueur = posSource.distance(posEvent);
-                return;
-            }
-            else
-            {
-                vec3 posSource = vec3(source->getPosition());
-                vec3 posEvent = vec3(events.at(0)->getPosition());
-                vec3 posRecep = vec3(((Recepteur*)(recepteur))->getPosition());
-                longueur = posSource.distance(posEvent) + posEvent.distance(posRecep);
-                return;
-            }
-            break;
-
-        default:
+    }else{ //Ray has some events
+        
             longueur = 0;
-            vec3 posSource = vec3(source->getPosition());
-            vec3 posCurrentEvent = vec3(events.at(0)->getPosition());
-            vec3 posNextEvent = vec3(events.at(1)->getPosition());
-            longueur += posSource.distance(posCurrentEvent);
-            for (unsigned int i = 0; i < events.size() - 1; i++)
-            {
-                posCurrentEvent = vec3(events.at(i)->getPosition());
-                posNextEvent = vec3(events.at(i + 1)->getPosition());
-                longueur += posCurrentEvent.distance(posNextEvent);
-            }
+
+            // Distance from source to first event
+            longueur = source->getPosition().distance( events.front()->getPosition() );
+
+            // Add length of events sequence
+            longueur += computeEventsSequenceLength();
+
+            // If the ray has reached a receptor, add the distance from the last event to the receptor
             if (recepteur != NULL)
             {
                 vec3 posLastEvent = vec3(events.back()->getPosition());
@@ -87,13 +67,13 @@ void Ray::computeLongueur()
                 longueur += posLastEvent.distance(posRecepteur);
             }
             return;
-            break;
+         
     }
 }
 
 decimal Ray::computeEventsSequenceLength()
 {
-    // Sum distance between each event
+    // Sum the distance between each event
 	decimal length = 0;
 
 	if ( events.size() == 0 ) { return 0; }
@@ -128,11 +108,16 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
     vec3 posLastEvent;
     switch (events.size())
     {
-        case 0: // Chemin direct source-lastPos
+        // Ray has no events
+        case 0: 
+            // Compute the projection of ref on the line passing by posSource and lastPos
 			closestPoint = ref.closestPointOnLine(posSource, lastPos);
+
+            // Compute the distance between the source and closestPoint
             return posSource.distance(closestPoint);
             break;
 
+        // Ray has some events
         default:
 			// Distance from source to first event
             length = source->getPosition().distance( events.front()->getPosition() );
@@ -140,9 +125,13 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
 			// Add length of events sequence
 			length += computeEventsSequenceLength();
 
-			// Compute distance from the last event to the nearest point from ref
+			// Find last event's position
 			posLastEvent = events.back()->getPosition();
+
+            // Compute the projection of ref on the line passing by posLastEvent and lastPos
 			closestPoint = ref.closestPointOnLine(posLastEvent, lastPos);
+
+            // Add the distance between closestPoint and the position of the last event to the length and return the trueLength
 			return length += closestPoint.distance(posLastEvent);
 
             break;
@@ -166,32 +155,43 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 
     Source* s = NULL;
     Event* e = NULL;
-	Base *beginEvent = getLastPertinentEventOrSource();
+
+    // Get the last diffraction event, or source if theray has no diffraction event
+	Base *pertinentEvent = getLastPertinentEventOrSource();
 
     switch (events.size())
     {
         case 0: 
-            // needs only computing of full (true) length
+            // if no the ray has no events, simply compute the full (true) length
             return computeTrueLength(ref, lastPos, closestPoint);
             break;
 
         default:
-            s = dynamic_cast<Source*>(beginEvent);
+            s = dynamic_cast<Source*>(pertinentEvent);
 
-            // Compute distance from source to the last event
+            // if pertinentEvent is the source, simply compute the full (true) length
             if (s)
             {
-                // needs only computing of full (true) length
+               
 				return computeTrueLength(ref, lastPos, closestPoint);
             }
+
+            // if pertinentEvent is not the source
             else
             {
-                e = dynamic_cast<Event*>(beginEvent);
+
+                // Recover the  pertinent event
+                e = dynamic_cast<Event*>(pertinentEvent);
+
                 if (e)
                 {
-                    // compute length from end of vector
+                    
+                    // Get the last event (begining of the reverse iterator)
                     std::vector< std::shared_ptr<Event> >::reverse_iterator rit = events.rbegin();
+                    // Get the position of the lastEvent
                     previous = (*rit)->getPosition();
+
+                    // Compute the length from the last event to pertinentEvent
                     while ((rit != events.rend()) && ((*rit).get() != e))
                     {
                         rit++;
@@ -200,9 +200,12 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
                         previous = current;
                     }
 
-                    // Compute distance from the last event to the nearest point from receptor
+                    // Get the position of last event
                     posLastEvent = vec3(events.back()->getPosition());
+                    // Compute the projection of ref on the line passing by posLastEvent and lastPos
 					closestPoint = ref.closestPointOnLine(posLastEvent, lastPos);
+
+                    // Return the distance from the last event to the projection of ref
                     return (pertinent_length += closestPoint.distance(posLastEvent));
                 }
             }

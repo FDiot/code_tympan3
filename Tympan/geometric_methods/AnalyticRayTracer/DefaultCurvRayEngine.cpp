@@ -92,7 +92,7 @@ bool DefaultCurvRayEngine::traitementRay(Ray* r, std::list<validRay> &result)
     //Si le dernier evenement du rayon peut generer plusieurs rayons secondaires, on genere
     //un rayon secondaire, puis on copie le rayon restant et on le met dans la pile de traitement.
     //Si le dernier evenement n'a plus de rayon a generer, le rayon n'est pas traite
-    if ( !(r->events.empty()) && (r->events.back()->isReponseLeft()) )
+    if ( !(r->getEvents()->empty()) && (r->getEvents()->back()->isReponseLeft()) )
     {
 		copyRayAndAddToStack(r);
     }

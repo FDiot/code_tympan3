@@ -95,7 +95,7 @@ public:
                     }
                     else
                     {
-                        rejectedData.insert(pair<unsigned long long, T*>(data->constructId, data));
+                        rejectedData.insert(pair<unsigned long long, T*>(data->getConstructId(), data));
                     }
                     return false;
                     break;
@@ -107,7 +107,7 @@ public:
             }
         }
 
-        //cout << "Tous les solveurs (" << selectors.size() << ") ont ete passe avec succes." << endl;
+        //cout << "Tous les selecteurs (" << selectors.size() << ") ont ete passe avec succes." << endl;
         //Tous les filtres sont passes, le rayon est valide
         //On commence par deplacer/supprimer les rayons a remplacer
         for (unsigned int i = 0; i < dataToReplace.size(); i++)
@@ -125,7 +125,7 @@ public:
                 }
                 else
                 {
-                    rejectedData.insert(pair<unsigned long long, T*>(previousData->constructId, previousData));
+                    rejectedData.insert(pair<unsigned long long, T*>(previousData->getConstructId(), previousData));
                 }
             }
         }
@@ -138,7 +138,7 @@ public:
 
         //Enfin, on rajoute le rayon dans la liste des rayons valides par le filtre
         //std::cout<<"Insertion de l'element "<<data->constructId<<std::endl;
-        selectedData.insert(pair<unsigned long long, T*>(data->constructId, data));
+        selectedData.insert(pair<unsigned long long, T*>(data->getConstructId(), data));
         //cout << "Insertion du rayon dans chaque solver passe avec succes." << endl;
         return true;
     }
