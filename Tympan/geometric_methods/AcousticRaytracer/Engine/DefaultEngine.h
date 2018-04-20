@@ -46,35 +46,53 @@ public:
 
     virtual void runStructureBenchmark();
 
+    Ray* genRay();                                                  //!< Create rays from the sources
+
+
 protected:
     /**
-     * \brief Search if a ray intersects a receptor
-     * @param tmin tmin
+     * \brief Search if a ray intersects a receptor before traveling a tmin distance 
+     * (NB: this is the only place in the code where a ray is added to the solver's list of valid rays)
+     * @param tmin maximum distance the ray can travel before hiting a receptor for the intersection to be considered valid
      * @param r The ray
      */
 	void searchForReceptor(const decimal &tmin, Ray *r)
 	{
-        //Recuperation des structures acceleratrices pour le Solver
+        //Get the receptors' accelerating structure
         Accelerator* accelerator = recepteurs->getAccelerator();
         std::list<Intersection> foundPrims;
 
-        //Appel du Solver pour le choix de la methode de traverser de la structure
+        //Find intersections with receptors
         accelerator->traverse(r, foundPrims);
         std::list<Intersection>::iterator iter;
+
+        //For each found intersections
         for (iter=foundPrims.begin(); iter != foundPrims.end(); iter++)
         {
+
             Intersection its = (*iter);
    			Intersection result;
+	
+            vec3 position=r->getPosition();
+   			vec3 direction=r->getDirection();
 
-            if ( dynamic_cast<Recepteur*>(its.p)->intersectionRecepteur(r->position, r->direction, tmin, result) )
+   			//If the ray intersect the receptor before traveling a tmin distance
+            if ( dynamic_cast<Recepteur*>(its.p)->intersectionRecepteur(position, direction, tmin, result) )
             {
-				//Cas ou le rayon touche un recepteur
+				// Create a copy of the ray
 				Ray* valide_ray = new Ray(r);
-				valide_ray->constructId = rayCounter;
+				valide_ray->setConstructId (rayCounter);
+				
 				rayCounter++;
-				valide_ray->recepteur = dynamic_cast<Recepteur*>(its.p);
-				valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
+
+				// Set the ray's receptor
+				valide_ray->setRecepteur ( dynamic_cast<Recepteur*>(its.p));
+
+				//Compute the final position of the ray based on its direction and the distance traveled
+				valide_ray->setFinalPosition ( valide_ray->getPosition() + valide_ray->getDirection() * result.t);
 				valide_ray->computeLongueur();
+
+				//Add the ray to the solver's list of valid rays
 				solver->valideRayon(valide_ray);
             }            
         }
@@ -90,16 +108,17 @@ protected:
 			for (std::vector<Shape*>::iterator itrecp = tabReceptors->begin(); itrecp != tabReceptors->end(); itrecp++)
 			{
 				Ray* new_ray = new Ray();
-				new_ray->constructId = rayCounter;
+				new_ray->setConstructId ( rayCounter);
 				rayCounter++;
-				new_ray->source = (&(*itsource));
-				new_ray->position = itsource->getPosition();
+				new_ray->setSource ( (&(*itsource)) );
+				new_ray->setPosition ( itsource->getPosition());
 				vec3 psource = itsource->getPosition();
 				vec3 precp = dynamic_cast<Sphere*>( (*itrecp) )->getPosition();
-				new_ray->direction = precp - psource;
-				new_ray->direction.normalize();
-				new_ray->mint = 0.;
-				new_ray->maxt = 10000.;
+				vec3 direction=precp - psource;
+				direction.normalize();
+				new_ray->setDirection(direction);
+				new_ray->setMint ( 0. );
+				new_ray->setMaxt ( 10000.);
 				pile_traitement.push(new_ray);
 			}
 		}	
@@ -124,6 +143,9 @@ public:
     virtual bool process();
 
     virtual void runStructureBenchmark();
+    
+    Ray* genRay();                                                  //!< Create rays from the sources
+
 
 protected :
     void searchForReceptor(const decimal &tmin, Ray *r)
@@ -131,15 +153,24 @@ protected :
 		for (unsigned int i = 0; i < recepteurs->size(); i++)
 		{
 			Intersection result;
+			//if the ray hits a receptor before traveling tmin
 			if (recepteurs->at(i).intersectionRecepteur(r->position, r->direction, tmin, result))
 			{
-				//Cas ou le rayon touche un recepteur
+				
+				// Create a copy of the ray
 				Ray* valide_ray = new Ray(r);
-				valide_ray->constructId = rayCounter;
+				valide_ray->setConstructId (rayCounter);
+
 				rayCounter++;
-				valide_ray->recepteur = (&(recepteurs->at(i)));
-				valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
+
+				// Set the ray's receptor
+				valide_ray->setRecepteur ( dynamic_cast<Recepteur*>(its.p));
+
+				//Compute the final position of the ray based on its direction and the distance traveled
+				valide_ray->setFinalPosition ( valide_ray->getPosition() + valide_ray->getDirection() * result.t);
 				valide_ray->computeLongueur();
+
+				//Add the ray to the solver's list of valid rays
 				solver->valideRayon(valide_ray);
 			}
 		}
@@ -169,21 +200,26 @@ protected :
 #endif
 protected :
 	/**
-	 * \brief Add a ray to the treatment stack
+	 * \brief Copy a ray and use its last event to generate a response to use as the copy's direction
+	 * (used to handle the generation of rays by diffraction events)
 	 * @param r Return modified ray
 	 */
 	void copyRayAndAddToStack(Ray *r)
 	{
-        //Copie d'un rayon ayant rencontre une diffraction...
+        //Copy ray
         Ray* copie = new Ray(r);
-        copie->constructId = rayCounter;
+        copie->setConstructId ( rayCounter );
         rayCounter++;
-        r->events.back()->getResponse(copie->direction);
+
+        //Generate a response with the event and use it has the copy's direction
+        vec3 response;
+        r->getEvents()->back()->getResponse(response);
+        copie->setDirection(response);
+
+        //Add the copy to the stack
         pile_traitement.push(copie);
-        //Copie achevee
 	}
 
-    Ray* genRay();													//!< Create rays from the sources
      /**
       * \brief Ray treatment method
       * @param r Ray to treat

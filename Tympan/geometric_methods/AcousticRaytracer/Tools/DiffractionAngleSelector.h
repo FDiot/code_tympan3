@@ -42,6 +42,7 @@ public :
     {
         vector<std::shared_ptr<Event> >* events = r->getEvents();
 
+        //The ray has is accepted if it has no diffraction event
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return SELECTOR_ACCEPT; }
 		
 		vec3 beginPos = r->getSource()->getPosition();
@@ -65,6 +66,7 @@ public :
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).get() );
 
+
 			N1 = dynamic_cast<Cylindre*>(pDiff->getShape())->getFirstShape()->getNormal();
 			N2 = dynamic_cast<Cylindre*>(pDiff->getShape())->getSecondShape()->getNormal();
 			
@@ -85,19 +87,22 @@ public :
 
 			FT = From * To;
 
-			if ( ( 1. - FT ) < EPSILON_4 ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
+			//Accept the ray if FROM and TO are colinear and point in the same direction
+			if ( ( 1. - FT ) < EPSILON_4 ) { return SELECTOR_ACCEPT; } 
 
-			if ( FT < 0. ) { return SELECTOR_REJECT; }  // Le vecteur sortant est "oppose" au vecteur entrant
+			//Reject the ray if FROM and TO point in opposite directions
+			if ( FT < 0. ) { return SELECTOR_REJECT; }  
 
 			F1 = From * N1;
 			F2 = From * N2;
 
+			//Reject the ray if its incoming direction is such that there is no shadow zone
 			if ( (F1 * F2) > 0.) { return SELECTOR_REJECT; } 
 
 			T1 = To * N1;
 			T2 = To * N2;
 
-
+			//Reject the ray if TO is not in the shadow zone of the obstacle
 			if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (T2 - F2) > EPSILON_4 ) ) )
 			{ 
 				return SELECTOR_REJECT; 
@@ -165,19 +170,22 @@ public :
 
 			FT = From * To;
 
-			if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
+			//Return true if FROM and TO are colinear and point in the same direction
+			if ( ( 1. - FT ) < EPSILON_4 ) { return true; } 
 
-			if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
+			//Return false if FROM and TO point in opposite directions
+			if ( FT < 0. ) { return false; }  
 
 			F1 = From * N1;
 			F2 = From * N2;
 
+			//Return false if its incoming direction is such that there is no shadow zone
 			if ( (F1 * F2) > 0.) { return false; } 
 
 			T1 = To * N1;
 			T2 = To * N2;
 
-
+			//Return false if TO is not in the shadow zone of the obstacle
 			if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (T2 - F2) > EPSILON_4 ) ) )
 			{ 
 				return false; 

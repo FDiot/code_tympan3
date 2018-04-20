@@ -178,7 +178,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
 {
 
     decimal tmin, tmax, intermin = -1.;
-    if (!globalBox.IntersectP(r->position, r->direction, &tmin, &tmax))
+    if (!globalBox.IntersectP(r->getPosition(), r->getDirection(), &tmin, &tmax))
     {
         return -1.;
     }
@@ -186,7 +186,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
     stringstream logs;
 
     // Prepare to traverse kd-tree for ray
-    vec3 invDir(1.f / r->direction.x, 1.f / r->direction.y, 1.f / r->direction.z);
+    vec3 invDir(1.f / r->getDirection().x, 1.f / r->getDirection().y, 1.f / r->getDirection().z);
 #define MAX_TODO 64
     KdToDo todo[MAX_TODO];
     int todoPos = 0;
@@ -196,18 +196,18 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
     while (node != NULL)
     {
         // Bail out if we found a hit closer than the current node
-        if (r->maxt < tmin) { break; }
+        if (r->getMaxt() < tmin) { break; }
         if (!node->isLeaf())
         {
             // Process kd-tree interior node
             // Compute parametric distance along ray to split plane
             int axis = node->getAxe();
-            float tplane = (node->getAxeValue() - r->position[axis]) * invDir[axis];
+            float tplane = (node->getAxeValue() - r->getPosition()[axis]) * invDir[axis];
 
             // Get node children pointers for ray
             KDNode* firstChild, *secondChild;
-            int belowFirst = (r->position[axis] <  node->getAxeValue()) ||
-                             (r->position[axis] == node->getAxeValue() && r->direction[axis] >= 0);
+            int belowFirst = (r->getPosition()[axis] <  node->getAxeValue()) ||
+                             (r->getPosition()[axis] == node->getAxeValue() && r->getDirection()[axis] >= 0);
             if (belowFirst)
             {
                 firstChild = node + 1;

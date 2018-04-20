@@ -64,24 +64,22 @@ void Triangle::updateBBox()
     box = BBox(p, p);
     box = box.Union(p + u);
     box = box.Union(p + v);
-    box.pMin = vec3(box.pMin.x - 0.01f, box.pMin.y - 0.01f, box.pMin.z - 0.01f);
-    box.pMax = vec3(box.pMax.x + 0.01f, box.pMax.y + 0.01f, box.pMax.z + 0.01f);
+    box.pMin = vec3((decimal)(box.pMin.x - 0.01), (decimal)(box.pMin.y - 0.01), (decimal)(box.pMin.z - 0.01));
+    box.pMax = vec3((decimal)(box.pMax.x + 0.01), (decimal)(box.pMax.y + 0.01), (decimal)(box.pMax.z + 0.01));
 };
 
 bool Triangle::getIntersection(Ray& ray, Intersection& inter)
 {
-    vec3 directeur = ray.direction;
+    vec3 directeur = ray.getDirection();
     directeur.normalize();
     if (directeur.dot(this->normal) > 0.)
     {
         return false;
     }
-    vec3 v = Vector_r(vertices->at(localVertices.at(1)), vertices->at(localVertices.at(0)));
-    vec3 u = Vector_r(vertices->at(localVertices.at(2)), vertices->at(localVertices.at(0)));
+   
     vec3 n;
     n.cross(u, v);
-    vec3 otr = Vector_r(ray.position,
-                        vertices->at(localVertices.at(0)));
+    vec3 otr = Vector_r(ray.getPosition(),p);
     double ir, iu, iv;
     vec3 temp;
 

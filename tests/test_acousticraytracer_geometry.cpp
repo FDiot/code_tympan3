@@ -458,7 +458,7 @@ TEST(test_cylindre, get_intersection1){
 	bool res=cylindre.getIntersection(ray,inter);
 
 	EXPECT_TRUE(res); //Intersection found
-	EXPECT_FLOAT_EQ(decimal(9.8),inter.t); // the intersection is 10 units minus the cylinder's thickness (0.2) away from position of the ray.
+	EXPECT_FLOAT_EQ((decimal)9.8,inter.t); // the intersection is 10 units minus the cylinder's thickness (0.2) away from position of the ray.
 	
 	ray=new Ray(ray_pos,vec3(-1,0,0)); //points away from the cylinder
 	
@@ -499,16 +499,13 @@ TEST(test_cylindre, get_intersection2){
 	vec3 axis_middle=p1+axis/2;
 	vec3 dir=axis_middle-ray_pos;
 	dir.normalize();
-
 	Ray ray=new Ray(ray_pos,dir); //points in direction of the cylinder
-
 
 	Intersection inter;
 
 	bool res=cylindre.getIntersection(ray,inter);
-
 	EXPECT_TRUE(res); //Intersection found
-	EXPECT_FLOAT_EQ(decimal(15.617231),inter.t); 
+	EXPECT_FLOAT_EQ((decimal)15.617231,inter.t); 
 	
 	ray=new Ray(ray_pos,dir+vec3(-1,7,5)); //points away from the cylinder
 	
@@ -556,7 +553,7 @@ TEST(test_sphere, get_intersection2){
 	bool res=s.getIntersection(r,inter);
 
 	EXPECT_TRUE(res); //should find an intersection
-	EXPECT_FLOAT_EQ((decimal)15.916492,inter.t); 
+	EXPECT_NEAR((decimal)15.91649,inter.t,0.00001); //Windows and Linux do not agree on the exact value of this, hence the EXPECT_NEAR
 
 	ray_dir=vec3(-8,9,14);
 	ray_dir.normalize();
@@ -625,7 +622,7 @@ TEST(test_triangle, get_intersection2){
 	bool res=t1.getIntersection(r,inter);
 
 	EXPECT_TRUE(res); //should find an intersection
-	EXPECT_FLOAT_EQ(11.130539,inter.t); //the distance between the ray position and the intersection should be 10
+	EXPECT_FLOAT_EQ((decimal)11.130539,inter.t);
 
 	res=t2.getIntersection(r,inter);
 	EXPECT_FALSE(res); //normal points in the same direction has the ray -> no intersection
@@ -955,5 +952,237 @@ TEST(test_randomsphericsampler, get_sample){
 
 	EXPECT_TRUE(p_min6<=p6);
 	EXPECT_TRUE(p_max6>=p6);	
+
+}
+
+
+/***********************************************************************
+						        BBox
+************************************************************************/
+
+
+TEST(test_3d_bbox,test_constructors)
+{
+
+	//Default constructor
+    BBox bbox;
+	EXPECT_TRUE(bbox.isNull);
+	EXPECT_DOUBLE_EQ(0.,bbox.SurfaceArea());
+	EXPECT_FLOAT_EQ(0.,bbox.diag());
+
+	//Min-Max constructor
+	bbox=BBox(vec3(-2.,-5.,2.),vec3(1.,3.,4.));
+	EXPECT_FALSE(bbox.isNull);
+	EXPECT_TRUE(vec3(-2.,-5.,2.)==bbox.getBBMin());
+	EXPECT_TRUE(vec3(1.,3.,4.)==bbox.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-1.,3.)==bbox.getCentroid());
+	EXPECT_DOUBLE_EQ(92.,bbox.SurfaceArea());
+	EXPECT_FLOAT_EQ(sqrtf(9.+64.+4),bbox.diag());
+	
+}
+
+//Test the union with a point
+TEST(test_3d_bbox,test_union_with_point)
+{
+	BBox bbox=BBox(vec3(-2.,-5.,2.),vec3(1.,3.,4.));
+
+	//point inside the bbox (should not change the bbox)
+	BBox res=bbox.Union(vec3(0.,2.,3.));
+	EXPECT_TRUE(bbox.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox.getCentroid()==res.getCentroid());
+
+	res=res.Union(bbox,vec3(0.,2.,3.));
+	EXPECT_TRUE(bbox.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox.getCentroid()==res.getCentroid());
+
+
+	//point outside the bbox (should enlarge the bbox)
+	res=bbox.Union(vec3(-5.,4.,1.));
+	EXPECT_TRUE(vec3(-5.,-5.,1.)==res.getBBMin());
+	EXPECT_TRUE(vec3(1.,4.,4.)==res.getBBMax());
+	EXPECT_TRUE(vec3(-2.,-0.5,2.5)==res.getCentroid());
+
+	res=res.Union(bbox,vec3(-5.,4.,1.));
+	EXPECT_TRUE(vec3(-5.,-5.,1.)==res.getBBMin());
+	EXPECT_TRUE(vec3(1.,4.,4.)==res.getBBMax());
+	EXPECT_TRUE(vec3(-2.,-0.5,2.5)==res.getCentroid());
+}
+
+//Test the union with another bbox
+TEST(test_3d_bbox,test_union_with_bbox)
+{
+
+	BBox bbox1=BBox(vec3(-2.,-5.,2.),vec3(1.,3.,4.));
+
+	//bbox2 included in bbox1 (res should be equal to bbox1)
+	BBox bbox2=BBox(vec3(-1.,0.,2.),vec3(0.,1.,3.));
+	BBox res=bbox1.Union(bbox2);
+	EXPECT_TRUE(bbox1.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox1.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox1.getCentroid()==res.getCentroid());
+
+	res=bbox2.Union(bbox1,bbox2);
+	EXPECT_TRUE(bbox1.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox1.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox1.getCentroid()==res.getCentroid());
+
+	//bbox 2 should not have been modified by previsous unions
+	EXPECT_TRUE(vec3(-1.,0.,2.)==bbox2.getBBMin());
+	EXPECT_TRUE(vec3(0.,1.,3.)==bbox2.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,0.5,2.5)==bbox2.getCentroid());
+
+
+	//bbox1 included in bbox2 (res should be equal to bbox2)
+	bbox2=BBox(vec3(-3.,-10.,0.),vec3(4.,5.,7.));
+	res=bbox1.Union(bbox2);
+	EXPECT_TRUE(bbox2.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox2.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox2.getCentroid()==res.getCentroid());
+
+	res=bbox2.Union(bbox1,bbox2);
+	EXPECT_TRUE(bbox2.getBBMin()==res.getBBMin());
+	EXPECT_TRUE(bbox2.getBBMax()==res.getBBMax());
+	EXPECT_TRUE(bbox2.getCentroid()==res.getCentroid());
+
+	//bbox 1 should not have been modified by previsous unions
+	EXPECT_TRUE(vec3(-2.,-5.,2.)==bbox1.getBBMin());
+	EXPECT_TRUE(vec3(1.,3.,4.)==bbox1.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-1.,3.)==bbox1.getCentroid());
+
+	//bboxs not included in each other
+	bbox2=BBox(vec3(-3.,-3.,1.),vec3(2.,2.,3.));
+
+	res=bbox1.Union(bbox2);
+	EXPECT_TRUE(vec3(-3.,-5.,1.)==res.getBBMin());
+	EXPECT_TRUE(vec3(2.,3.,4.)==res.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-1.,2.5)==res.getCentroid());
+
+	res=bbox2.Union(bbox1,bbox2);
+	EXPECT_TRUE(vec3(-3.,-5.,1.)==res.getBBMin());
+	EXPECT_TRUE(vec3(2.,3.,4.)==res.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-1.,2.5)==res.getCentroid());
+
+	//bbox 1 and 2 should not have been modified by previsous unions
+	EXPECT_TRUE(vec3(-2.,-5.,2.)==bbox1.getBBMin());
+	EXPECT_TRUE(vec3(1.,3.,4.)==bbox1.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-1.,3.)==bbox1.getCentroid());
+
+	EXPECT_TRUE(vec3(-3.,-3.,1.)==bbox2.getBBMin());
+	EXPECT_TRUE(vec3(2.,2.,3.)==bbox2.getBBMax());
+	EXPECT_TRUE(vec3(-0.5,-0.5,2.)==bbox2.getCentroid());
+
+
+}
+
+
+//Test the isInBox method 
+TEST(test_3d_bbox,test_is_in_box)
+{
+
+	BBox bbox(vec3(-5,1,-2),vec3(1,5,7));
+
+	//Inside
+	EXPECT_TRUE(bbox.isInBox(vec3(0,1,0)));
+	EXPECT_TRUE(bbox.isInBox(vec3(-5,1,-2)));
+	EXPECT_TRUE(bbox.isInBox(vec3(1,5,7)));
+	EXPECT_TRUE(bbox.isInBox(vec3(0,1,-2)));
+	EXPECT_TRUE(bbox.isInBox(vec3(-4,3,-1)));
+
+	//Outside
+	EXPECT_FALSE(bbox.isInBox(vec3(-5,1,(decimal)-2.00001)));
+	EXPECT_FALSE(bbox.isInBox(vec3(-5,(decimal)0.99999,-2.)));
+	EXPECT_FALSE(bbox.isInBox(vec3((decimal)-5.00001,1,-2.)));
+	EXPECT_FALSE(bbox.isInBox(vec3((decimal)1.00001,5,7)));
+	EXPECT_FALSE(bbox.isInBox(vec3(1,(decimal)5.00001,7)));
+	EXPECT_FALSE(bbox.isInBox(vec3(1,5,(decimal)7.00001)));
+
+}
+
+
+//Test the Inside method 
+TEST(test_3d_bbox,test_inside)
+{
+
+	BBox bbox(vec3(-5,1,-2),vec3(1,5,7));
+
+	//Inside
+	EXPECT_TRUE(bbox.Inside(vec3(0,1,0)));
+	EXPECT_TRUE(bbox.Inside(vec3(-5,1,-2)));
+	EXPECT_TRUE(bbox.Inside(vec3(1,5,7)));
+	EXPECT_TRUE(bbox.Inside(vec3(0,1,-2)));
+	EXPECT_TRUE(bbox.Inside(vec3(-4,3,-1)));
+
+	//Outside
+	EXPECT_FALSE(bbox.Inside(vec3(-5,1,(decimal)-2.00001)));
+	EXPECT_FALSE(bbox.Inside(vec3(-5,(decimal)0.99999,-2.)));
+	EXPECT_FALSE(bbox.Inside(vec3((decimal)-5.00001,1,-2.)));
+	EXPECT_FALSE(bbox.Inside(vec3((decimal)1.00001,5,7)));
+	EXPECT_FALSE(bbox.Inside(vec3(1,(decimal)5.00001,7)));
+	EXPECT_FALSE(bbox.Inside(vec3(1,5,(decimal)7.00001)));
+
+}
+
+//Test the intersectBox method 
+TEST(test_3d_bbox,test_intersect_box)
+{
+	BBox bbox(vec3(-4,2,-5),vec3(-1,4,-2));
+
+	EXPECT_TRUE(bbox.intersectBox(BBox(vec3(-3,2,-4),vec3(2,4,1))));
+	EXPECT_TRUE(bbox.intersectBox(BBox(vec3(-3,2,-4),vec3(-2,4,-2))));
+	EXPECT_TRUE(bbox.intersectBox(BBox(vec3(-3,1,-2),vec3(-1,4,-2))));
+	EXPECT_TRUE(bbox.intersectBox(BBox(vec3(-6,3,-4),vec3(2,4,-3))));
+
+	EXPECT_FALSE(bbox.intersectBox(BBox(vec3(-10,-8,-9),vec3(-4,-6,-8))));
+	EXPECT_FALSE(bbox.intersectBox(BBox(vec3(-10,-8,-9),vec3(-5,-2,-8))));
+	EXPECT_FALSE(bbox.intersectBox(BBox(vec3(-10,-8,-9),vec3(-5,-6,-3))));
+}
+
+
+//Test the IntersectP method 
+TEST(test_3d_bbox,test_intersect_p)
+{
+
+	BBox bbox(vec3(1,1,1),vec3(3,3,3));
+
+	decimal hit1=-1;
+	decimal hit2=-1;
+	//Ray passes under the bbox
+	EXPECT_FALSE(bbox.IntersectP(vec3(0,0,0),vec3(1,0,0),&hit1,&hit2));
+	EXPECT_FLOAT_EQ(-1.,hit1);
+	EXPECT_FLOAT_EQ(-1.,hit2);
+
+
+	hit1=-1;
+	hit2=-1;
+	//Ray hits the bbox
+	EXPECT_TRUE(bbox.IntersectP(vec3(0,3,3),vec3(1,0,0),&hit1,&hit2));
+	EXPECT_FLOAT_EQ(1.,hit1);
+	EXPECT_FLOAT_EQ(3.,hit2);
+
+	hit1=-1;
+	hit2=-1;
+	//Ray starts inside the bbox
+	EXPECT_TRUE(bbox.IntersectP(vec3(2,2,2),vec3(1,0,0),&hit1,&hit2));
+	EXPECT_FLOAT_EQ(0.,hit1);
+	EXPECT_FLOAT_EQ(1.,hit2);
+
+
+}
+
+//Test the maximumExtend method 
+TEST(test_3d_bbox,test_maximum_extend)
+{
+
+	BBox bbox(vec3(-5,-1,-1),vec3(-2,1,1)); 
+	EXPECT_EQ(0,bbox.MaximumExtend()); //max-min = (6,2,2) => x is the dominant direction
+
+	bbox=BBox(vec3(1,-3,1),vec3(2,2,2));
+	EXPECT_EQ(1,bbox.MaximumExtend()); //max-min = (1,2,1) => y is the dominant direction
+
+	bbox=BBox(vec3(-5,-1,1),vec3(-2,1,10));
+	EXPECT_EQ(2,bbox.MaximumExtend()); //max-min = (3,2,9) => z is the dominant direction
+
 
 }

@@ -107,7 +107,7 @@ public:
     /*!
      * \fn decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
      * \brief	Compute ray length from source to closestPoint
-	 *			ClosestPoint is the closest point from ref on the line between the position of the last event and lastPos
+	 *			closestPoint is the projection of ref on the line passing by lastPos and the position of the last event (or source if the ray has no events)
      * \param ref
      * \param lastPos
      * \param closestPoint
@@ -116,7 +116,7 @@ public:
 
     /*!
      * \fn decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
-     * \brief Compute ray length from last pertinent event (i.e. source or last diffraction
+     * \brief Compute ray length from last pertinent event (i.e. source or last diffraction)
 	 *        to the nearest point of the "event" located at ref position
      */
 	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
@@ -129,16 +129,18 @@ public:
 
 	/*!
 	 * \fn vec3 computeLocalOrigin( Base *ev);
-	 * \brief Return position of event found by getLastPertinentEventOrSource()
+	 * \brief Return position of ev which might be a source or an event
 	 */
 	inline vec3 computeLocalOrigin( Base *ev)
 	{
 		if ( dynamic_cast<Source*>(ev) )
 		{
+            // if ev is the source
 			return dynamic_cast<Source*>(ev)->getPosition();
 		}
-		else // that's a standard event
+		else 
 		{
+            // if ev is a standard event
 			return dynamic_cast<Event*>(ev)->getPosition();
 		}
 	}
@@ -155,20 +157,20 @@ public:
     * \brief Return the diffractions number encountered by the ray.
     * \return Reflections diffractions encountered by the ray.
     */
-    unsigned int getDiff() { return nbDiffraction; }
+    unsigned int getDiff() const { return nbDiffraction; }
 
     /*!
     * \fn unsigned int getReflex()
     * \brief Return the reflections number encountered by the ray.
     * \return Reflections number encountered by the ray.
     */
-    unsigned int getReflex() { return nbReflexion; }
+    unsigned int getReflex() const { return nbReflexion; }
 
     /*!
      * \fn unsigned int getNbEvents();
      * \brief Return the total number of events
      */
-    unsigned int getNbEvents() { return nbDiffraction + nbReflexion; }
+    unsigned int getNbEvents() const { return nbDiffraction + nbReflexion; }
 
     /*!
     * \fn std::vector<std::shared_ptr<Event> >* getEvents()
@@ -218,13 +220,14 @@ public:
 
     /*!
      * \fn decimal getThickness( const decimal& distance, bool diffraction);
-     * \brief Compute thickness of the ray after covering a distance for spherical or diffraction source
+     * \brief Compute the thickness of the ray after having traveled a certain distance 
+     * depending on the type of source which generated the ray (spherical or diffraction source)
      */
 	decimal getThickness( const decimal& distance, bool diffraction);
 
     /*!
      * \fn decimal getSolidAngle( bool &diffraction)
-     * \brief   Compute solid angle associated with the ray
+     * \brief Compute the solid angle associated with the ray (depends on the type of source which generated the ray and the number of rays it generated)
      * \param diffraction Set diffraction true if last pertinent event is a diffraction
      */
 	decimal getSolidAngle( bool &diffraction );
@@ -248,7 +251,190 @@ public:
      */
     bitSet getEventsBitSet(const typeevent& typeEv);
 
-public:
+    /*!
+     * \fn decimal getcumulDelta();
+     * \brief Return the cumulative difference between the rays length and its length when ignoring diffractions and taking the direct path between reflections instead
+     */
+
+     decimal getCumulDelta() const { return cumulDelta; }
+
+    /*!
+     * \fn decimal getCumulDistance()
+     * \brief Return the cumulative length since the last reflection event
+     */
+
+     decimal getCumulDistance() const { return cumulDistance; }
+
+    /*!
+     * \fn unsigned long long int getConstructId()
+     * \brief Return Ray id
+     */
+
+     unsigned long long int getConstructId() const { return constructId; }
+
+    /*!
+     * \fn decimal getMint()
+     * \brief Return mint
+     */
+
+     decimal getMint() const { return mint; }
+
+    /*!
+     * \fn decimal getMaxt()
+     * \brief Return maxt
+     */
+
+     decimal getMaxt() const { return maxt; }
+
+    /*!
+     * \fn vec3 getFinalPosition()
+     * \brief Return ending point of the ray (this ending point is set when a the ray hits a receptor in engine.searchForReceptor)
+     */
+
+     vec3 getFinalPosition() const { return finalPosition; }
+
+    /*!
+     * \fn vect3 getDirection()
+     * \brief Return direction of the ray 
+     */
+
+     vec3 getDirection() const { return direction; }
+
+    /*!
+     * \fn vect3 getPosition()
+     * \brief Return starting point ray
+     */
+
+     vec3 getPosition() const { return position; }
+    
+    /*!
+     * \fn void setPosition (vec3 _position)
+     * \brief set the starting point ray
+     */
+
+     void setPosition (vec3 _position){
+        position = _position;
+     }
+
+    /*!
+     * \fn void setdirection (vec3 _direction)
+     * \brief set the direction if the ray
+     */
+
+     void setDirection (vec3 _direction){
+        direction=_direction;
+     }
+
+    /*!
+     * \fn void setFinalPosition (vec3 _finalPosition)
+     * \brief set the ending point of the ray
+     */
+
+     void setFinalPosition (vec3 _finalPosition){
+        finalPosition=_finalPosition;
+     }
+
+    /*!
+     * \fn void setMint (decimal _mint)
+     * \brief set the Mint
+     */
+
+     void setMint (decimal _mint){
+        mint=_mint;
+     }
+
+    /*!
+     * \fn void setMaxt (decimal _maxt)
+     * \brief set the maxt
+     */
+
+     void setMaxt (decimal _maxt){
+        maxt=_maxt;
+     }
+
+    /*!
+     * \fn void setSource (Source* _source)
+     * \brief set the pointer to the source of the ray 
+     */
+
+     void setSource (Source* _source){
+        source=_source;
+     }
+
+    /*!
+     * \fn void setRecepteur (void* _recepteur)
+     * \brief set the pointer to the receptor of the ray
+     */
+
+     void setRecepteur (void* _recepteur){
+        recepteur=_recepteur;
+     }
+
+    /*!
+     * \fn void setLongueur (decimal _longueur) 
+     * \brief set the distance traveled by the ray
+     */
+
+     void setLongueur (decimal _longueur){
+        longueur=_longueur;
+     }
+
+    /*!
+     * \fn void setConstructId (unsigned long long int _constructId)
+     * \brief set the ray id
+     */
+
+      void setConstructId (unsigned long long int _constructId){
+        constructId=_constructId;
+     }
+
+
+    /*!
+     * \fn void setNbReflexion (unsigned int _nbReflexion) 
+     * \brief set the reflections number for the ray
+     */
+
+     void setNbReflexion (unsigned int _nbReflexion){
+        nbReflexion=_nbReflexion;
+     }
+
+    /*!
+     * \fn void setNbDiffraction (unsigned int _nbDiffraction) 
+     * \brief set the diffractions number for the ray
+     */
+
+     void setNbDiffraction (unsigned int _nbDiffraction){
+        nbDiffraction=_nbDiffraction;
+     }
+
+    /*!
+     * \fn void setCumulDistance (decimal _cumulDistance)
+     * \brief set the cumulative distance by the ray computed at each step
+     */
+
+     void setCumulDistance (decimal _cumulDistance){
+       cumulDistance = _cumulDistance;
+     }
+
+    /*!
+     * \fn void setCumulDelta (decimal _cumulDelta)
+     * \brief set the cumulative walking step difference by the ray computed at each step
+     */
+
+     void setCumulDelta (decimal _cumulDelta){
+        cumulDelta=_cumulDelta;
+     }
+
+    /*!
+     * \fn void setCumulDelta (decimal _cumulDelta)
+     * \brief set the cumulative walking step difference by the ray computed at each step
+     */
+
+     void addEvent (std::shared_ptr<Event> _event){
+        events.push_back(_event);
+     }
+ 
+protected:
     vec3 position;                              //!< Starting point ray
     vec3 direction;                             //!< Direction vector for the ray at the source
     vec3 finalPosition;                         //!< Ending point of the ray
@@ -256,13 +442,14 @@ public:
     decimal maxt;
     Source* source;                             //!< Pointer to the source of the ray
     void* recepteur;                            //!< Pointer to the receptor of the ray
-    std::vector<std::shared_ptr<Event> > events; //!< Events list for the ray
     decimal longueur;                           //!< Distance traveled by the ray
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray
     unsigned int nbDiffraction;                 //!< Diffractions number for the ray
-    decimal cumulDistance;                      //!< Cumulative length (set to 0 after each reflexion event validation)
-    decimal cumulDelta;                         //!< Cumulative walking step difference by the ray computed at each step
+    decimal cumulDistance;                      //!< Cumulative length since last valid reflexion
+    decimal cumulDelta;                         //!< Cumulative difference by the ray computed at each step
+    std::vector<std::shared_ptr<Event>> events; //!< Events list for the ray
+
 };
 
 

@@ -19,7 +19,7 @@
 #include "Selector.h"
 
 /*!
- * \brief : To disable rays which have traveled a distance greater than a given length
+ * \brief : Rejects rays which have traveled a distance greater than a given length
  */
 template<typename T>
 class LengthSelector : public Selector<T>
@@ -114,13 +114,24 @@ public :
         }
         return true;
     }
-    /// Get the maximal length
+    /**
+     * \brief Get the maximal length
+     */ 
     double getMaximumLength() { return maxLength; }
-    /// Set the maximal length
+ 
+    /**
+    * \brief Set the maximal length
+    */ 
     void setMaximumLength(double _maximumLength) { this->maximumLength = _maximumLength; }
-    /// Get the OPERATOR of this Selector
+
+    /**
+    * \brief Get the OPERATOR of this Selector
+    */ 
     OPERATOR getOperator() { return op; }
-    /// Set the OPERATOR of this Selector
+ 
+    /**
+    * \brief Set the OPERATOR of this Selector
+    */ 
     void setOperator(OPERATOR _op) { op = _op; }
 
 protected:

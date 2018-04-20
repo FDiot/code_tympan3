@@ -33,7 +33,7 @@ decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersect
         case ALL_BEFORE_VISIBLE:
             return keepAllBeforeVisible(currentIntersections, currentTmin);
             break;
-        case leafTreatment::ALL:
+        case ALL:
             return keepAll(currentIntersections, currentTmin);
             break;
         default:
@@ -46,11 +46,14 @@ decimal keepFirst(std::list<Intersection> &currentIntersections, decimal current
 {
     if (currentIntersections.empty()) { return currentTmin; }
 
+    //Set the max tmin to currentTmin
     decimal tmin = currentTmin;
     std::list<Intersection>::iterator firstInter = currentIntersections.end();
 
+    //Browse through all intersections found
     for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
     {
+        //Check if the current intersection happens before the closest one we found so far in term of tmin
         if (tmin < 0. || it->t <= tmin)
         {
             tmin = it->t;
@@ -58,6 +61,7 @@ decimal keepFirst(std::list<Intersection> &currentIntersections, decimal current
         }
     }
 
+    //if some intersection has been found, copy it, clear the list of intersections and put back the copy into the list
     if (firstInter != currentIntersections.end())
     {
         Intersection firstIntersection;
@@ -76,7 +80,10 @@ decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, dec
 {
     if (currentIntersections.empty()) { return currentTmin; }
 
+    //Set the max tmin to currentTmin
     decimal tmin = currentTmin;
+
+    //Find the tmin of the first intersection with a triangle
     for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
     {
         Triangle* triangle = dynamic_cast<Triangle*>(it->p);
@@ -87,9 +94,10 @@ decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, dec
     }
     
     std::list<Intersection>::iterator it = currentIntersections.begin();
+    //Erase all intersections that happen after tmin
     while(it != currentIntersections.end())
     {
-        if (it->t > tmin)
+        if (tmin > 0. && it->t > tmin)
            currentIntersections.erase(it++);
         else
            it++;
@@ -103,7 +111,10 @@ decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, deci
 {
     if (currentIntersections.empty()) { return currentTmin; }
 
+    //Set the max tmin to currentTmin
     decimal tmin = currentTmin;
+
+    //Find the tmin of the first intersection with a visible shape
     for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
     {
         if (it->p->isVisible() && (tmin < 0. || it->t < tmin))
@@ -112,10 +123,12 @@ decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, deci
         }
     }
 
+
     std::list<Intersection>::iterator it = currentIntersections.begin();
+    //Erase all intersections that happen after tmin
     while(it != currentIntersections.end())
     {
-        if (tmin < 0. || it->t > tmin)
+        if (tmin > 0. && it->t > tmin)
             currentIntersections.erase(it++);
         else
            it++;
@@ -127,8 +140,11 @@ decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, deci
 decimal keepAll(std::list<Intersection> &currentIntersections, decimal currentTmin)
 {
     if (currentIntersections.empty()) { return currentTmin; }
+
+    //Set the max tmin to currentTmin
     decimal tmin = currentTmin;
 
+    //Find the tmin of the first intersection
     for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
     {
         if (tmin < 0. || it->t <= tmin)

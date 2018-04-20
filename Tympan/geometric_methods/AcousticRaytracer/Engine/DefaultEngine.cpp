@@ -16,8 +16,6 @@
 #include <stack>
 #include <list>
 #include <algorithm>
-//Suppress reference to Qt (a Qtime object was created but results from Qtime::elapsed() was not printed) 
-//#include <QTime>
 #include <vector>
 
 #include "Geometry/mathlib.h"
@@ -25,7 +23,7 @@
 #include "Ray/Ray.h"
 #include "DefaultEngine.h"
 
-struct CompareVec
+/*struct CompareVec
 {
     bool operator()(std::vector<unsigned int> list1, std::vector<unsigned int> list2) const
     {
@@ -58,7 +56,7 @@ struct CompareVec
         }
         return false;
     }
-} myCompare ;
+} myCompare ;*/
 
 bool DefaultEngine::process()
 {
@@ -68,23 +66,23 @@ bool DefaultEngine::process()
     //time.start();
     nbRayonsTraites = 0;
 
-    //We begin to throw a rays directly from each source to each receptor
+    //Throw ray from every source to every receptor
 	initialReceptorTargeting();
 
-	//Traitement des rayons diffractes ainsi que les rayons tires aleatoirement
+	//Loop until the end of the simulation (i.e. when the stack of rays is empty and the sources cannot generate more rays)
     while (1)
     {
-        //Pile de traitement vide, on prend le suivant dans la liste des sources
+        //Empty stack => we generate a new ray from the sources
         if (pile_traitement.empty())
         {
             Ray* newRay = genRay();
             if (newRay)
             {
-                //ray_to_process--;
+                
                 pile_traitement.push(newRay);
             }
 
-            //Aucun rayon genere a partir des sources, fin du traitement
+            //Sources have generated all their rays => finish the simulation
             if (pile_traitement.empty())
             {
                 solver->finish();
@@ -94,22 +92,29 @@ bool DefaultEngine::process()
         }
         else
         {
-        	// The current ray of the stack is treated:
+        	// Recover the ray a the top of the stack
             Ray* current_ray = pile_traitement.top();
             pile_traitement.pop();
+
             std::list<validRay> result;
+
+            //Process the current ray and put the resulting rays in result
             traitementRay(current_ray, result);
+
+            //Go through the rays in resulting from the call of traitementRay
             for (std::list<validRay>::iterator it = result.begin(); it != result.end(); it++)
             {
                 bool currentValid = it->valid;
                 Ray* currentValidRay = it->r;
+
+                //If the ray is not valid we invalid it (delete or put in the debug_rays list if the KeepDebugRay option is set to true)
                 if (!currentValid)
                 {
                     solver->invalidRayon(currentValidRay);
                 }
                 else
                 {
-                	// New valid ray to treat:
+                	//The ray is valid (but has yet to hit a receptor) => put it back in the stack for further processing
                     pile_traitement.push(currentValidRay);
                     if (pile_traitement.size() > max_size)
                     {
@@ -123,19 +128,22 @@ bool DefaultEngine::process()
 
 Ray* DefaultEngine::genRay()
 {
+
     for (unsigned int i = 0; i < sources->size(); i++)
     {
         if (sources->at(i).getNbRayLeft() > 0)
         {
         	// Generate a ray from the current source(i)
             Ray* new_ray = new Ray();
-            new_ray->constructId = rayCounter;
+            new_ray->setConstructId ( rayCounter );
             rayCounter++;
-            new_ray->source = (&(sources->at(i)));
-            new_ray->position = sources->at(i).getPosition();
-            sources->at(i).getDirection(new_ray->direction);
-            new_ray->mint = 0.;
-            new_ray->maxt = 10000.;
+            new_ray->setSource ( (&(sources->at(i))) );
+            new_ray->setPosition ( sources->at(i).getPosition());
+			vec3 direction;
+            sources->at(i).getDirection(direction);
+			new_ray->setDirection(direction);
+            new_ray->setMint ( 0.);
+            new_ray->setMaxt ( 10000.);
             return new_ray;
         }
     }
@@ -145,55 +153,72 @@ Ray* DefaultEngine::genRay()
 
 bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
 {
-    nbRayonsTraites++; //Nombre de rayons traites au cours de la simulation
+    nbRayonsTraites++; //Number of rays processed during the simulation
 
-    //Si le dernier evenement du rayon peut generer plusieurs rayons secondaires, on genere
-    //un rayon secondaire, puis on copie le rayon restant et on le met dans la pile de traitement.
-    //Si le dernier evenement n'a plus de rayon a generer, le rayon n'est pas traite
-    if ( !(r->events.empty()) && (r->events.back()->isReponseLeft()) )
+    // Handle diffraction events: (reflexion events only have one possible response and it is consumed during their validation in valideIntersection)
+    // If the last event of the current ray still has reponses left, copy the ray and use the next response to generate a new direction for the copy and then add the copy to the stack.
+    // The reason rays generated by diffraction events are handled in this way instead of generating all responses when the intersection is validated is to avoid flooding the rays' stack.
+    // Indeed, in this way, each response is handled individually and needs to be processed before the next response is generated. 
+    // Hence, for a particular diffraction event, only one of the rays it generates can be present in the stack at a given time.
+    if ( !(r->getEvents()->empty()) && (r->getEvents()->back()->isReponseLeft()) )
     {
 		copyRayAndAddToStack(r);
     }
 
     decimal tmin = -1.0f;
 
-	//Recuperation des structures acceleratrices pour le Solver
+	//Get the solver's accelerating structure
     Accelerator* accelerator = scene->getAccelerator();
     std::list<Intersection> foundPrims;
 
-    //Appel du Solver pour le choix de la methode de traversee de la structure
+    // Find intersections with the scene's primitives
     tmin =  accelerator->traverse(r, foundPrims);
 
-    // Recherche pour des recepteurs;
+    // Check for intersections with receptors (and pass the ray to the selector manager for validation if it hits a receptor)
     searchForReceptor(tmin, r);
 
-    //Validation des rayons en generant un evenement. Les premiers rayons valides sont des copies de l'original, le dernier est valide sans copie.
-    //De cette maniere on peut valider separement des diffractions et une reflexion a partir d'un seul rayon initial.
-    //La copie est necessaire pour ne pas valider 2 fois le meme evenement. Si le rayon ne peut pas etre valide, il sera delete dans la fonction traitement()
-    bool valide(false);
-	unsigned int compteurValide(0);
-	Intersection *inter = NULL;
-	
-	// ! IMPORTANT
-	// We suppose, here, that accelerating structures use "leafTreatment::treatment::FIRST:"
-	// In this case, accelerating structure return only the closest primitive.
-	// If it is not the case, you must browse through the returned list
-	if ( foundPrims.size() > 0 )
-	{
-		inter = &( *(foundPrims.begin()) );
-        valide = solver->valideIntersection(r, inter);
-        if (valide) { compteurValide++; }
-	}
-	// Lines under are left intentionally commented only for understanding reason
-	//else // no primitive found. The ray goes to infinity (and beyond)
-	//{
-	//	valide = false;
-	//}
 
-    validRay resultRay;
-    resultRay.r = r;
-    resultRay.valid = valide;
-    result.push_back(resultRay);
+    //Intersections' validation. 
+  
+	if ( foundPrims.size() == 0 ){
+	//if no intersection found => return the current ray 'r' as an invalid validRay;
+		validRay resultRay;
+		resultRay.r = r;
+		resultRay.valid = false;
+		result.push_back(resultRay);
+    
+	}else{
+	//if some intersections have been found, iterate through them and test their validity
+		for (std::list<Intersection,std::allocator<Intersection>>::iterator it=foundPrims.begin();it != foundPrims.end();it++){
+
+			bool valide=false;
+			Intersection *inter = NULL;
+			Ray* current_ray = NULL;
+
+			if(next(it)!=foundPrims.end()){
+			//if the current intersection is NOT the last one, copy the current ray
+				current_ray = new Ray(r);
+				current_ray->setConstructId ( rayCounter );
+				rayCounter++;
+
+			}else{
+			//if the current intersection is the last one, validate the current ray 'r' directly without copying it.
+				current_ray=r;
+			}
+
+			//retrieve the intersection and validate it
+			inter = &(*(it));
+			valide = solver->valideIntersection(current_ray, inter);
+
+			//create a validRay to return the result of the intersection validation
+			validRay resultRay;
+			resultRay.r = current_ray;
+			resultRay.valid = valide;
+			result.push_back(resultRay);
+
+		}
+	}
+
 
     return true;
 }
@@ -222,13 +247,13 @@ void DefaultEngine::runStructureBenchmark()
     for (unsigned int i = 0; i < nbVec; i++)
     {
         Ray r;
-        r.mint = 0.00001f;
-        r.maxt = 10000.;
-        r.direction = vec3((decimal)rand() / (decimal)RAND_MAX, (decimal)rand() / (decimal)RAND_MAX, (decimal)rand() / (decimal)RAND_MAX);
-        r.direction.normalize();
-        r.position = vec3(((decimal)rand() / (decimal)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
+        r.setMint ( 0.00001f);
+        r.setMaxt ( 10000.);
+        r.setDirection ( vec3((decimal)rand() / (decimal)RAND_MAX, (decimal)rand() / (decimal)RAND_MAX, (decimal)rand() / (decimal)RAND_MAX) );
+        r.getDirection().normalize();
+        r.setPosition ( vec3(((decimal)rand() / (decimal)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
                           ((decimal)rand() / (decimal)RAND_MAX) * (sceneBox.pMax.y - sceneBox.pMin.y) + sceneBox.pMin.y,
-                          ((decimal)rand() / (decimal)RAND_MAX) * (sceneBox.pMax.z - sceneBox.pMin.z) + sceneBox.pMin.z);
+                          ((decimal)rand() / (decimal)RAND_MAX) * (sceneBox.pMax.z - sceneBox.pMin.z) + sceneBox.pMin.z));
         Accelerator* accel = scene->getAccelerator();
         std::list<Intersection> foundPrims;
         accel->traverse(&r, foundPrims);
