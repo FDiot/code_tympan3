@@ -52,7 +52,7 @@ build_script:
 
     conda install -y -q geos=3.4.2
 
-    conda install -y - q -c scitools/label/archive shapely
+    conda install -c scitools/label/archive shapely
 
     conda install -y -q qt=4.8.7=vc10_9
 
