@@ -73,7 +73,7 @@ foreach (testfile ${TESTS_SRC})
     configure_gtest_target(TARGET ${basename}
         FOLDER "Tests"
         RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-        LIBS testutils tympan_common tympan_lib tympan_solver_anime3d_lib)
+        LIBS testutils tympan_common tympan_lib tympan_convexhullfinder tympan_solver_default_lib tympan_solver_anime3d_lib)
 endforeach (testfile)
 # More specific tests configuration
 if(TYMPAN_USE_NMPB2008)
