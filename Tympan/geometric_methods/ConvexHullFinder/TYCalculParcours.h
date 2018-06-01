@@ -23,8 +23,11 @@
 #ifndef TYCALCUL_PARCOURS_H
 #define TYCALCUL_PARCOURS_H
 
+#include <gtest/gtest_prod.h>
+
 #include "TYPointParcours.h"
 #include "TYSetGeometriqueParcours.h"
+
 /**
  * @brief Class for computing path used by TYAcousticPathFinder
  */
@@ -72,6 +75,12 @@ public:
     bool Traitement();
 
 private:
+    FRIEND_TEST(test_TYCalculParcours, InitChangementVariable2D3D);
+    FRIEND_TEST(test_TYCalculParcours, AjouterSegmentSR);
+    FRIEND_TEST(test_TYCalculParcours, AjouterSegmentCoupe);
+    FRIEND_TEST(test_TYCalculParcours, PointTrajetGauche);
+    FRIEND_TEST(test_TYCalculParcours, PointTrajetDroite);
+    FRIEND_TEST(test_TYCalculParcours, Traitement);
     void PointTrajet(int i, double* pt, TYSetGeometriqueParcours* geo);
     void AjouterSegment(double* ptA, double* ptB, bool isInfra, bool isEcran, TYSetGeometriqueParcours* geo);
     bool CalculTrajet(TYSetGeometriqueParcours& geoCourant,
