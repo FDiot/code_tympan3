@@ -341,8 +341,7 @@ TEST(test_simulation_1source_3recepteur, test_3_aligned_receptors){
 }
 
 
-TEST(){
-}
+
 // Test valid ray in simple scene with one source and three aligned receptors
 TEST(test_simulation_1source_2recepteur, close_receptors){
 

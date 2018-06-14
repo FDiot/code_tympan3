@@ -149,7 +149,7 @@ public:
     * \brief Return a vector of all receptors of the scene
     * \return Vector
     */
-    std::vector<Recepteur> getRecepteurs() { return recepteurs; }
+    std::vector<Recepteur>& getRecepteurs() { return recepteurs; }
 
     /// Set/Get the pointer to the MaterialManager
     void setMaterialManager(MaterialManager* _materialManager) { materialManager = _materialManager; }
