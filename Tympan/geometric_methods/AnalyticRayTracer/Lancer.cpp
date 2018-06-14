@@ -25,7 +25,7 @@
 #include "RayCourb.h"
 #include "Lancer.h"
 
-Lancer::Lancer() : sources(std::vector<vec3>()), recepteurs(std::vector<vec3>()), _weather(NULL), h(0.001f), TMax(3.0f), temps(std::vector<decimal>()), dmax(1000.f), nbRay(20)
+Lancer::Lancer() : sources(std::vector<vec3>()), recepteurs(std::vector<vec3>()),_weather(NULL), _sampler(NULL), h(0.001f), TMax(3.0f), temps(std::vector<decimal>()), dmax(1000.f), nbRay(20)
 {
     _weather = new meteoLin();
     initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
@@ -71,29 +71,33 @@ void Lancer::init_sampler()
     {
         case 1 : // Tir horizontal
             _sampler = new Latitude2DSampler(nbRay);
+            _sampler->init();
             dynamic_cast<Latitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
             dynamic_cast<Latitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
             dynamic_cast<Latitude2DSampler*>(_sampler)->setEndPhi(finalAnglePhi);
             break;
         case 2 : // Tir vertical
             _sampler = new Longitude2DSampler(nbRay);
+            _sampler->init();
             dynamic_cast<Longitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
             dynamic_cast<Longitude2DSampler*>(_sampler)->setEndTheta(finalAngleTheta);
             dynamic_cast<Longitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
             break;
         case 3 : // Tir sur une sphere
             _sampler = new UniformSphericSampler(nbRay);
+            _sampler->init();
             nbRay = dynamic_cast<UniformSphericSampler*>(_sampler)->getRealNbRays();
             break;
         case 4 : // Tir sur une sphere v2
             _sampler = new UniformSphericSampler2(nbRay);
+            _sampler->init();
             nbRay = dynamic_cast<UniformSphericSampler2*>(_sampler)->getRealNbRays();
             break;
         default :
             return; // do nothing
     }
 
-    _sampler->init();
+    
 }
 
 void Lancer::purgeMatRes()

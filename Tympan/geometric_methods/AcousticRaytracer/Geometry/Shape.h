@@ -61,17 +61,28 @@ public:
 	/// Default constructor
     Shape() : Base(), material(NULL) { name = "unknown shape"; }
     /// Constructor by giving a name to the Shape
-    Shape(const std::string _name) : material(NULL) { name = _name; }
+    Shape(const std::string _name) : Base(), material(NULL) { name = _name; }
     /// Copy constructor
     Shape(Shape* other)
     {
         name = std::string(other->name);
+		primitiveId = other->primitiveId;
+		faceId  = other->faceId;                           
+		buildingId  = other->buildingId;                        
+		etageId  = other->etageId;                         
+		_isSol  = other->_isSol;                          
     }
     /// Destructor
     virtual ~Shape() { }
     /// Copy constructor
     Shape(const Shape& other) : Base(other)
     {
+		name = std::string(other.name);
+		primitiveId = other.primitiveId;
+		faceId  = other.faceId;                           
+		buildingId  = other.buildingId;                        
+		etageId  = other.etageId;                         
+		_isSol  = other._isSol;   
     }
     /// Clone and return a pointer to a Shape
     virtual Shape* Clone()
