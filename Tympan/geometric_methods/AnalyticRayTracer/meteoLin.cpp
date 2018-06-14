@@ -45,7 +45,8 @@ vec3 meteoLin::cWind(const vec3& P) const
 
 void meteoLin::init()
 {
-    double angle = -M_PIDIV2 - wind_angle;
+
+    double angle = -M_PIDIV2 - wind_angle; //from windrose oriented angle to trigonometric
     double DVx = cos(angle) * grad_V;
     double DVy = sin(angle) * grad_V;
 
