@@ -126,6 +126,14 @@ public :
     /// Set the Operator used by this Selector
     void setOperator(OPERATOR _op) { op = _op; }
 
+
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
+
 protected:
     int maxDiffractionOrder; //!< Maximal number of possible diffractions
     OPERATOR op;			//!< Operator selected (by default LESS_OR_EQUAL, so it keep rays with a number of diffractions less or equal to maxDiffractionOrder)
