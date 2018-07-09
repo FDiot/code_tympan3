@@ -113,7 +113,7 @@ public:
 
         computeN2();
     }
-    /// Return the launched rays real number
+    // Return the real number of launched rays 
     unsigned int getRealNbRays() const { return _real_nb_rays; }
 
     virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul)
