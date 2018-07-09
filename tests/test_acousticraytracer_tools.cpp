@@ -705,7 +705,7 @@ TEST(test_DiffractionPathSelector_canBeInserted, only_reflexions)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	//Set a source
 	Source* src=new Source();
@@ -850,7 +850,7 @@ TEST(test_DiffractionPathSelector_insertWithTest, only_reflexions)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	//Set a source
 	Source* src=new Source();
@@ -1196,7 +1196,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1320,7 +1320,7 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1446,7 +1446,7 @@ TEST(test_FaceSelector_insertWithTest, history_primitive_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1563,7 +1563,7 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -2625,7 +2625,7 @@ TEST(test_SelectorManager, appendData)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -2772,26 +2772,26 @@ TEST(test_SelectorManager, appendData)
 TEST(test_UnitConverter, fromRadianToCarthesien){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien(0,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
+	Tools::fromRadianToCarthesien(0,decimal(M_PI/4),res);
+	ASSERT_TRUE(res.barelyEqual(vec3(decimal(0.707107),decimal(0.707107),0)));
 
-	Tools::fromRadianToCarthesien((decimal)M_PI/2,(decimal)M_PI/4,res);
+	Tools::fromRadianToCarthesien(decimal(M_PI/2),decimal(M_PI/4),res);
 	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien((decimal)2*M_PI/3,(decimal)5*M_PI/6,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.433,(decimal)-0.25,(decimal)0.866)));
+	Tools::fromRadianToCarthesien(decimal(2*M_PI/3),decimal(5*M_PI/6),res);
+	ASSERT_TRUE(res.barelyEqual(vec3(decimal(0.433),decimal(-0.25),decimal(0.866))));
 }
 
 //Test the method appendData of SelectorManager
 TEST(test_UnitConverter, fromRadianToCarthesien2){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien2(0,(decimal)M_PI/4,res);
+	Tools::fromRadianToCarthesien2(0,decimal(M_PI/4),res);
 	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien2((decimal)M_PI/2,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
+	Tools::fromRadianToCarthesien2(decimal(M_PI/2),decimal(M_PI/4),res);
+	ASSERT_TRUE(res.barelyEqual(vec3(decimal(0.707107),decimal(0.707107),0)));
 
-	Tools::fromRadianToCarthesien2((decimal)3*M_PI/4,(decimal)2*M_PI/3,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)-0.354,(decimal)0.612,(decimal)-0.707)));
+	Tools::fromRadianToCarthesien2(decimal(3*M_PI/4),decimal(2*M_PI/3),res);
+	ASSERT_TRUE(res.barelyEqual(vec3(decimal(-0.354),decimal(0.612),decimal(-0.707))));
 }

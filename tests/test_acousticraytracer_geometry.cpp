@@ -69,7 +69,7 @@ TEST(test_scene, test_random_points)
 
 	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
 	srand(seed);				  //Init random number generator with seed
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	const int nb_vertices=rand()%100; //Random nuymber of points
 
@@ -738,6 +738,8 @@ TEST(test_latitude2dsampler, get_sample){
 	EXPECT_TRUE(sampler.getSample().barelyEqual(vec3((decimal)0,(decimal)-0.707107,(decimal)0.707107)));
 	EXPECT_TRUE(sampler.getSample().barelyEqual(vec3((decimal)0.5,(decimal)-0.5,(decimal)0.707107)));
 
+
+
 }
 
 
@@ -889,6 +891,14 @@ TEST(test_uniformsphericsampler2, get_sample){
 	}
 
 }
+
+
+
+
+/***********************************************************************
+						       RandomSphericSampler
+************************************************************************/ 
+
 // Test the RandomSphericSampler getSample function
 TEST(test_randomsphericsampler, get_sample){
 
@@ -908,7 +918,7 @@ TEST(test_randomsphericsampler, get_sample){
 	int positive_sample5=0;
 	int positive_sample6=0;
 
-	//each area is chosen by picking two circles along the same axis (h1 is also used to sample polar caps)
+	//each area is chosen by picking two slices along the same axis (h1 is also used to sample polar caps)
 	double x_h1=0.32;
 	double x_h2=0.58;
 	
