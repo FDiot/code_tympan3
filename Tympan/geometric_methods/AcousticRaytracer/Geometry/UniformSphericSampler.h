@@ -124,7 +124,10 @@ public:
 private :
     inline void computeN1()
     {
-        _n1 = 2 * static_cast<unsigned int>(floor(M_PI * sqrt(static_cast<decimal>(_nb_rays)) / 8. + 0.5));
+		if(_nb_rays==1)
+			_n1=1;
+		else
+			_n1 = 2 * static_cast<unsigned int>(floor(M_PI * sqrt(static_cast<decimal>(_nb_rays)) / 8. + 0.5));
     }
 
     inline void computeThetaCalcul(unsigned int i)
