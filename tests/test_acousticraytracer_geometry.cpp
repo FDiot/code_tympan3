@@ -22,6 +22,7 @@
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformBeamSampler.h"
 
 #include <iostream>
 #include <fstream>
@@ -30,6 +31,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+
+unsigned int N_TESTS=100;
 
 /***********************************************************************
 						        Scene
@@ -774,7 +777,24 @@ TEST(test_longitude2dsampler, get_sample){
 						       UniformSphericSampler
 ************************************************************************/
 
-// Non regretion test of UniformSphericSampler
+
+// Check that a UniformSphericSampler with 0 nbRays returns 0 realNbRays
+TEST(test_uniformsphericsampler, no_sample){
+
+	UniformSphericSampler sampler=new UniformSphericSampler((unsigned int)0);
+	EXPECT_EQ(sampler.getRealNbRays(),0); // No samples
+}
+
+// Check that a UniformBeamSampler with 1 nbRays returns a single ray equal to the directivity
+TEST(test_uniformsphericsampler, one_sample){
+
+	UniformSphericSampler sampler=new UniformSphericSampler((unsigned int)1);
+	EXPECT_EQ(sampler.getRealNbRays(),1);			 // one single sample
+	
+}
+
+
+// Non regression test of UniformSphericSampler
 TEST(test_uniformsphericsampler, get_sample){
 
 	//some of the samples obtained from a previous execution
@@ -795,22 +815,44 @@ TEST(test_uniformsphericsampler, get_sample){
 
 	int const n=1000;
 	vec3 samples[n];
-	UniformSphericSampler sampler=new UniformSphericSampler(n);
+	decimal theta=(decimal)M_PIDIV2;
+	decimal phi=(decimal)M_2PI;
+	UniformSphericSampler sampler=new UniformSphericSampler(n,theta,phi);
 
 	//get the samples
 	for(unsigned int i=0;i<sampler.getRealNbRays();i++)
 			samples[i]=sampler.getSample();		
+
+	
 
 	//check that the samples at indexes expected_samples_index are equal to the expected_samples
 	for(unsigned int i=0;i<10;i++){
 		int index=expected_samples_index[i];
 		EXPECT_TRUE(expected_samples[i]==samples[index]);
 	}
-	
-
 }
 
-// Non regretion test of UniformSphericSampler2
+/***********************************************************************
+						       UniformSphericSampler2
+************************************************************************/
+
+
+// Check that a UniformSphericSampler2 with 0 nbRays returns 0 realNbRays
+TEST(test_uniformsphericsampler2, no_sample){
+
+	UniformSphericSampler2 sampler=new UniformSphericSampler2((unsigned int)0);
+	EXPECT_EQ(sampler.getRealNbRays(),0); // No samples
+}
+
+// Check that a UniformSphericSampler2 with 1 nbRays returns a single ray equal to the directivity
+TEST(test_uniformsphericsampler2, one_sample){
+
+	UniformSphericSampler2 sampler=new UniformSphericSampler2((unsigned int)1);
+	EXPECT_EQ(sampler.getRealNbRays(),1);			 // one single sample
+	vec3 sample=sampler.getSample();
+}
+
+// Non regression test of UniformSphericSampler2
 TEST(test_uniformsphericsampler2, get_sample){
 
 	//some of the samples obtained from a previous execution
@@ -831,11 +873,14 @@ TEST(test_uniformsphericsampler2, get_sample){
 
 	int const n=1000;
 	vec3 samples[n];
-	UniformSphericSampler2 sampler=new UniformSphericSampler2(n);
+	decimal theta=(decimal)M_PIDIV2;
+	decimal phi=(decimal)M_2PI;
+	UniformSphericSampler2 sampler=new UniformSphericSampler2(n,theta,phi);
 
 	//get the samples
 	for(unsigned int i=0;i<sampler.getRealNbRays();i++)
 			samples[i]=sampler.getSample();		
+
 
 	//check that the samples at indexes expected_samples_index are equal to the expected_samples
 	for(unsigned int i=0;i<10;i++){
@@ -955,6 +1000,144 @@ TEST(test_randomsphericsampler, get_sample){
 
 }
 
+
+
+/***********************************************************************
+						       UniformBeamSampler
+************************************************************************/
+
+// Check that a UniformBeamSampler with 0 nbRays returns 0 realNbRays
+TEST(test_beamsampler, no_sample){
+
+	UniformBeamSampler sampler=new UniformBeamSampler((unsigned int)0);
+	EXPECT_EQ(sampler.getRealNbRays(),0); // No samples
+}
+
+// Check that a UniformBeamSampler with 1 nbRays returns a single ray equal to the directivity
+TEST(test_beamsampler, one_sample){
+
+	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
+	srand(seed);				  //Init random number generator with seed
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
+
+	for(unsigned int i =0 ; i< N_TESTS ;i++){ // perform N_TESTS random tests
+		// random directivity
+		decimal x=decimal((rand()%200-100)/100.); 
+		decimal y=decimal((rand()%200-100)/100.); 
+		decimal z=decimal((rand()%200-100)/100.); 
+		vec3 directivity(x,y,z);
+		directivity.normalize();
+
+		UniformBeamSampler sampler=new UniformBeamSampler((unsigned int)1,decimal(M_PI),directivity);
+		EXPECT_EQ(sampler.getRealNbRays(),1);			 // one single sample
+		EXPECT_TRUE(sampler.getSample()==directivity);   // equal to the directivity
+	}
+}
+
+
+// Check that all samples lie in the opening angle of the cone
+TEST(test_beamsampler,get_sample ){
+
+	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
+	srand(seed);				  //Init random number generator with seed
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
+
+	for(unsigned int i =0 ; i< N_TESTS ;i++){ // perform N_TESTS random tests
+		// random directivity
+		decimal alpha=decimal(M_PI*(rand()%1000)/1000.+0.1); //add some small value to avoid null opening angles
+		unsigned int n=rand()%1000+1; 
+
+		decimal x=decimal((rand()%200-100)/100.); 
+		decimal y=decimal((rand()%200-100)/100.); 
+		decimal z=decimal((rand()%200-100)/100.); 
+
+		vec3 directivity(x,y,z);
+		directivity.normalize();
+
+		UniformBeamSampler sampler=new UniformBeamSampler((unsigned int)n,alpha,directivity);
+		EXPECT_TRUE(sampler.getRealNbRays()>=n);							 // RealNbRays must be >= n
+		EXPECT_TRUE(sampler.getSample()==directivity);						 // The first sample should be equal to the directivity
+		for(unsigned int j=1;j<sampler.getRealNbRays();j++)
+			EXPECT_TRUE(sampler.isAcceptableSample(sampler.getSample()));	// Sample lies within the beam's cone
+		
+
+		//Requesting more samples than realNbRays should return (0,0,0)
+		EXPECT_TRUE(sampler.getSample()==vec3(0,0,0));
+	}
+
+	
+}
+
+// Check that the opening angle and directivity are correct when set with the setter method
+TEST(test_beamsampler, directivity_opening_angle){
+
+	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
+	srand(seed);								//Init random number generator with seed
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
+
+	for(unsigned int i =0 ; i< N_TESTS ;i++){ // perform N_TESTS random tests
+		// random directivity
+		decimal alpha=decimal(M_PI*(rand()%1000)/1000.);
+		unsigned int n=rand()%100; 
+
+		decimal x=decimal((rand()%200-100)/100.); 
+		decimal y=decimal((rand()%200-100)/100.); 
+		decimal z=decimal((rand()%200-100)/100.); 
+
+		vec3 directivity(x,y,z);
+		directivity.normalize();
+
+		UniformBeamSampler sampler1=new UniformBeamSampler((unsigned int)n,alpha,directivity);
+		UniformBeamSampler sampler2=new UniformBeamSampler((unsigned int)n);
+		sampler2.setOpeningAngle(alpha*M_180DIVPI);
+		sampler2.setDirectivity(directivity);
+
+		// The opening angle and directivity must be the same weather they are set by the constructor or the setter method
+		EXPECT_NEAR(sampler1.getOpeningAngle(),sampler2.getOpeningAngle(),EPSILON_5);	
+		EXPECT_TRUE(sampler1.getDirectivity()==sampler2.getDirectivity());
+	}
+
+}
+
+
+// Test that only ray's tha tlie in the beams'cone are considered acceptable
+TEST(test_beamsampler, is_acceptable_sample){
+
+	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
+	srand(seed);								//Init random number generator with seed
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
+
+	for(unsigned int i =0 ; i< N_TESTS ;i++){ // perform N_TESTS random tests
+		// random directivity
+		decimal alpha=decimal(M_PI*(rand()%1000)/1000.);
+		unsigned int n=rand()%100; 
+
+		decimal x=decimal((rand()%200-100)/100.); 
+		decimal y=decimal((rand()%200-100)/100.); 
+		decimal z=decimal((rand()%200-100)/100.); 
+
+		vec3 directivity(x,y,z);
+		directivity.normalize();
+		
+		UniformBeamSampler sampler=new UniformBeamSampler((unsigned int)n,alpha,directivity);
+
+		for(unsigned int j =0 ; j< N_TESTS ;j++){ // Try N_TESTS random samples
+				decimal x=decimal((rand()%200-100)/100.); 
+				decimal y=decimal((rand()%200-100)/100.); 
+				decimal z=decimal((rand()%200-100)/100.); 
+
+				vec3 random_sample(x,y,z);
+				random_sample.normalize();
+				decimal dot_product= random_sample*sampler.getDirectivity();
+				if(dot_product>0 && acos(dot_product)<=(alpha/2+EPSILON_5))
+					EXPECT_TRUE(sampler.isAcceptableSample(random_sample));	// Sample lies within the beam's cone
+				else
+					EXPECT_FALSE(sampler.isAcceptableSample(random_sample));
+		}
+
+	}
+
+}
 
 /***********************************************************************
 						        BBox
