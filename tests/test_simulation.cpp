@@ -104,7 +104,7 @@ void setup_random(Simulation* simu,
 
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
@@ -351,7 +351,7 @@ TEST(test_simulation_1source_2recepteur, close_receptors){
 
 	vector<vec3> pos_recepteurs;
 	pos_recepteurs.push_back(vec3(1000,1000,1000));
-	pos_recepteurs.push_back(vec3(1000.1,1000.1,1000.1));
+	pos_recepteurs.push_back(vec3(decimal(1000.1),decimal(1000.1),decimal(1000.1)));
 
 	// Setup
 	setup(&simu,0,2,vector<vec3>(1,vec3(0,5,0)),pos_recepteurs,leafTreatment::ALL_BEFORE_TRIANGLE );
