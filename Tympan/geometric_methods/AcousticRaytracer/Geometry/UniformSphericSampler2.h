@@ -139,7 +139,7 @@ public:
 private :
     inline void computeN1()
     {
-        decimal dh = 2.f * _dr * static_cast<float>( sin(M_PI / 3.) ); // high of a slice on equator
+        decimal dh = 2.f * _dr * static_cast<float>( sin(M_PI / 3.) ); // height of a slice on equator
         _d_theta = atan(dh);
         _n1 = static_cast<unsigned int>(floor(M_PI / _d_theta));
     }
