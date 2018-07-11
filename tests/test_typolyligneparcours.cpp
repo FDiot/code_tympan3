@@ -296,7 +296,7 @@ TEST(test_TYPolyligneParcours, estSurUnParcourFermee)
     P1.isInfra = true;
     P1.isEcran = true;
 
-    TYPointParcours P2;
+   TYPointParcours P2;
     P2.Identifiant = 2;
     P2.isInfra = true;
     P2.isEcran = true;
@@ -319,14 +319,14 @@ TEST(test_TYPolyligneParcours, estSurUnParcourFermee)
     polyligneP3._PolyligneP0 = &polyligneP2;
 
     // Call to the tested method:
-    bool isOnAnOpenPath = polyligneP1.estSurUnParcourFermee();
+    bool isOnAClosedPath = polyligneP1.estSurUnParcourFermee();
 
     // Check result:
-    EXPECT_EQ(false, isOnAnOpenPath);
+    EXPECT_EQ(false, isOnAClosedPath);
 
     // Data setup :
 
-    /*
+/*
     TYPolyligneParcours polyligneP4, polyligneP5;
     polyligneP4.ajouteSegment(&P0, &P1);
     polyligneP5.ajouteSegment(&P1, &P0);
@@ -341,8 +341,8 @@ TEST(test_TYPolyligneParcours, estSurUnParcourFermee)
     bool isOnAClosedPath = polyligneP4.estSurUnParcourFermee();
 
     // Check result:
-    EXPECT_EQ(true, isOnAClosedPath);
-    */
+    EXPECT_EQ(true, isOnAClosedPath);*/
+
 }
 
 // Testing the TYPolyligneParcours::polylignesVoisinesPointentSurLaMemePolyligne method
@@ -496,21 +496,11 @@ TEST(test_TYPolyligneParcours, Copy)
 
     // Call to the tested method:
     copiePolyligneP1.Copy(polyligneP1);
-    bool isSame = true;
 
-    if (copiePolyligneP1._PolyligneP0 != polyligneP1._PolyligneP0)
-    {
-        isSame = false;
-    }
-    if (copiePolyligneP1._PolyligneP1 != polyligneP1._PolyligneP1)
-    {
-        isSame = false;
-    }
-    if(copiePolyligneP1.nombreDePoint() != polyligneP1.nombreDePoint())
-    {
-        isSame = false;
-    }
+    EXPECT_EQ(true, (copiePolyligneP1._PolyligneP0 == polyligneP1._PolyligneP0));
+    EXPECT_EQ(false, (copiePolyligneP1._PolyligneP1 == polyligneP1._PolyligneP0));
+    EXPECT_EQ(true, (copiePolyligneP1._PolyligneP1 == polyligneP1._PolyligneP1));
+    EXPECT_EQ(true, (copiePolyligneP1.nombreDePoint() == polyligneP1.nombreDePoint()));
 
-    // Check result:
-    EXPECT_EQ(isSame, true);
+
 }
