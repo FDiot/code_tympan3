@@ -85,6 +85,10 @@ cdef class Spectrum:
         """Balanced spectrum value in DBA (for audible frequencies)"""
         return self.thisobj.valGlobDBA()
 
+    @property
+    def dBLin(self):
+        return self.thisobj.valGlobDBLin()
+
 
 cdef class Triangle:
 
