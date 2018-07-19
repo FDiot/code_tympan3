@@ -386,6 +386,10 @@ cdef class Ground:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getResistivite()
 
+    def set_resistivity(self, resistivity):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setResistivite(resistivity)
+
     @property
     def width(self):
         """Ground width (floating point value)"""
