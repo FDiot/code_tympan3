@@ -326,6 +326,7 @@ cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
 cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
+        void setResistivite(double res)
         double getEpaisseur()
         double getEcartType()
         double getLongueur()
