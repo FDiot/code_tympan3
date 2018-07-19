@@ -131,7 +131,8 @@ cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h":
 
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
-        TYSpectre* getSpectre() const
+        TYSpectre * getSpectre() const
+        void setSpectre(const TYSpectre * spectrum)
 
 cdef extern from "Tympan/models/business/acoustic/TYSourcePonctuelle.h":
     cdef cppclass TYSourcePonctuelle(TYSource):
@@ -144,6 +145,7 @@ cdef extern from "Tympan/models/business/acoustic/TYSourcePonctuelle.h":
 cdef extern from "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h":
     cdef cppclass TYUserSourcePonctuelle(TYSourcePonctuelle):
         TYUserSourcePonctuelle()
+        void updateCurrentRegime()
 
 
 cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
