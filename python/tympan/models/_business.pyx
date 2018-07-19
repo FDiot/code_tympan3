@@ -443,12 +443,17 @@ cdef class Vegetation:
 cdef class User_source:
 
     def __cinit__(self):
-        self.thisgeonodeptr = SmartPtr[TYGeometryNode] (new TYGeometryNode())
+        self.thisgeonodeptr = SmartPtr[TYGeometryNode](new TYGeometryNode())
+        self.thisptr = SmartPtr[TYUserSourcePonctuelle](new TYUserSourcePonctuelle())
 
     @property
     def getID(self):
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getID().toString().toStdString().decode()
+
+    def set_name(self, name):
+        assert self.thisptr.getRealPointer() != NULL
+        self.thisptr.getRealPointer().setName(name.encode('utf-8'))
 
     @property
     def name(self):
@@ -482,6 +487,20 @@ cdef class User_source:
     def hauteur(self):
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getHauteur()
+
+    @cy.locals(spectrum=tycommon.Spectrum)
+    def set_spectrum(self, spectrum):
+        assert self.thisptr.getRealPointer() != NULL
+        tyspectre = new TYSpectre(spectrum.thisobj)
+        self.thisptr.getRealPointer().setSpectre(tyspectre)
+        self.thisptr.getRealPointer().updateCurrentRegime()
+
+    @property
+    def spectrum(self):
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_spectrum = cy.declare(cy.pointer(
+            TYSpectre), self.thisptr.getRealPointer().getSpectre())
+        return tycommon.ospectre2spectrum(deref(cpp_spectrum))
 
 
 cdef class Engine:
