@@ -27,9 +27,9 @@ class TestFeatures(object):
     pine_area_coords = [(0, 9.5), (12, 9.5), (12, 10), (0, 10)]
     waterbody_coords = [(3, 3), (5, 4), (3, 5)]
     altitude_water = 5.0
-    subsite_A_coords = rect(6, 6, 11, 8)
+    subsite_A_coords = rect(5.5, 5.5, 11, 8)
     level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
-    cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
+    cleaned_level_B_shape = MultiLineString([[(8.0, 5.5), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
     landtake_coords = rect(2, 7, 4, 8)
 
