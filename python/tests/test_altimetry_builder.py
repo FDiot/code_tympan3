@@ -25,7 +25,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         landtake_level_curve = LevelCurve(
             self.big_rect_coords, altitude=self.altitude_A, close_it=True,
             parent_site=self.mainsite, id="{Mainsite ref altitude}")
-
+    
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot(self):
         equivalent_site, mesh, _ = builder.build_altimetry(self.mainsite)
@@ -37,6 +37,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.assertIsNone(expected_None)
         plotter.plot_face(fh, material_id='concrete')
         plotter.show()
+        
 
     def check_vertices_props(self, mesher, points_and_expectations):
         for point, expected in points_and_expectations:
@@ -231,6 +232,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         altitudes = [mesh.vertices_info[fh.vertex(i)].altitude
                      for fh in landtake_faces for i in range(3)]
         assert_allclose(altitudes, altitudes[0])
+        
 
     def test_ply_export(self):
         from plyfile import PlyData
