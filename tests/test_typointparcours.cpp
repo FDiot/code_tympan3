@@ -19,9 +19,6 @@ private:
     TYPointParcours PointParcours;
 };
 
-//TEST_F(TYPointParcoursTest, create_instance)
-//{
-//}
 
 // Testing the TYPointParcours::vecteur2D method
 TEST(test_TYPointParcours, vecteur2D)

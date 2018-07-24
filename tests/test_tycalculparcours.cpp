@@ -21,11 +21,6 @@ class TYCalculParcoursTest :
         TYCalculParcours CalculParcours;
 };
 
-//TEST_F(TYCalculParcoursTest, create_instance)
-//{
-//}
-
-// DONE
 // Testing the TYCalculParcours::InitChangementVariable2D3D method
 TEST(test_TYCalculParcours, InitChangementVariable2D3D)
 {
@@ -55,7 +50,6 @@ TEST(test_TYCalculParcours, InitChangementVariable2D3D)
 
 }
 
-// DONE
 // Testing the TYCalculParcours::AjouterSegmentCoupe method
 TEST(test_TYCalculParcours, AjouterSegmentCoupe)
 {
@@ -86,8 +80,6 @@ TEST(test_TYCalculParcours, AjouterSegmentCoupe)
 
 }
 
-
-// DONE
 // Testing the TYCalculParcours::AjouterSegmentSR method
 TEST(test_TYCalculParcours, AjouterSegmentSR)
 {
@@ -110,7 +102,6 @@ TEST(test_TYCalculParcours, AjouterSegmentSR)
 
 }
 
-// DONE
 // Testing the TYCalculParcours::PointTrajetGauche method
 TEST(test_TYCalculParcours, PointTrajetGauche)
 {
@@ -154,7 +145,6 @@ TEST(test_TYCalculParcours, PointTrajetGauche)
 
 }
 
-// DONE
 // Testing the TYCalculParcours::PointTrajetDroite method
 TEST(test_TYCalculParcours, PointTrajetDroite)
 {
@@ -204,7 +194,7 @@ TEST(test_TYCalculParcours, Traitement)
 
     // Data setup:
     // Points
-    OPoint3D S(0.0, 0.0, 0.0);
+   /* OPoint3D S(0.0, 0.0, 0.0);
     OPoint3D R(10.0, 10.0, 0.0);
 
     OPoint3D P1(1.0, 3.0, 0.0);
@@ -249,58 +239,36 @@ TEST(test_TYCalculParcours, Traitement)
     EXPECT_EQ(1, ParcoursH._geoTrajetDroite->_nNbPolylines);
 
     EXPECT_EQ(4, ParcoursH._geoSecondePasseDroite._nNbPointTotal);
-    EXPECT_EQ(1, ParcoursH._geoSecondePasseDroite._nNbPolylines);
+    EXPECT_EQ(1, ParcoursH._geoSecondePasseDroite._nNbPolylines);*/
 
 
 
     // VERTICAL
 
-    OPoint3D S_v(0.0, 0.0, 0.0);
-    OPoint3D R_v(10.0, 0.0, 10.0);
+    OPoint3D S_v(5.0, 2.0, 0.0);
+    OPoint3D R_v(5.0, 2.0, 10.0);
 
-    OPoint3D P1_v(1.0, 0.0, 3.0);
-    OPoint3D P2_v(3.0, 0.0, 3.0);
-    OPoint3D P3_v(6.0, 0.0, 4.0);
-    OPoint3D P4_v(4.0, 0.0, 7.0);
-    OPoint3D P5_v(7.0, 0.0, 7.0);
-    OPoint3D P6_v(10.0, 0.0, 7.0);
+    OPoint3D P1_v(1.0, 2.0, 3.0);
+    OPoint3D P2_v(2.0, 2.0, 5.0);
+
 
     // Construction Parcours avec bVertical = true
-    TYCalculParcours ParcoursV(8, true);
+    TYCalculParcours ParcoursV(20, true);
 
     // Rajout de la Source et du Recepteur
     ParcoursV.AjouterSegmentSR(S_v, R_v);
 
     ParcoursV.AjouterSegmentCoupe(S_v, P1_v, true, true);
     ParcoursV.AjouterSegmentCoupe(P1_v, P2_v, true, true);
-    ParcoursV.AjouterSegmentCoupe(P2_v, P3_v, true, true);
-    ParcoursV.AjouterSegmentCoupe(P3_v, P4_v, true, true);
-    ParcoursV.AjouterSegmentCoupe(P4_v, P5_v, true, true);
-    ParcoursV.AjouterSegmentCoupe(P5_v, P6_v, true, true);
-    ParcoursV.AjouterSegmentCoupe(P6_v, R_v, true, true);
+    ParcoursV.AjouterSegmentCoupe(P2_v, R_v, true, true);
 
     bool t_traitementV = ParcoursV.Traitement();
-
     EXPECT_EQ(false, t_traitementV);
 
     // Nbre LIGNES / POINTS
     EXPECT_EQ(true, ParcoursV._geoTrajetGauche != NULL);
-    EXPECT_EQ(true, ParcoursV._geoTrajetDroite != NULL);
-
-    if(ParcoursV._geoTrajetGauche != NULL){
-        EXPECT_EQ(4, ParcoursV._geoTrajetGauche->_nNbPointTotal);
-        EXPECT_EQ(1, ParcoursV._geoTrajetGauche->_nNbPolylines);
-    }
-
-    if(ParcoursV._geoTrajetDroite != NULL){
-        EXPECT_EQ(4, ParcoursV._geoTrajetDroite->_nNbPointTotal);
-        EXPECT_EQ(1, ParcoursV._geoTrajetDroite->_nNbPolylines);
-    }
-
-    EXPECT_EQ(4, ParcoursV._geoSecondePasseGauche._nNbPointTotal);
-    EXPECT_EQ(1, ParcoursV._geoSecondePasseGauche._nNbPolylines);
-
-    EXPECT_EQ(4, ParcoursV._geoSecondePasseDroite._nNbPointTotal);
-    EXPECT_EQ(1, ParcoursV._geoSecondePasseDroite._nNbPolylines);
+    EXPECT_EQ(true, ParcoursV._geoTrajetDroite == NULL);//en mode vertical,_geoTrajetDroite n'est pas mis ? jour
+    EXPECT_EQ(2, ParcoursV._geoTrajetGauche->_nNbPointTotal);
+    EXPECT_EQ(2, ParcoursV._geoSecondePasseGauche._nNbPointTotal);
 
 }
