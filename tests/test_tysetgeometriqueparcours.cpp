@@ -124,18 +124,6 @@ class TYSetGeometriqueParcoursTest :
         }
 };
 
-TEST_F(TYSetGeometriqueParcoursTest, create_instance)
-{
-}
-
-TEST_F(TYSetGeometriqueParcoursTest, IsConstruct)
-{
-    //EXPECT_EQ(0, geoParcoursSR._ListePolylines[0].indexePoint1());
-    //EXPECT_EQ(1, geoParcoursSR._ListePolylines[0].indexePoint2());
-}
-
-
-// DONE
 // Testing the TYSetGeometriqueParcours::Copy method
 TEST_F(TYSetGeometriqueParcoursTest, Copy)
 {
@@ -149,7 +137,6 @@ TEST_F(TYSetGeometriqueParcoursTest, Copy)
 
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::SupressionPolylignesRedondantes method
 TEST_F(TYSetGeometriqueParcoursTest, SupressionPolylignesRedondantes)
 {
@@ -215,7 +202,6 @@ TEST_F(TYSetGeometriqueParcoursTest, SupressionPolylignesRedondantes)
 
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::MergePointsDoubles method
 TEST_F(TYSetGeometriqueParcoursTest, MergePointsDoubles)
 {
@@ -299,8 +285,6 @@ TEST_F(TYSetGeometriqueParcoursTest, MergePointsDoubles)
 
 }
 
-
-// DONE
 // Testing the TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere method
 TEST_F(TYSetGeometriqueParcoursTest, RamenerPointsTraversantLaFrontiere)
 {
@@ -332,7 +316,6 @@ TEST_F(TYSetGeometriqueParcoursTest, RamenerPointsTraversantLaFrontiere)
    delete EstUnPointIntersectant;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::MarquePointsADroiteEtAGauche method
 TEST_F(TYSetGeometriqueParcoursTest, MarquePointsADroiteEtAGauche)
 {
@@ -366,12 +349,10 @@ TEST_F(TYSetGeometriqueParcoursTest, MarquePointsADroiteEtAGauche)
    delete PointAGauche;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::SeparationDroiteGauche method
 TEST_F(TYSetGeometriqueParcoursTest, SeparationDroiteGauche)
 {
     // Data setup:
-    // Geometrique Parcours
     TYSetGeometriqueParcours  geoGauche, geoDroite;
 
     bool* PointAGauche;
@@ -415,7 +396,6 @@ TEST_F(TYSetGeometriqueParcoursTest, SeparationDroiteGauche)
     delete PointAGauche;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::TriePointsIntersectionSuivantSR method
 TEST_F(TYSetGeometriqueParcoursTest, TriePointsIntersectionSuivantSR)
 {
@@ -448,7 +428,6 @@ TEST_F(TYSetGeometriqueParcoursTest, TriePointsIntersectionSuivantSR)
     delete EstUnPointIntersectant;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::AjoutePointALaPolyLigne method
 TEST_F(TYSetGeometriqueParcoursTest, AjoutePointALaPolyLigne)
 {
@@ -503,7 +482,6 @@ TEST_F(TYSetGeometriqueParcoursTest, AjoutePointALaPolyLigne)
 
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::AjouteLesPointsComprisEntre method
 TEST_F(TYSetGeometriqueParcoursTest, AjouteLesPointsComprisEntre)
 {
@@ -555,7 +533,6 @@ TEST_F(TYSetGeometriqueParcoursTest, AjouteLesPointsComprisEntre)
     geoAjoute._nNbPolylines = 0;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::ParcourtPolyligneAPartirDe method
 TEST_F(TYSetGeometriqueParcoursTest, ParcourtPolyligneAPartirDe)
 {
@@ -593,14 +570,12 @@ TEST_F(TYSetGeometriqueParcoursTest, ParcourtPolyligneAPartirDe)
     EXPECT_EQ(1,geoPremierePasse._ListePolylines[0].indexePoint1());
 
     // Destruction
-    geoPremierePasse.~TYSetGeometriqueParcours();
     delete PointsADroite;
     delete PointsAGauche;
     delete IndexePointsFrontiere;
     delete EstUnPointIntersectant;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::PolylignesInfraFermees method
 TEST_F(TYSetGeometriqueParcoursTest, PolylignesInfraFermees)
 {
@@ -706,7 +681,6 @@ TEST_F(TYSetGeometriqueParcoursTest, PolylignesInfraFermees)
 
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::ListerPointsConnexes method
 TEST_F(TYSetGeometriqueParcoursTest, ListerPointsConnexes)
 {
@@ -759,7 +733,6 @@ TEST_F(TYSetGeometriqueParcoursTest, ListerPointsConnexes)
     bool t_connexe = geoParcoursPC.ListerPointsConnexes(Connexes);
 
     // Check result:
-    // A Verifier
     EXPECT_EQ(true, t_connexe);
     EXPECT_EQ(2, Connexes->NbSegmentsConnexes);
    // Premier point
@@ -782,7 +755,6 @@ TEST_F(TYSetGeometriqueParcoursTest, ListerPointsConnexes)
     delete Connexes;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::intersects method
 TEST_F(TYSetGeometriqueParcoursTest, intersects)
 {
@@ -821,7 +793,6 @@ TEST_F(TYSetGeometriqueParcoursTest, intersects)
     geoParcoursI._nNbPolylines = 0;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::AppartienneMemePolyligne method
 TEST_F(TYSetGeometriqueParcoursTest, AppartienneMemePolyligne)
 {
@@ -871,7 +842,6 @@ TEST_F(TYSetGeometriqueParcoursTest, AppartienneMemePolyligne)
     geoParcoursA._nNbPolylines = 0;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR method
 TEST_F(TYSetGeometriqueParcoursTest, SelectionnePointsEntreSetRetDuCoteDeSR)
 {
@@ -893,7 +863,6 @@ TEST_F(TYSetGeometriqueParcoursTest, SelectionnePointsEntreSetRetDuCoteDeSR)
     int t_indirect = geoParcours.SelectionnePointsEntreSetRetDuCoteDeSR(&geoParcoursSR, TableauDePoints, geoParcours._nNbPointTotal);
 
     // Check result:
-
     EXPECT_EQ(6, t_indirect);
     EXPECT_EQ(0, TableauDePoints[0]->Identifiant);
     EXPECT_EQ(1, TableauDePoints[1]->Identifiant);
@@ -909,7 +878,6 @@ TEST_F(TYSetGeometriqueParcoursTest, SelectionnePointsEntreSetRetDuCoteDeSR)
     delete EstUnPointIntersectant;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::CreerTrajetAPartirDuneListeDePointsTriee method
 TEST_F(TYSetGeometriqueParcoursTest, CreerTrajetAPartirDuneListeDePointsTriee)
 {
@@ -962,7 +930,6 @@ TEST_F(TYSetGeometriqueParcoursTest, CreerTrajetAPartirDuneListeDePointsTriee)
     geoParcoursG._nNbPolylines = 0;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::EnveloppeConvexeLes2PremiersPointsEtant method
 TEST_F(TYSetGeometriqueParcoursTest, EnveloppeConvexeLes2PremiersPointsEtant)
 {
@@ -1001,7 +968,6 @@ TEST_F(TYSetGeometriqueParcoursTest, EnveloppeConvexeLes2PremiersPointsEtant)
     delete TableauDePointsECOut;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::PremierePasse method
 TEST_F(TYSetGeometriqueParcoursTest, PremierePasse)
 {
@@ -1036,7 +1002,6 @@ TEST_F(TYSetGeometriqueParcoursTest, PremierePasse)
     delete [] Connexes;
 }
 
-// DONE
 // Testing the TYSetGeometriqueParcours::SecondePasse method
 TEST_F(TYSetGeometriqueParcoursTest, SecondePasse)
 {
