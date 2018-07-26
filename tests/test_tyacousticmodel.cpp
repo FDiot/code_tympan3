@@ -30,17 +30,17 @@ class TYAcousticModelTest :
 
 
 public:
-    bool m_isInitGlobal = false;
+    bool m_isInitGlobal;
 
     //constantes globales
-    double m_gamma = 1.41;
-    double m_perfectGaz = 8.31;
-    double m_molareMass = 0.029;
-    double m_temperature = 20;
-    double m_absoluteZero = 273.15;
-    double m_pression = 101325.0;
-    double m_hydromzetry = 50.0;
-    double m_distance = 600.0;
+    double m_gamma;
+    double m_perfectGaz;
+    double m_molareMass;
+    double m_temperature;
+    double m_absoluteZero;
+    double m_pression;
+    double m_hydromzetry;
+    double m_distance;
     double m_tk, m_soundSpeed;
     OSpectre m_spectreLambda;
 
@@ -50,7 +50,7 @@ public:
     TYChemin m_chemin_ecran;
     TYChemin m_chemin_relex;
 
-    //tableau d'étapes
+    //tableau d'ï¿½tapes
     TYTabEtape m_tabEtape01;
 
     //spectre source
@@ -59,7 +59,7 @@ public:
     //tableau d'intersection
     std::deque<TYSIntersection> m_tabIntersect;
 
-    //directivité
+    //directivitï¿½
     OVector3D m_directivityVector;
     tympan::SourceDirectivityInterface* m_directivity;
 
@@ -72,8 +72,17 @@ public:
 
     TabPoint3D m_tabPoints;
 
-    //méthode d'initialisation des objets globaux
+    //mï¿½thode d'initialisation des objets globaux
     void initGlobal(bool isFlate){
+        m_gamma = 1.41;
+        m_perfectGaz = 8.31;
+        m_molareMass = 0.029;
+        m_temperature = 20;
+        m_absoluteZero = 273.15;
+        m_pression = 101325.0;
+        m_hydromzetry = 50.0;
+        m_distance = 600.0;
+        
         m_tk = m_temperature + m_absoluteZero;
         m_soundSpeed = sqrt((m_gamma*m_perfectGaz*m_tk)/m_molareMass);
         m_spectreLambda = OSpectre::getLambda(m_soundSpeed);
@@ -111,7 +120,7 @@ public:
         m_isInitGlobal = true;
     }
 
-    //méthode cas utilisateur chemin direct
+    //mï¿½thode cas utilisateur chemin direct
     OSpectre initDirectPathWay(){
         OSpectre _spectreToReturn;
         //remplissage du spectre avecc les valeurs attendues dans _spectreToReturn
@@ -122,7 +131,7 @@ public:
         m_chemin_direct.setDistance(m_distance);
         m_chemin_direct.setLongueur(m_distance);
 
-        //MAJ de l'étape
+        //MAJ de l'ï¿½tape
         TYEtape etape01;
         etape01.setType(TYSOURCE);
         etape01.setPoint(m_pointSource);
@@ -133,7 +142,7 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin sol
+    //mï¿½thode cas utilisateur chemin sol
     OSpectre initGroundPathWay(){
 
         OSpectre _spectreToReturn;
@@ -144,7 +153,7 @@ public:
         double rr=0.0;
 
 
-        //Effacement des précedentes etapes
+        //Effacement des prï¿½cedentes etapes
         m_tabEtape01.clear();
 
         //Etape avant la reflexion
@@ -181,7 +190,7 @@ public:
         etape2._Absorption = mat->get_absorption(angle2, rr);
 
 
-        m_tabEtape01.push_back(etape2); //Ajout de l'étape apr?s reflexion
+        m_tabEtape01.push_back(etape2); //Ajout de l'ï¿½tape apr?s reflexion
 
         m_chemin_sol.setLongueur(rr);
         m_chemin_sol.setDistance(m_distance);
@@ -190,14 +199,14 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin écran
+    //mï¿½thode cas utilisateur chemin ï¿½cran
     OSpectre initBlockPathWay(){
 
         OSpectre _spectreToReturn;
         double _longueur = 0.0;
         double _epaisseur = 0.0;
 
-        //objets necessaires ? la création du solver
+        //objets necessaires ? la crï¿½ation du solver
         tympan::AcousticProblemModel newProblem;
         tympan::AcousticResultModel newResult;
         tympan::LPSolverConfiguration configuration;
@@ -211,7 +220,7 @@ public:
         //remplissage du spectre avecc les valeurs attendues dans _spectreToReturn
         //TODO
 
-        //Effacement des précedentes etapes
+        //Effacement des prï¿½cedentes etapes
         m_tabEtape01.clear();
 
         m_tabPoints.push_back( m_pointSource);
@@ -267,7 +276,7 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin reflexion
+    //mï¿½thode cas utilisateur chemin reflexion
     OSpectre initReflexionPathWay(){
         OSpectre _spectreToReturn;
         OPoint3D _ptRecep(0,50,60);
@@ -353,7 +362,7 @@ TEST(test_TYAcousticModel, limAttDiffraction)
     }
 
     // Cas 2:  ECRAN MINCE (<0.01 m) et puissance en dessous de 20 dB
-    // ecran Ã  0.008 m et puissance sonore Ã  5 dB
+    // ecran ï¿½  0.008 m et puissance sonore ï¿½  5 dB
     dB = pow(10.0, (10.0/10.0));
     m_Source.setDefaultValue(dB);
 
@@ -524,7 +533,7 @@ TEST_F(TYAcousticModelTest, computeCheminsAvecEcran)
     EXPECT_EQ(600.0,rayonSR.longueur());
 
     TYTabChemin tabChemin;
-    //objets necessaires ? la création du solver
+    //objets necessaires ? la crï¿½ation du solver
     tympan::AcousticProblemModel newProblem;
     tympan::AcousticResultModel newResult;
     tympan::LPSolverConfiguration configuration;
@@ -571,10 +580,10 @@ TEST_F(TYAcousticModelTest, computeCheminsAvecEcran)
     EXPECT_EQ(m_chemin_ecran.getDistance(),returnWay.getDistance());
     EXPECT_NEAR(m_chemin_ecran.getLongueur(),returnWay.getLongueur(),1e-1);
 
-    //vérification du nombre d'étape dnas le tableau
+    //vï¿½rification du nombre d'ï¿½tape dnas le tableau
     EXPECT_EQ(4, m_tabEtape01.size());
 
-    //appel de la méthode ? tester
+    //appel de la mï¿½thode ? tester
     m_chemin_ecran.calcAttenuation(m_tabEtape01,_atmos_test);
 
     //comparaison des spectre
@@ -599,7 +608,7 @@ TEST_F(TYAcousticModelTest, computeCheminAPlat)
     EXPECT_EQ(1, m_tabEtape01.size());
 
     TYTabChemin tabChemin;
-    //objets necessaires ? la création du solver
+    //objets necessaires ? la crï¿½ation du solver
     tympan::AcousticProblemModel newProblem;
     tympan::AcousticResultModel newResult;
     tympan::LPSolverConfiguration configuration;
@@ -683,7 +692,7 @@ TEST_F(TYAcousticModelTest, computeCheminSansEcran)
     EXPECT_EQ(1, m_tabEtape01.size());
 
     TYTabChemin tabChemin;
-    //objets necessaires ? la création du solver
+    //objets necessaires ? la crï¿½ation du solver
     tympan::AcousticProblemModel newProblem;
     tympan::AcousticResultModel newResult;
     tympan::LPSolverConfiguration configuration;
@@ -805,12 +814,12 @@ TEST_F(TYAcousticModelTest, computeCheminReflexion)
     OSpectre returnSpectre;
     AtmosphericConditions _atmos_test(101325., 20., 50.);
 
-    //vérification du nombre d'étape dnas le tableau
+    //vï¿½rification du nombre d'ï¿½tape dnas le tableau
     EXPECT_EQ(2, m_tabEtape01.size());
     EXPECT_EQ(600.0,rayonSR.longueur());
 
     TYTabChemin tabChemin;
-    //objets necessaires ? la création du solver
+    //objets necessaires ? la crï¿½ation du solver
     tympan::AcousticProblemModel newProblem;
     tympan::AcousticResultModel newResult;
     tympan::LPSolverConfiguration configuration;
@@ -859,7 +868,7 @@ TEST_F(TYAcousticModelTest, computeCheminReflexion)
 
 
 
-    //appel de la méthode ? tester
+    //appel de la mï¿½thode ? tester
     m_chemin_relex.calcAttenuation(m_tabEtape01,_atmos_test);
 
     //comparaison des spectre
