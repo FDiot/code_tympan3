@@ -215,21 +215,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
             visu.plot_points_seq(plotter.ax, points_left, marker='<')
             visu.plot_points_seq(plotter.ax, points_right, marker='>')
             plotter.show()
-
-        #print("TEST faces_right = ",faces_right)
         
-        for f in faces_right:
-            test = self.mesher.point_for_face(f)
-            print("TEST faces_right  test = ",test)
-        
-        test2 = self.mesher.point_for_face(f1)
-        print("TEST f1 point  = ",test2)
-        
-        test3 = self.mesher.point_for_face(f2)
-        print("TEST f2 point  = ",test3)
-        
-        test4 = self.mesher.point_for_face(f3)
-        print("TEST f3 point  = ",test4)
         
         self.assertEqual(faces_right, (f3, f2, f1))
         
