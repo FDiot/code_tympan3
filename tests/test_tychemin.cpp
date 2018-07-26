@@ -27,17 +27,17 @@ protected:
     //AtmosphericConditions m_atmoCondition(100.2,5.2,8.3);
 
 public:
-    bool m_isInitGlobal = false;
+    bool m_isInitGlobal;
 
     //constantes globales
-    const double m_gamma = 1.41;
-    const double m_perfectGaz = 8.31;
-    const double m_molareMass = 0.029;
-    const double m_temperature = 20;
-    const double m_absoluteZero = 273.15;
-    const double m_pression = 101325.0;
-    const double m_hydromzetry = 50.0;
-    const double m_distance = 100.0;
+    double m_gamma;
+    double m_perfectGaz;
+    double m_molareMass;
+    double m_temperature;
+    double m_absoluteZero;
+    double m_pression;
+    double m_hydromzetry;
+    double m_distance;
     double m_tk, m_soundSpeed;
     OSpectre m_spectreLambda;
 
@@ -67,6 +67,18 @@ public:
 
     //m�thode d'initialisation des objets globaux
     void initGlobal(){
+            m_isInitGlobal = false;
+
+    //constantes globales
+    m_gamma = 1.41;
+    m_perfectGaz = 8.31;
+    m_molareMass = 0.029;
+    m_temperature = 20;
+    m_absoluteZero = 273.15;
+    m_pression = 101325.0;
+    m_hydromzetry = 50.0;
+        m_distance = 100.0;
+    
         m_tk = m_temperature + m_absoluteZero;
         m_soundSpeed = sqrt((m_gamma*m_perfectGaz*m_tk)/m_molareMass);
         m_spectreLambda = OSpectre::getLambda(m_soundSpeed);
