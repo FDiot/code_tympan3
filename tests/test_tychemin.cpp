@@ -30,14 +30,14 @@ public:
     bool m_isInitGlobal = false;
 
     //constantes globales
-    double m_gamma = 1.41;
-    double m_perfectGaz = 8.31;
-    double m_molareMass = 0.029;
-    double m_temperature = 20;
-    double m_absoluteZero = 273.15;
-    double m_pression = 101325.0;
-    double m_hydromzetry = 50.0;
-    double m_distance = 100.0;
+    const double m_gamma = 1.41;
+    const double m_perfectGaz = 8.31;
+    const double m_molareMass = 0.029;
+    const double m_temperature = 20;
+    const double m_absoluteZero = 273.15;
+    const double m_pression = 101325.0;
+    const double m_hydromzetry = 50.0;
+    const double m_distance = 100.0;
     double m_tk, m_soundSpeed;
     OSpectre m_spectreLambda;
 
@@ -47,13 +47,13 @@ public:
     TYChemin m_chemin_ecran;
     TYChemin m_chemin_relex;
 
-    //tableau d'étapes
+    //tableau d'ï¿½tapes
     TYTabEtape m_tabEtape01;
 
     //spectre source
     OSpectreComplex m_spectre_source;
 
-    //directivité
+    //directivitï¿½
     OVector3D m_directivityVector;
     tympan::SourceDirectivityInterface* m_directivity;
 
@@ -65,7 +65,7 @@ public:
     std::vector<tympan::AcousticReceptor> m_acousticReceptionList;
 
 
-    //méthode d'initialisation des objets globaux
+    //mï¿½thode d'initialisation des objets globaux
     void initGlobal(){
         m_tk = m_temperature + m_absoluteZero;
         m_soundSpeed = sqrt((m_gamma*m_perfectGaz*m_tk)/m_molareMass);
@@ -98,18 +98,18 @@ public:
         m_isInitGlobal = true;
     }
 
-    //méthode cas utilisateur chemin direct
+    //mï¿½thode cas utilisateur chemin direct
     OSpectre initDirectPathWay(){
         OSpectre _spectreToReturn;
         //remplissage du spectre avecc les valeurs attendues
-        //TODO renter les résultats des fichiers csv dans _spectreToReturn
+        //TODO renter les rï¿½sultats des fichiers csv dans _spectreToReturn
 
         //MAJ distance/longueur
         m_tabEtape01.clear();
         m_chemin_direct.setDistance(m_distance);
         m_chemin_direct.setLongueur(m_distance);
 
-        //MAJ de l'étape
+        //MAJ de l'ï¿½tape
         TYEtape etape01;
         etape01.setType(TYSOURCE);
         etape01.setPoint(m_pointSource);
@@ -120,13 +120,13 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin sol
+    //mï¿½thode cas utilisateur chemin sol
     OSpectre initGroundPathWay(){
         OSpectre _spectreToReturn;
         //remplissage du spectre avecc les valeurs attendues
-        //TODO renter les résultats des fichiers csv _spectreToReturn
+        //TODO renter les rï¿½sultats des fichiers csv _spectreToReturn
 
-        //Effacement des précedentes etapes
+        //Effacement des prï¿½cedentes etapes
         m_tabEtape01.clear();
 
         //Etape avant la reflexion
@@ -169,7 +169,7 @@ public:
 
         }
 
-        m_tabEtape01.push_back(etape2); //Ajout de l'étape apr?s reflexion
+        m_tabEtape01.push_back(etape2); //Ajout de l'ï¿½tape apr?s reflexion
 
         m_chemin_sol.setLongueur(rr);
         m_chemin_sol.setDistance(m_distance);
@@ -178,14 +178,14 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin écran
+    //mï¿½thode cas utilisateur chemin ï¿½cran
     OSpectre initBlockPathWay(){
 
         OSpectre _spectreToReturn;
         double _longueur = 0.0;
         double _epaisseur = 0.0;
 
-        //objets necessaires ? la création du solver
+        //objets necessaires ? la crï¿½ation du solver
         tympan::AcousticProblemModel newProblem;
         tympan::AcousticResultModel newResult;
         tympan::LPSolverConfiguration configuration;
@@ -197,9 +197,9 @@ public:
         modelAcoustic->init();
 
         //remplissage du spectre avecc les valeurs attendues
-        //TODO renter les résultats des fichiers csv _spectreToReturn
+        //TODO renter les rï¿½sultats des fichiers csv _spectreToReturn
 
-        //Effacement des précedentes etapes
+        //Effacement des prï¿½cedentes etapes
         m_tabEtape01.clear();
 
         OPoint3D ptFirst(49,50,35);
@@ -245,14 +245,14 @@ public:
 
     }
 
-    //méthode cas utilisateur chemin reflexion
+    //mï¿½thode cas utilisateur chemin reflexion
     OSpectre initReflexionPathWay(){
         OSpectre _spectreToReturn;
         m_pointSource.setCoords(0,50,20);
         OPoint3D _ptRecep(0,50,0);
         OPoint3D _ptReflex(20,50,10);
         //remplissage du spectre avecc les valeurs attendues
-        //TODO renter les résultats des fichiers csv dans _spectreToReturn
+        //TODO renter les rï¿½sultats des fichiers csv dans _spectreToReturn
 
         //MAJ distance/longueur
         m_tabEtape01.clear();
@@ -321,75 +321,75 @@ TEST_F(TYCheminTest, calcAttenuation)
         bool _exact;
 
         //CAS 1 CHEMIN DIRECT
-        //appel de la méthode cas chemin direct
+        //appel de la mï¿½thode cas chemin direct
         _expectedSpectre = initDirectPathWay();
 
-        //vérification du nombre d'étape dnas le tableau
+        //vï¿½rification du nombre d'ï¿½tape dnas le tableau
         EXPECT_EQ(1, m_tabEtape01.size());
 
-        //appel de la méthode ? tester
+        //appel de la mï¿½thode ? tester
         m_chemin_direct.calcAttenuation(m_tabEtape01,_atmos_test);
 
         //comparaison des spectre
         _returnSpectreDB = m_chemin_direct.getAttenuation().toDB();
 
-        //vérification de la comparaison
+        //vï¿½rification de la comparaison
         EXPECT_EQ(_expectedSpectre, _returnSpectreDB);
 
         //end cas 1
 
         //CAS 2 CHEMIN SOL
-        //appel de la méthode cas chemin sol
+        //appel de la mï¿½thode cas chemin sol
         _expectedSpectre = initGroundPathWay();
 
-        //vérification du nombre d'étape dnas le tableau
+        //vï¿½rification du nombre d'ï¿½tape dnas le tableau
         EXPECT_EQ(2, m_tabEtape01.size());
 
-        //appel de la méthode ? tester
+        //appel de la mï¿½thode ? tester
         m_chemin_sol.calcAttenuation(m_tabEtape01,_atmos_test);
 
         //comparaison des spectre
         _returnSpectreDB = m_chemin_sol.getAttenuation().toDB();
 
-        //vérification de la comparaison
+        //vï¿½rification de la comparaison
         EXPECT_EQ(_expectedSpectre, _returnSpectreDB);
 
         //end cas 2
 
         //CAS 3 CHEMIN ECRAN
-        //appel de la méthode cas chemin écran
+        //appel de la mï¿½thode cas chemin ï¿½cran
         _expectedSpectre = initBlockPathWay();
 
-        //vérification du nombre d'étape dnas le tableau
+        //vï¿½rification du nombre d'ï¿½tape dnas le tableau
         EXPECT_EQ(4, m_tabEtape01.size());
 
-        //appel de la méthode ? tester
+        //appel de la mï¿½thode ? tester
         m_chemin_ecran.calcAttenuation(m_tabEtape01,_atmos_test);
 
         //comparaison des spectre
         _returnSpectreDB = m_chemin_ecran.getAttenuation().toDB();
 
-        //vérification de la comparaison
+        //vï¿½rification de la comparaison
         EXPECT_EQ(_expectedSpectre, _returnSpectreDB);
 
-        //vérification de la comparaison
+        //vï¿½rification de la comparaison
         EXPECT_EQ(true, _exact);
         //end cas 3
 
         //CAS 4 CHEMIN REFLEX
-        //appel de la méthode cas chemin écran
+        //appel de la mï¿½thode cas chemin ï¿½cran
         _expectedSpectre = initReflexionPathWay();
 
-        //vérification du nombre d'étape dnas le tableau
+        //vï¿½rification du nombre d'ï¿½tape dnas le tableau
         EXPECT_EQ(2, m_tabEtape01.size());
 
-        //appel de la méthode ? tester
+        //appel de la mï¿½thode ? tester
         m_chemin_relex.calcAttenuation(m_tabEtape01,_atmos_test);
 
         //comparaison des spectre
         _returnSpectreDB = m_chemin_relex.getAttenuation().toDB();
 
-        //vérification de la comparaison
+        //vï¿½rification de la comparaison
         EXPECT_EQ(_expectedSpectre, _returnSpectreDB);
 
         //end cas 3
