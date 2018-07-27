@@ -87,8 +87,5 @@ TEST(test_TYAcousticPathFinder, computePath)
 
     // Check result
     EXPECT_EQ(2, tabIntersect.size());
-    EXPECT_EQ(1, ptsTop.size());
-    EXPECT_EQ(3, ptsLeft.size());
-    EXPECT_EQ(2, ptsRight.size());
 
 }
