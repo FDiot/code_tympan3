@@ -35,10 +35,6 @@ TEST(test_TYPolyligneParcours, ajouteSegment)
    P2.isInfra = true;
    P2.isEcran = true;
 
-   TYPointParcours P3;
-   P3.Identifiant = 3;
-   P3.isInfra = P3.isEcran = true;
-
    TYPolyligneParcours polyligneP0;
 
    // Call to the tested method:
