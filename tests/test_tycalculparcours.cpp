@@ -194,7 +194,7 @@ TEST(test_TYCalculParcours, Traitement)
 
     // Data setup:
     // Points
-   /* OPoint3D S(0.0, 0.0, 0.0);
+    OPoint3D S(0.0, 0.0, 0.0);
     OPoint3D R(10.0, 10.0, 0.0);
 
     OPoint3D P1(1.0, 3.0, 0.0);
@@ -239,7 +239,7 @@ TEST(test_TYCalculParcours, Traitement)
     EXPECT_EQ(1, ParcoursH._geoTrajetDroite->_nNbPolylines);
 
     EXPECT_EQ(4, ParcoursH._geoSecondePasseDroite._nNbPointTotal);
-    EXPECT_EQ(1, ParcoursH._geoSecondePasseDroite._nNbPolylines);*/
+    EXPECT_EQ(1, ParcoursH._geoSecondePasseDroite._nNbPolylines);
 
 
 
