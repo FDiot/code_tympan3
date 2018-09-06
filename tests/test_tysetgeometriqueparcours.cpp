@@ -629,10 +629,7 @@ TEST_F(TYSetGeometriqueParcoursTest, ParcourtPolyligneAPartirDe)
     geoPremierePasse->_nNbPointTotal = 0;
     geoPremierePasse->_nNbPolylineAllouee = 0;
     geoPremierePasse->_nNbPolylines = 0;
-    PointsADroite = nullptr;
-    PointsAGauche = nullptr;
-    IndexePointsFrontiere = nullptr;
-    EstUnPointIntersectant = nullptr;
+
     std::cout<<"ParcourtPolyligneAPartirDe FIN "<<std::endl;
 }
 
