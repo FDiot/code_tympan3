@@ -54,8 +54,6 @@ build_script:
 
     conda install -y -c scitools/label/archive shapely
 
-    conda install -y -q qt=4.8.7=vc10_9
-
     conda install -y -q swig=3.0.10
 
     conda install -y -q gmp mpfr -c salilab
@@ -66,6 +64,8 @@ build_script:
     
     conda install -y -q doxygen -c omnia
 
+    conda install -y -q qt=4.8.7=vc10_9
+    
     conda list
 
     cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python34.lib ..\src
