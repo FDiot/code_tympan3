@@ -454,8 +454,8 @@ std::cout<<"TriePointsIntersectionSuivantSR  DEBUT"<<std::endl;
 
     // Check result:
     EXPECT_EQ(7 ,NbPointFrontiere);
-    EXPECT_EQ(0 ,IndexePointsFrontiere[0]);
-    EXPECT_EQ(4 ,IndexePointsFrontiere[1]);
+    EXPECT_EQ(4 ,IndexePointsFrontiere[0]);
+    EXPECT_EQ(0 ,IndexePointsFrontiere[1]);
     EXPECT_EQ(2 ,IndexePointsFrontiere[2]);
     EXPECT_EQ(2 ,IndexePointsFrontiere[3]);
     EXPECT_EQ(5 ,IndexePointsFrontiere[4]);
@@ -1047,11 +1047,10 @@ std::cout<<"03 "<<std::endl;
 std::cout<<"04 "<<std::endl;
     // Check result:
     EXPECT_EQ(true, FirstPasse);
-    EXPECT_EQ(12, geoPremierePasse->_nNbPointTotal);
-    EXPECT_EQ(3, geoPremierePasse->_nNbPointTotal);
+    EXPECT_EQ(10, geoPremierePasse->_nNbPointTotal);
     EXPECT_EQ(0, geoPremierePasse->_ListePolylines[0].indexePoint(0));
-    EXPECT_EQ(0, geoPremierePasse->_ListePolylines[0].indexePoint(1));
-    EXPECT_EQ(1, geoPremierePasse->_ListePolylines[0].indexePoint(2));
+    EXPECT_EQ(4, geoPremierePasse->_ListePolylines[0].indexePoint(1));
+    EXPECT_EQ(4, geoPremierePasse->_ListePolylines[0].indexePoint(2));
 
      //Destruction
     geoPremierePasse->_ListePolylines = nullptr;
@@ -1102,11 +1101,11 @@ std::cout<<"SecondePasse DEBUT "<<std::endl;
 
     // Check result:
     EXPECT_EQ(true, b_SecondePasse);
-    EXPECT_EQ(12, geoPremierePasse->_nNbPointTotal);
+    EXPECT_EQ(10, geoPremierePasse->_nNbPointTotal);
     EXPECT_EQ(3, geoSecondePasse->_nNbPointTotal);
     EXPECT_EQ(0, geoSecondePasse->_ListePolylines[0].indexePoint(0));
-    EXPECT_EQ(0, geoSecondePasse->_ListePolylines[0].indexePoint(1));
-    EXPECT_EQ(1, geoSecondePasse->_ListePolylines[0].indexePoint(2));
+    EXPECT_EQ(1, geoSecondePasse->_ListePolylines[0].indexePoint(1));
+    EXPECT_EQ(7, geoSecondePasse->_ListePolylines[0].indexePoint(2));
 
 
     // Destruction
