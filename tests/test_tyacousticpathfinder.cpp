@@ -22,10 +22,6 @@ private:
     TYAcousticPathFinder AcousticPathFinder;
 };
 
-//TEST_F(TYAcousticPathFinderTest, create_instance)
-//{
-//}
-
 // Testing the TYAcousticPathFinder::computePath method
 TEST(test_TYAcousticPathFinder, computePath)
     {

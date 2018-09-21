@@ -16,114 +16,104 @@
 class TYSetGeometriqueParcoursTest :
     public testing::Test
 {
-    private:
-        //TYSetGeometriqueParcours SetGeometriqueParcours;
+private:
 
-    public:
-        TYSetGeometriqueParcours *geoParcoursSR, *geoParcours;
-        TYPointParcours S, R;
-        TYPointParcours P1, P2, P3, P4, P5, P6;
-        TYPolyligneParcours polyligneSR;
-        TYPolyligneParcours polyligneP1, polyligneP2, polyligneP3, polyligneP4, polyligneP5, polyligneP6, polyligneP7;
+public:
+    TYSetGeometriqueParcours *geoParcoursSR, *geoParcours;
+    TYPointParcours S, R;
+    TYPointParcours P1, P2, P3, P4, P5, P6;
+    TYPolyligneParcours polyligneSR;
+    TYPolyligneParcours polyligneP1, polyligneP2, polyligneP3, polyligneP4, polyligneP5, polyligneP6, polyligneP7;
 
-        void initGlobal(){
-            std::cout<<"initGlobal  DEBUT"<<std::endl;
+    void initGlobal(){
+        geoParcoursSR = new TYSetGeometriqueParcours;
+        geoParcours = new TYSetGeometriqueParcours;
 
+        // Parcours de Points
+        S.Identifiant = 0;
+        S.x = 0.0;
+        S.y = 0.0;
+        S.isEcran = S.isInfra = true;
 
-                    geoParcoursSR = new TYSetGeometriqueParcours;
+        R.Identifiant = 7;
+        R.x = 10.0;
+        R.y = 10.0;
+        R.isEcran = R.isInfra = true;
 
+        P1.Identifiant = 1;
+        P1.x = 1.0;
+        P1.y = 3.0;
+        P1.isEcran = P1.isInfra = true;
 
+        P2.Identifiant = 2;
+        P2.x = 3.0;
+        P2.y = 3.0;
+        P2.isEcran = P2.isInfra = true;
 
-                    geoParcours = new TYSetGeometriqueParcours;
+        P3.Identifiant = 3;
+        P3.x = 6.0;
+        P3.y = 4.0;
+        P3.isEcran = P3.isInfra = true;
 
+        P4.Identifiant = 4;
+        P4.x = 4.0;
+        P4.y = 7.0;
+        P4.isEcran = P4.isInfra = true;
 
-                // Parcours de Points
-                S.Identifiant = 0;
-                S.x = 0.0;
-                S.y = 0.0;
-                S.isEcran = S.isInfra = true;
+        P5.Identifiant = 5;
+        P5.x = 7.0;
+        P5.y = 7.0;
+        P5.isEcran = P5.isInfra = true;
 
-                R.Identifiant = 7;
-                R.x = 10.0;
-                R.y = 10.0;
-                R.isEcran = R.isInfra = true;
+        P6.Identifiant = 6;
+        P6.x = 10.0;
+        P6.y = 7.0;
+        P6.isEcran = P6.isInfra = true;
 
-                P1.Identifiant = 1;
-                P1.x = 1.0;
-                P1.y = 3.0;
-                P1.isEcran = P1.isInfra = true;
+        // Polylignes
+        polyligneSR.ajouteSegment(&S, &R);
+        polyligneP1.ajouteSegment(&S,&P1);
+        polyligneP2.ajouteSegment(&P1, &P2);
+        polyligneP3.ajouteSegment(&P2, &P3);
+        polyligneP4.ajouteSegment(&P3, &P4);
+        polyligneP5.ajouteSegment(&P4, &P5);
+        polyligneP6.ajouteSegment(&P5, &P6);
+        polyligneP7.ajouteSegment(&P6,&R);
 
-                P2.Identifiant = 2;
-                P2.x = 3.0;
-                P2.y = 3.0;
-                P2.isEcran = P2.isInfra = true;
+        // Geometrique Parcours
+        geoParcoursSR->_nNbPointTotal = 2;
+        geoParcoursSR->_nNbPolylines = 1;
+        geoParcoursSR->_ListePoint = new TYPointParcours[2];
+        geoParcoursSR->_ListePoint[0] = S;
+        geoParcoursSR->_ListePoint[1] = R;
+        geoParcoursSR->_ListePolylines = new TYPolyligneParcours[1];
+        geoParcoursSR->_ListePolylines[0] = polyligneSR;
 
-                P3.Identifiant = 3;
-                P3.x = 6.0;
-                P3.y = 4.0;
-                P3.isEcran = P3.isInfra = true;
-
-                P4.Identifiant = 4;
-                P4.x = 4.0;
-                P4.y = 7.0;
-                P4.isEcran = P4.isInfra = true;
-
-                P5.Identifiant = 5;
-                P5.x = 7.0;
-                P5.y = 7.0;
-                P5.isEcran = P5.isInfra = true;
-
-                P6.Identifiant = 6;
-                P6.x = 10.0;
-                P6.y = 7.0;
-                P6.isEcran = P6.isInfra = true;
-
-                // Polylignes
-                polyligneSR.ajouteSegment(&S, &R);
-                polyligneP1.ajouteSegment(&S,&P1);
-                polyligneP2.ajouteSegment(&P1, &P2);
-                polyligneP3.ajouteSegment(&P2, &P3);
-                polyligneP4.ajouteSegment(&P3, &P4);
-                polyligneP5.ajouteSegment(&P4, &P5);
-                polyligneP6.ajouteSegment(&P5, &P6);
-                polyligneP7.ajouteSegment(&P6,&R);
-
-                // Geometrique Parcours
-                geoParcoursSR->_nNbPointTotal = 2;
-                geoParcoursSR->_nNbPolylines = 1;
-                geoParcoursSR->_ListePoint = new TYPointParcours[2];
-                geoParcoursSR->_ListePoint[0] = S;
-                geoParcoursSR->_ListePoint[1] = R;
-                geoParcoursSR->_ListePolylines = new TYPolyligneParcours[1];
-                geoParcoursSR->_ListePolylines[0] = polyligneSR;
-
-                geoParcours->_nNbPointTotal = 8;
-                geoParcours->_nNbPolylines = 7;
-                geoParcours->_ListePoint = new TYPointParcours[8];
-                geoParcours->_ListePoint[0] = S;
-                geoParcours->_ListePoint[1] = P1;
-                geoParcours->_ListePoint[2] = P2;
-                geoParcours->_ListePoint[3] = P3;
-                geoParcours->_ListePoint[4] = P4;
-                geoParcours->_ListePoint[5] = P5;
-                geoParcours->_ListePoint[6] = P6;
-                geoParcours->_ListePoint[7] = R;
-                geoParcours->_ListePolylines = new TYPolyligneParcours[7];
-                geoParcours->_ListePolylines[0]=polyligneP1;
-                geoParcours->_ListePolylines[1]=polyligneP2;
-                geoParcours->_ListePolylines[2]=polyligneP3;
-                geoParcours->_ListePolylines[3]=polyligneP4;
-                geoParcours->_ListePolylines[4]=polyligneP5;
-                geoParcours->_ListePolylines[5]=polyligneP6;
-                geoParcours->_ListePolylines[6]=polyligneP6;
-    std::cout<<"initGlobal  FIN"<<std::endl;
-        }
+        geoParcours->_nNbPointTotal = 8;
+        geoParcours->_nNbPolylines = 7;
+        geoParcours->_ListePoint = new TYPointParcours[8];
+        geoParcours->_ListePoint[0] = S;
+        geoParcours->_ListePoint[1] = P1;
+        geoParcours->_ListePoint[2] = P2;
+        geoParcours->_ListePoint[3] = P3;
+        geoParcours->_ListePoint[4] = P4;
+        geoParcours->_ListePoint[5] = P5;
+        geoParcours->_ListePoint[6] = P6;
+        geoParcours->_ListePoint[7] = R;
+        geoParcours->_ListePolylines = new TYPolyligneParcours[7];
+        geoParcours->_ListePolylines[0]=polyligneP1;
+        geoParcours->_ListePolylines[1]=polyligneP2;
+        geoParcours->_ListePolylines[2]=polyligneP3;
+        geoParcours->_ListePolylines[3]=polyligneP4;
+        geoParcours->_ListePolylines[4]=polyligneP5;
+        geoParcours->_ListePolylines[5]=polyligneP6;
+        geoParcours->_ListePolylines[6]=polyligneP6;
+    }
 };
 
 // Testing the TYSetGeometriqueParcours::Copy method
 TEST_F(TYSetGeometriqueParcoursTest, Copy)
 {
-std::cout<<"Copy  DEBUT"<<std::endl;
     initGlobal();
     TYSetGeometriqueParcours copieGeoParcoursP0;
 
@@ -142,15 +132,11 @@ std::cout<<"Copy  DEBUT"<<std::endl;
     copieGeoParcoursP0._nNbPolylineAllouee = 0;
     copieGeoParcoursP0._nNbPolylines = 0;
 
-    //delete geoParcoursSR;
-
-std::cout<<"Copy  FIN"<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::SupressionPolylignesRedondantes method
 TEST_F(TYSetGeometriqueParcoursTest, SupressionPolylignesRedondantes)
 {
-std::cout<<"SupressionPolylignesRedondantes  DEBUT"<<std::endl;
     // Data pour le test redondant
     TYPointParcours t_S;
     t_S.Identifiant = 0;
@@ -209,16 +195,12 @@ std::cout<<"SupressionPolylignesRedondantes  DEBUT"<<std::endl;
     geoParcoursRevient._nNbPointTotal = 0;
     geoParcoursRevient._nNbPolylineAllouee = 0;
     geoParcoursRevient._nNbPolylines = 0;
-    std::cout<<"SupressionPolylignesRedondantes  FIN"<<std::endl;
-
 
 }
 
 // Testing the TYSetGeometriqueParcours::MergePointsDoubles method
 TEST_F(TYSetGeometriqueParcoursTest, MergePointsDoubles)
 {
-
-std::cout<<"MergePointsDoubles  DEBUT"<<std::endl;
     // Points
     TYPointParcours P10,P11, P12,P11_bis,P13;
     P10.Identifiant = 0;
@@ -246,8 +228,6 @@ std::cout<<"MergePointsDoubles  DEBUT"<<std::endl;
     P13.y = 3.0;
     P13.isEcran = P13.isInfra = true;
 
-
-
     TYPolyligneParcours polyligneMP1;
     polyligneMP1.ajouteSegment(&P10, &P11);
     TYPolyligneParcours polyligneMP2;
@@ -255,11 +235,9 @@ std::cout<<"MergePointsDoubles  DEBUT"<<std::endl;
     TYPolyligneParcours polyligneMP3;
     polyligneMP3.ajouteSegment(&P11_bis, &P13);
 
-
     polyligneMP1._PolyligneP1 = &polyligneMP2;
     polyligneMP2._PolyligneP0 = &polyligneMP1;
     polyligneMP3._PolyligneP0 = &polyligneMP2;
-
 
     // Geometriques Parcours
     TYSetGeometriqueParcours geoParcoursMP;
@@ -295,15 +273,11 @@ std::cout<<"MergePointsDoubles  DEBUT"<<std::endl;
     geoParcoursMP._nNbPolylineAllouee = 0;
     geoParcoursMP._nNbPolylines = 0;
     
-    std::cout<<"MergePointsDoubles  FIN"<<std::endl;
-
-
 }
 
 // Testing the TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere method
 TEST_F(TYSetGeometriqueParcoursTest, RamenerPointsTraversantLaFrontiere)
 {
-std::cout<<"RamenerPointsTraversantLaFrontiere  DEBUT"<<std::endl;
     initGlobal();
     // Data setup:
     bool* PointAGauche;
@@ -312,7 +286,6 @@ std::cout<<"RamenerPointsTraversantLaFrontiere  DEBUT"<<std::endl;
     int NbPointFrontiere = 0;
     bool* EstUnPointIntersectant = new bool[100];
     bool bCoteGauche = true;
-
 
    geoParcours->MarquePointsADroiteEtAGauche(S, R, PointAGauche, PointADroite);
 
@@ -331,19 +304,15 @@ std::cout<<"RamenerPointsTraversantLaFrontiere  DEBUT"<<std::endl;
 
 
    // Destruction
-   delete PointADroite;
-   delete PointAGauche;
-   delete IndexPointFrontiere;
-   delete EstUnPointIntersectant;
-
-   //delete geoParcours;
-   std::cout<<"RamenerPointsTraversantLaFrontiere  FIN"<<std::endl;
+   delete [] PointADroite;
+   delete [] PointAGauche;
+   delete [] IndexPointFrontiere;
+   delete [] EstUnPointIntersectant;
 }
 
 // Testing the TYSetGeometriqueParcours::MarquePointsADroiteEtAGauche method
 TEST_F(TYSetGeometriqueParcoursTest, MarquePointsADroiteEtAGauche)
 {
-std::cout<<"MarquePointsADroiteEtAGauche  DEBUT"<<std::endl;
     initGlobal();
     // Data setup:
     bool* PointAGauche;
@@ -381,16 +350,13 @@ std::cout<<"MarquePointsADroiteEtAGauche  DEBUT"<<std::endl;
 
 
    // Destruction
-   delete PointADroite;
-   delete PointAGauche;
-
-   std::cout<<"MarquePointsADroiteEtAGauche  FIN"<<std::endl;
+   delete [] PointADroite;
+   delete [] PointAGauche;
 }
 
 // Testing the TYSetGeometriqueParcours::SeparationDroiteGauche method
 TEST_F(TYSetGeometriqueParcoursTest, SeparationDroiteGauche)
 {
-std::cout<<"SeparationDroiteGauche  DEBUT"<<std::endl;
     initGlobal();
     // Data setup:
     TYSetGeometriqueParcours  geoGauche, geoDroite;
@@ -428,16 +394,13 @@ std::cout<<"SeparationDroiteGauche  DEBUT"<<std::endl;
     EXPECT_EQ(3, geoGauche._ListePolylines[2].indexePoint1());
     EXPECT_EQ(4, geoGauche._ListePolylines[2].indexePoint2());
 
-
-
-    
-    std::cout<<"SeparationDroiteGauche  FIN"<<std::endl;
+    delete [] PointAGauche;
+    delete [] PointADroite;
 }
 
 // Testing the TYSetGeometriqueParcours::TriePointsIntersectionSuivantSR method
 TEST_F(TYSetGeometriqueParcoursTest, TriePointsIntersectionSuivantSR)
 {
-std::cout<<"TriePointsIntersectionSuivantSR  DEBUT"<<std::endl;
     // Data setup
     initGlobal();
     bool* PointsAGauche;
@@ -462,20 +425,18 @@ std::cout<<"TriePointsIntersectionSuivantSR  DEBUT"<<std::endl;
 
 
     // Destruction
-    delete PointsADroite;
-    delete PointsAGauche;
-    delete IndexePointsFrontiere;
-    delete EstUnPointIntersectant;
-    std::cout<<"TriePointsIntersectionSuivantSR  FIN"<<std::endl;
+    delete [] PointsADroite;
+    delete [] PointsAGauche;
+    delete [] IndexePointsFrontiere;
+    delete [] EstUnPointIntersectant;
 }
 
 // Testing the TYSetGeometriqueParcours::AjoutePointALaPolyLigne method
 TEST_F(TYSetGeometriqueParcoursTest, AjoutePointALaPolyLigne)
 {
 
-std::cout<<"DEBUT AjoutePointALaPolyLigne"<<std::endl;
     // Data setup:
-    //initGlobal();
+    initGlobal();
 
     // Geometrique Parcours
     TYSetGeometriqueParcours *geoParcoursP = new TYSetGeometriqueParcours();
@@ -528,15 +489,12 @@ std::cout<<"DEBUT AjoutePointALaPolyLigne"<<std::endl;
     geoParcoursP->_nNbPolylineAllouee = 0;
     geoParcoursP->_nNbPolylines = 0;
 
-    std::cout<<"AjoutePointALaPolyLigne FIN"<<std::endl;
-
 }
 
 
 // Testing the TYSetGeometriqueParcours::AjouteLesPointsComprisEntre method
 TEST_F(TYSetGeometriqueParcoursTest, AjouteLesPointsComprisEntre)
 {
-std::cout<<"DEBUT AjouteLesPointsComprisEntre TODO"<<std::endl;
     // Data setup:
     initGlobal();
     TYPointParcours PS,PR,Padd;
@@ -584,13 +542,11 @@ std::cout<<"DEBUT AjouteLesPointsComprisEntre TODO"<<std::endl;
     geoAjoute->_nNbPointTotal = 0;
     geoAjoute->_nNbPolylineAllouee = 0;
     geoAjoute->_nNbPolylines = 0;
-    std::cout<<"AjouteLesPointsComprisEntre  FIN"<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::ParcourtPolyligneAPartirDe method
 TEST_F(TYSetGeometriqueParcoursTest, ParcourtPolyligneAPartirDe)
 {
-   std::cout<<"DEBUT ParcourtPolyligneAPartirDe"<<std::endl;
     // Data setup:
     initGlobal();
     TYSetGeometriqueParcours *geoPremierePasse = new TYSetGeometriqueParcours;
@@ -629,14 +585,17 @@ TEST_F(TYSetGeometriqueParcoursTest, ParcourtPolyligneAPartirDe)
     geoPremierePasse->_nNbPointTotal = 0;
     geoPremierePasse->_nNbPolylineAllouee = 0;
     geoPremierePasse->_nNbPolylines = 0;
+    delete [] PointsADroite;
+    delete [] PointsAGauche;
+    delete [] IndexePointsFrontiere;
+    delete [] EstUnPointIntersectant;
 
-    std::cout<<"ParcourtPolyligneAPartirDe FIN "<<std::endl;
+
 }
 
 // Testing the TYSetGeometriqueParcours::PolylignesInfraFermees method
 TEST_F(TYSetGeometriqueParcoursTest, PolylignesInfraFermees)
 {
-std::cout<<"PolylignesInfraFermees DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     // Points
@@ -733,16 +692,11 @@ std::cout<<"PolylignesInfraFermees DEBUT "<<std::endl;
     geoParcoursO->_nNbPointTotal = 0;
     geoParcoursO->_nNbPolylineAllouee = 0;
     geoParcoursO->_nNbPolylines = 0;
-    
-    std::cout<<"PolylignesInfraFermees FIN "<<std::endl;
-
-
 }
 
 // Testing the TYSetGeometriqueParcours::ListerPointsConnexes method
 TEST_F(TYSetGeometriqueParcoursTest, ListerPointsConnexes)
 {
-std::cout<<"ListerPointsConnexes DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     TYPolyligneParcours polylignePC1;
@@ -808,14 +762,12 @@ std::cout<<"ListerPointsConnexes DEBUT "<<std::endl;
     geoParcoursPC->_nNbPolylineAllouee = 0;
     geoParcoursPC->_nNbPolylines = 0;
     delete Connexes;
-    
-    std::cout<<"ListerPointsConnexes FIN "<<std::endl;
+
 }
 
 // Testing the TYSetGeometriqueParcours::intersects method
 TEST_F(TYSetGeometriqueParcoursTest, intersects)
 {
-std::cout<<"intersects DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     TYPolyligneParcours polyligneI1;
@@ -850,15 +802,11 @@ std::cout<<"intersects DEBUT "<<std::endl;
     geoParcoursI._nNbPointTotal = 0;
     geoParcoursI._nNbPolylineAllouee = 0;
     geoParcoursI._nNbPolylines = 0;
-
-    std::cout<<"intersects FIN "<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::AppartienneMemePolyligne method
 TEST_F(TYSetGeometriqueParcoursTest, AppartienneMemePolyligne)
 {
-
-std::cout<<"AppartienneMemePolyligne DEBUT "<<std::endl;
     // Data setup:
     // Polylignes
     initGlobal();
@@ -903,15 +851,11 @@ std::cout<<"AppartienneMemePolyligne DEBUT "<<std::endl;
     geoParcoursA._nNbPointTotal = 0;
     geoParcoursA._nNbPolylineAllouee = 0;
     geoParcoursA._nNbPolylines = 0;
-    
-    std::cout<<"AppartienneMemePolyligne FIN "<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR method
 TEST_F(TYSetGeometriqueParcoursTest, SelectionnePointsEntreSetRetDuCoteDeSR)
 {
-std::cout<<"SelectionnePointsEntreSetRetDuCoteDeSR DEBUT "<<std::endl;
-
     initGlobal();
 
     TYPointParcours** TableauDePoints = new TYPointParcours*[geoParcours->_nNbPointTotal + 2];     // [8 + 2]
@@ -929,14 +873,11 @@ std::cout<<"SelectionnePointsEntreSetRetDuCoteDeSR DEBUT "<<std::endl;
 
     // Destruction
     TableauDePoints = nullptr;
-
-    std::cout<<"SelectionnePointsEntreSetRetDuCoteDeSR FIN "<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::CreerTrajetAPartirDuneListeDePointsTriee method
 TEST_F(TYSetGeometriqueParcoursTest, CreerTrajetAPartirDuneListeDePointsTriee)
 {
-std::cout<<"CreerTrajetAPartirDuneListeDePointsTriee DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     // Geometrique Parcours
@@ -985,14 +926,11 @@ std::cout<<"CreerTrajetAPartirDuneListeDePointsTriee DEBUT "<<std::endl;
     geoParcoursG->_nNbPointTotal = 0;
     geoParcoursG->_nNbPolylineAllouee = 0;
     geoParcoursG->_nNbPolylines = 0;
-
-    std::cout<<"CreerTrajetAPartirDuneListeDePointsTriee FIN "<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::EnveloppeConvexeLes2PremiersPointsEtant method
 TEST_F(TYSetGeometriqueParcoursTest, EnveloppeConvexeLes2PremiersPointsEtant)
 {
-std::cout<<"EnveloppeConvexeLes2PremiersPointsEtant DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
 
@@ -1012,16 +950,11 @@ std::cout<<"EnveloppeConvexeLes2PremiersPointsEtant DEBUT "<<std::endl;
     EXPECT_EQ(1, TableauDePointsECOut[1]->Identifiant);
     EXPECT_EQ(4, TableauDePointsECOut[2]->Identifiant);
 
-
-    // Destruction
-    
-    std::cout<<"EnveloppeConvexeLes2PremiersPointsEtant FIN "<<std::endl;
 }
 
 // Testing the TYSetGeometriqueParcours::PremierePasse method
 TEST_F(TYSetGeometriqueParcoursTest, PremierePasse)
 {
-std::cout<<"PremierePasse DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     TYSetGeometriqueParcours *geoPremierePasse = new TYSetGeometriqueParcours;
@@ -1035,13 +968,12 @@ std::cout<<"PremierePasse DEBUT "<<std::endl;
 
     Connexite* Connexes = new Connexite[geoParcours->_nNbPointTotal];
     geoParcours->ListerPointsConnexes(Connexes);
-std::cout<<"01 "<<std::endl;
+
     geoParcours->MarquePointsADroiteEtAGauche(S, R, PointAGauche, PointADroite);
-    std::cout<<"02 "<<std::endl;
+
     geoParcours->RamenerPointsTraversantLaFrontiere(S, R, IndexPointFrontiere, NbPointFrontiere, EstUnPointIntersectant, bCoteGauche, PointAGauche, PointADroite);
-std::cout<<"03 "<<std::endl;
+
     bool FirstPasse = geoParcours->PremierePasse(S, R, IndexPointFrontiere, NbPointFrontiere, EstUnPointIntersectant, Connexes, *geoPremierePasse);
-std::cout<<"04 "<<std::endl;
     // Check result:
     EXPECT_EQ(true, FirstPasse);
     EXPECT_EQ(10, geoPremierePasse->_nNbPointTotal);
@@ -1055,14 +987,12 @@ std::cout<<"04 "<<std::endl;
     geoPremierePasse->_nNbPointTotal = 0;
     geoPremierePasse->_nNbPolylineAllouee = 0;
     geoPremierePasse->_nNbPolylines = 0;
-    
-    std::cout<<"PremierePasse FIN "<<std::endl;
+
 }
 
 // Testing the TYSetGeometriqueParcours::SecondePasse method
 TEST_F(TYSetGeometriqueParcoursTest, SecondePasse)
 {
-std::cout<<"SecondePasse DEBUT "<<std::endl;
     // Data setup:
     initGlobal();
     TYSetGeometriqueParcours *geoPremierePasse, *geoSecondePasse;
@@ -1112,5 +1042,4 @@ std::cout<<"SecondePasse DEBUT "<<std::endl;
     delete [] TableauDePointsECOut;
     delete [] PointADroite;
     delete [] PointAGauche;
-    std::cout<<"SecondePasse FIN "<<std::endl;
 }
