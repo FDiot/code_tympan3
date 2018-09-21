@@ -24,12 +24,6 @@ private:
     TYFaceSelector FaceSelector;
 };
 
-//TEST_F(TYFaceSelectorTest, create_instance)
-//{
-//}
-
-
-//DONE
 // Testing the TYFaceSelector::selectFaces method
 TEST(test_TYFaceSelector, selectFaces)
 {
