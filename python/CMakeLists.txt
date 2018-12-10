@@ -1,6 +1,6 @@
 set(CURRENT_FOLDER "python")
 
-find_package(PythonInterp 3.5 REQUIRED)
+find_package(PythonInterp 3.7 REQUIRED)
 
 # Cython integration adapted from https://github.com/thewtex/cython-cmake-example/
 # Include the CMake script UseCython.cmake.  This defines add_cython_module().
