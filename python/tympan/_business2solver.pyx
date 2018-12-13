@@ -26,8 +26,7 @@ def triangles_as_array(triangles):
     return np.array([(t.p1, t.p2, t.p3) for t in triangles])
 
 
-@cy.locals(ground=tybusiness.Ground)
-def _acoustic_material(ground):
+def _acoustic_material(ground: tybusiness.Ground):
     """Build material information from a Ground instance."""
     grnd = cy.declare(SmartPtr[tybusiness.TYSol], ground.thisptr)
     name = cy.declare(string, grnd.getRealPointer().getName().toStdString())
@@ -64,8 +63,7 @@ def acoustic_solver_by_name(name, foldername):
     return solver
 
 
-@cy.locals(computation=tybusiness.Computation)
-def acoustic_solver_from_computation(computation, foldername):
+def acoustic_solver_from_computation(computation:tybusiness.Computation, foldername):
     """Load an acoustic solver from a computation."""
     # load_solvers(foldername.encode('utf-8'))
     # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
@@ -109,8 +107,7 @@ cdef class Business2SolverConverter:
     # (PyCObject_FromVoidPtr/PyCObject_AsVoidPtr) to add and get back the pointer.
     instances_mapping = cy.declare(map[string, cy.pointer(tybusiness.TYElement)])
 
-    @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
-    def __cinit__(self, comp, site):
+    def __cinit__(self, comp:tybusiness.Computation, site:tybusiness.Site):
         self.comp = comp
         self.site = site
         self.bus2solv_receptors = dict()
@@ -118,8 +115,7 @@ cdef class Business2SolverConverter:
         self.bus2solv_sources = dict()
         self.macro2micro_sources = dict()
 
-    @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
-    def postprocessing(self, model, result):
+    def postprocessing(self, model: tysolver.ProblemModel, result: tysolver.ResultModel):
         """Post-process solver result to reinject them to the business result
         """
         # Retrieve solver result matrix
@@ -137,8 +133,7 @@ cdef class Business2SolverConverter:
         # Try to catch rays from solver and to push them in business data
         self.update_business_rays_tab(result)
 
-    @cy.locals(result=tysolver.ResultModel)
-    def update_business_rays_tab(self, result):
+    def update_business_rays_tab(self, result: tysolver.ResultModel):
         """Recover acoustic paths from solver
         """
         solver_rays_tab = cy.declare(vector[cy.pointer(tycommon.acoustic_path)],
@@ -148,8 +143,7 @@ cdef class Business2SolverConverter:
         for solver_ray in solver_rays_tab:
             business_rays_tab.push_back(tybusiness.build_ray(deref(solver_ray)))
 
-    @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
-    def update_business_receptors(self, model, result):
+    def update_business_receptors(self, model: tysolver.ProblemModel, result: tysolver.ResultModel):
         """Update business receptor by cumulating spectra perceived from the sources
 
         Once the acoustic problem has been solved, send back the acoustic results
@@ -248,8 +242,7 @@ cdef class Business2SolverConverter:
             uuid = self.to_be_removed_receptors.pop()
             del self.bus2solv_receptors[uuid]
 
-    @cy.locals(model=tysolver.ProblemModel)
-    def build_mesh(self, model):
+    def build_mesh(self, model: tysolver.ProblemModel):
         """Build site mesh into the model
 
         Retrieve a mesh from business site topography and altimetry and inject it into
@@ -258,12 +251,10 @@ cdef class Business2SolverConverter:
         self.process_altimetry(model, self.site)
         self.process_infrastructure(model, self.site)
 
-    @cy.locals(model=tysolver.ProblemModel)
-    def build_sources(self, model):
+    def build_sources(self, model: tysolver.ProblemModel):
         return self._build_sources(model, self.site)
 
-    @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
-    def _build_sources(self, model, site):
+    def _build_sources(self, model: tysolver.ProblemModel, site: tybusiness.Site):
         """Build acoustic sources into the model, given that of the site
 
         Retrieve the sources from the site infrastructure (TYSourcePonctuelle),
@@ -371,8 +362,7 @@ cdef class Business2SolverConverter:
                 (model.thisptr.get().nsources(), nb_sources))
         return nb_sources
 
-    @cy.locals(model=tysolver.ProblemModel)
-    def build_receptors(self, model):
+    def build_receptors(self, model: tysolver.ProblemModel):
         """Insert receptors into the solver model from the business project
 
         Retrieve the mesh points (TYPointCalcul, TYPointControl) used in the
@@ -433,8 +423,7 @@ cdef class Business2SolverConverter:
                 (model.thisptr.get().nreceptors(), nb_receptors))
         return nb_receptors
 
-    @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
-    cdef process_altimetry(self, model, site):
+    cdef process_altimetry(self, model: tysolver.ProblemModel, site: tybusiness.Site):
         """Call Tympan methods to make a mesh out of the site altimetry.
 
         Read and export this mesh to the acoustic problem model
@@ -450,8 +439,7 @@ cdef class Business2SolverConverter:
         for subsite in site.subsites:
             self.process_altimetry(model, subsite)
 
-    @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
-    def process_infrastructure(self, model, site):
+    def process_infrastructure(self, model: tysolver.ProblemModel, site: tybusiness.Site):
         """Fill solver model from site infrastructure."""
         for surface in site.acoustic_surfaces:
             points, triangles = surface.export_mesh()

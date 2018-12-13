@@ -50,11 +50,14 @@ cdef class ProblemModel:
             self._set_triangle_material(tri_idx, *material_info)
         return tri_idx
 
-    @cy.locals(material=shared_ptr[AcousticMaterialBase],
-               spectrum=tycommon.Spectrum,
-               c_spectrum=tycommon.OSpectreComplex)
     def _set_triangle_material(self, idx, *material_info):
         """Set material on triangle with `idx`."""
+        material = cy.declare(shared_ptr[AcousticMaterialBase],
+                              shared_ptr[AcousticMaterialBase]())
+        spectrum = cy.declare(tycommon.Spectrum,
+                              tycommon.Spectrum())
+        c_spectrum = cy.declare(tycommon.OSpectreComplex,
+                                tycommon.OSpectreComplex())
         actri = cy.declare(cy.pointer(AcousticTriangle),
                            cy.address(self.thisptr.get().triangle(idx)))
         # Dispatch through make_material prototypes.
@@ -87,8 +90,7 @@ cdef class ProblemModel:
              for (p1, p2, p3), m in zip_longest(triangles, materials)])
         return nodes_idx, triangles_idx
 
-    @cy.locals(spectrum=tycommon.Spectrum, directivity=Directivity)
-    def _add_source(self, position, spectrum, directivity):
+    def _add_source(self, position, spectrum: tycommon.Spectrum, directivity: Directivity):
         """Add an acoustic source to the model"""
         pos = cy.declare(tycommon.OPoint3D,
                          tycommon.OPoint3D(position[0], position[1], position[2]))
@@ -130,8 +132,8 @@ cdef class ProblemModel:
             sources.append(source)
         return sources
 
-    @cy.locals(point=tycommon.OPoint3D)
     def add_receptor(self, x, y, z):
+        point = cy.declare(tycommon.OPoint3D)
         point = tycommon.OPoint3D(x, y, z)
         return self.thisptr.get().make_receptor(point)
 
@@ -165,8 +167,7 @@ cdef class ProblemModel:
             triangles.append(triangle)
         return triangles
 
-    @cy.locals(source=tycommon.Point3D, receptor=tycommon.Point3D)
-    def fresnel_zone_intersection(self, l, h, source, receptor):
+    def fresnel_zone_intersection(self, l, h, source: tycommon.Point3D, receptor: tycommon.Point3D):
         """Return the indices of the acoustic triangles of the model that are intersected by
         the non iso-oriented box `box`
 
@@ -247,9 +248,8 @@ cdef class ResultModel:
 
 cdef class Solver:
 
-    @cy.locals(model=ProblemModel)
     @cy.returns((bool, ResultModel))
-    def solve_problem(self, model):
+    def solve_problem(self, model: ProblemModel):
         """Run a computation based on the solver model given in argument
 
         Raises a RuntimeError in case of computation failure.

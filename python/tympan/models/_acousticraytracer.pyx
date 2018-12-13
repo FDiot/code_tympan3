@@ -11,21 +11,20 @@ cdef class cySimulation:
         '''Naming the Scene'''
         scene=self.thisptr.get().getScene()
         scene.setName("MyScene")
-    @cy.locals(s=cySource, source=Source) 
-    def addSource(self, s):
+    def addSource(self, s: cySource):
         """Add a source"""
         '''Set the sampler'''
+        source = cy.declare(Source)
         nbRaysPerSource=self.getConfiguration().NbRaysPerSource
         s.setSampler(self.getConfiguration().Discretization, nbRaysPerSource)
         source = s.thisptr
         self.thisptr.get().addSource(source)   
-    @cy.locals(r=cyRecepteur, receptor=Recepteur) 
-    def addRecepteur(self, r):
+    def addRecepteur(self, r: cyRecepteur):
         """Add a receptor"""
+        receptor = cy.declare(Recepteur)
         receptor = r.thisptr
         self.thisptr.get().addRecepteur(receptor)
-    @cy.locals(s=cySolver)      
-    def setSolver(self, s):
+    def setSolver(self, s: cySolver):
         """Set the solver"""
         self.thisptr.get().setSolver(s.thisptr)
     def getSolver(self):
@@ -73,9 +72,9 @@ cdef class cySimulation:
 
 cdef class cyRecepteur:
     """Cython class for Receptor"""
-    @cy.locals(vec=base_vec3[float])
     def __cinit__(self,x,y,z,r):
         """Create a receptor"""
+        vec = cy.declare(base_vec3[float])
         self.thisptr.setRadius(r)
         vec = base_vec3[float](x,y,z)
         self.thisptr.setPosition(vec)
