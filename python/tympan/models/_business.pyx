@@ -8,8 +8,7 @@ from tympan.models cimport _common as tycommon
 from tympan._business2solver cimport business2microsource
 
 
-@cy.locals(elm=Element)
-def elemen2receptor(elm):
+def elemen2receptor(elm: Element):
     """ Convert an Element to a Receptor if possible """
     ptcalc = cy.declare(cy.pointer(TYPointCalcul),
                         downcast_point_calcul(elm.thisptr.getRealPointer()))
@@ -459,8 +458,7 @@ cdef class User_source:
         except UnicodeDecodeError:
             return str.decode('cp1252')
 
-    @cy.locals(pos=tycommon.Point3D)
-    def set_position(self, pos):
+    def set_position(self, pos: tycommon.Point3D):
         assert self.thisptr.getRealPointer() != NULL
         self.thisptr.getRealPointer().setPos(SmartPtr[TYPoint](new TYPoint(cypoint2cpp(pos))))
 
@@ -503,8 +501,7 @@ cdef class Engine:
         assert self.thisptr.getRealPointer() != NULL
         self.thisptr.getRealPointer().setName(name.encode('utf-8'))
 
-    @cy.locals(pos=tycommon.Point3D)
-    def set_position(self, pos):
+    def set_position(self, pos: tycommon.Point3D):
         assert self.thisgeonodeptr.getRealPointer() != NULL
         self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(pos))
 
@@ -515,8 +512,7 @@ cdef class Engine:
                              self.thisgeonodeptr.getRealPointer().position())
         return tycommon.opoint3d2point3d(cpp_pos)
 
-    @cy.locals(rot=tycommon.Point3D)
-    def set_rotation(self, rot):
+    def set_rotation(self, rot: tycommon.Point3D):
         assert self.thisgeonodeptr.getRealPointer() != NULL
         self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(rot))
 
@@ -558,8 +554,7 @@ cdef class Building:
         assert self.thisptr.getRealPointer() != NULL
         self.thisptr.getRealPointer().setName(name.encode('utf-8'))
 
-    @cy.locals(pos=tycommon.Point3D)
-    def set_position(self, pos):
+    def set_position(self, pos: tycommon.Point3D):
         assert self.thisgeonodeptr.getRealPointer() != NULL
         self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(pos))
 
@@ -570,8 +565,7 @@ cdef class Building:
                              self.thisgeonodeptr.getRealPointer().position())
         return tycommon.opoint3d2point3d(cpp_pos)
 
-    @cy.locals(rot=tycommon.Point3D)
-    def set_rotation(self, rot):
+    def set_rotation(self, rot: tycommon.Point3D):
         assert self.thisgeonodeptr.getRealPointer() != NULL
         self.thisgeonodeptr.getRealPointer().setPosition(cypoint2cpp(rot))
 
@@ -739,8 +733,7 @@ cdef class Site:
             inc(itg)
         return (points, triangles, grounds)
 
-    @cy.locals(comp=Computation)
-    def fetch_sources(self, comp):
+    def fetch_sources(self, comp: Computation):
         """Retrieve acoustic sources (macro and micro) from business infrastructure
 
         Return them as a 'Business2MicroSource' containing a map linking macro
@@ -834,8 +827,7 @@ cdef class Site:
         cpp_lcurve = SmartPtr[TYCourbeNiveau]( new TYCourbeNiveau(cpp_points, alti) )
         topo.addCrbNiv(cpp_lcurve)
 
-    @cy.locals(curve=LevelCurve)
-    def delete_levelcurve(self, curve):
+    def delete_levelcurve(self, curve: LevelCurve):
         cpp_lcurve = cy.declare(SmartPtr[TYCourbeNiveau],
                                 SmartPtr[TYCourbeNiveau](curve.thisptr))
         topo = cy.declare(cy.pointer(TYTopographie))
@@ -843,8 +835,7 @@ cdef class Site:
         topo.remCrbNiv(cpp_lcurve)
 
 
-    @cy.locals(source=User_source, position=tycommon.Point3D)
-    def add_user_source(self, source, position, height):
+    def add_user_source(self, source: User_source, position: tycommon.Point3D, height):
         cpp_point = cy.declare(SmartPtr[TYPoint])
         cpp_point = SmartPtr[TYPoint](new TYPoint(cypoint2cpp(position)))
         source_copy = cy.declare(cy.pointer(TYUserSourcePonctuelle), new TYUserSourcePonctuelle())
@@ -912,8 +903,7 @@ cdef class Site:
             cy_sources.append(cy_source)
         return cy_sources
 
-    @cy.locals(engine=Engine, position=tycommon.Point3D, rotation=tycommon.Point3D)
-    def add_engine(self, engine, position, rotation, height):
+    def add_engine(self, engine: Engine, position: tycommon.Point3D, rotation: tycommon.Point3D, height):
         engine_copy = cy.declare(cy.pointer(TYMachine), new TYMachine())
         engine_copy.deepCopy(engine.thisptr.getRealPointer(), False)
         geonode = cy.declare(SmartPtr[TYGeometryNode],
@@ -926,8 +916,7 @@ cdef class Site:
                            self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         infra.addMachine(geonode)
 
-    @cy.locals(building=Building, position=tycommon.Point3D, rotation=tycommon.Point3D)
-    def add_building(self, building, position, rotation, height):
+    def add_building(self, building: Building, position: tycommon.Point3D, rotation: tycommon.Point3D, height):
         building_copy = cy.declare(cy.pointer(TYBatiment), new TYBatiment())
         building_copy.deepCopy(building.thisptr.getRealPointer(), False)
         geonode = cy.declare(SmartPtr[TYGeometryNode],
@@ -940,8 +929,7 @@ cdef class Site:
                            self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         infra.addBatiment(geonode)
 
-    @cy.locals(site=Site, position=tycommon.Point3D, rotation=tycommon.Point3D)
-    def add_sub_site(self, site, position, rotation):
+    def add_sub_site(self, site: Site, position: tycommon.Point3D, rotation: tycommon.Point3D):
         site_copy = cy.declare(cy.pointer(TYSiteNode), new TYSiteNode())
         site_copy.deepCopy(site.thisptr.getRealPointer(), False)
         geonode = cy.declare(SmartPtr[TYGeometryNode],
@@ -1015,8 +1003,7 @@ cdef class Site:
             lcurves.append(lcurve)
         return lcurves
 
-    @cy.locals(pos=tycommon.Point3D)
-    def set_position(self, pos):
+    def set_position(self, pos: tycommon.Point3D):
         mat = cy.declare(tycommon.OMatrix, self.matrix)
         cpp_geonode = cy.declare(TYGeometryNode)
         cpp_geonode.setMatrix(mat)
@@ -1032,8 +1019,7 @@ cdef class Site:
                              cpp_geonode.position())
         return tycommon.opoint3d2point3d(cpp_pos)
 
-    @cy.locals(rot=tycommon.Point3D)
-    def set_rotation(self, rot):
+    def set_rotation(self, rot: tycommon.Point3D):
         mat = cy.declare(tycommon.OMatrix, self.matrix)
         cpp_geonode = cy.declare(TYGeometryNode)
         cpp_geonode.setMatrix(mat)
@@ -1276,8 +1262,7 @@ cdef class Result:
         """ set use of LW """
         self.thisptr.getRealPointer().setHideLW(abool)
 
-    @cy.locals(receptor=Element, source=Element)
-    def spectrum(self, receptor, source):
+    def spectrum(self, receptor: Element, source: Element):
         """The computed acoustic spectrum"""
         assert self.thisptr.getRealPointer() != NULL
         return tycommon.ospectre2spectrum(
@@ -1285,18 +1270,15 @@ cdef class Result:
                                         receptor.thisptr.getRealPointer(),
                                         source.thisptr.getRealPointer()  )   )
 
-    @cy.locals(receptor=Element)
-    def add_receptor(self, receptor):
+    def add_receptor(self, receptor: Element):
         """ add a business receptor in result matrix """
         self.thisptr.getRealPointer().addRecepteur(receptor.thisptr.getRealPointer())
 
-    @cy.locals(source=Element)
-    def add_source(self, source):
+    def add_source(self, source: Element):
         """ Add a new business source in result matrix """
         self.thisptr.getRealPointer().addSource(source.thisptr.getRealPointer())
 
-    @cy.locals(receptor=Element, source=Element, spectrum=tycommon.Spectrum)
-    def set_spectrum(self, receptor, source, spectrum):
+    def set_spectrum(self, receptor: Element, source: Element, spectrum: tycommon.Spectrum):
         self.thisptr.getRealPointer().setSpectre(
                                         receptor.thisptr.getRealPointer(),
                                         source.thisptr.getRealPointer(),
@@ -1369,8 +1351,7 @@ cdef class Receptor:
                                    downcast_point_control(self.thisptr.getRealPointer()))
         return (control_point != NULL)
 
-    @cy.locals(comp=Computation)
-    def is_active(self, comp):
+    def is_active(self, comp: Computation):
         """ Return true if this receptor is active in computation 'comp', false
             otherwise
         """
@@ -1415,22 +1396,18 @@ cdef class Computation:
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
-    @cy.locals(receptor=UserReceptor)
-    def addReceptor(self, receptor):
+    def addReceptor(self, receptor: UserReceptor):
         self.thisptr.getRealPointer().addPtCtrlToResult(receptor.thisptr)
 
-    @cy.locals(receptor=Receptor, spectrum=tycommon.Spectrum)
-    def set_spectrum(self, receptor, spectrum):
+    def set_spectrum(self, receptor: Receptor, spectrum: tycommon.Spectrum):
         tyspectre = cy.declare(cy.pointer(TYSpectre))
         tyspectre = new TYSpectre(spectrum.thisobj)
         self.thisptr.getRealPointer().setSpectre(receptor.thisptr.getRealPointer(), tyspectre)
 
-    @cy.locals(mesh=Mesh)
-    def add_noise_map(self, mesh):
+    def add_noise_map(self, mesh: Mesh):
         self.thisptr.getRealPointer().addMaillage(mesh.thisptr)
 
-    @cy.locals(mesh=Mesh)
-    def get_noise_map_spectrums(self, mesh):
+    def get_noise_map_spectrums(self, mesh: Mesh):
         cpp_spectrums = cy.declare(vector[SmartPtr[TYSpectre]])
         cpp_spectrums = deref(self.thisptr.getRealPointer().getSpectrumDatas(mesh.thisptr))
         spectrums = []
@@ -1447,8 +1424,7 @@ cdef class Computation:
             spectrums.append(cyspectre)
         return spectrums
 
-    @cy.locals(mesh=Mesh)
-    def set_noise_map_spectrums(self, mesh, spectrums):
+    def set_noise_map_spectrums(self, mesh: Mesh, spectrums):
         cpp_spectrums = cy.declare(cy.pointer(vector[SmartPtr[TYSpectre]]))
         cpp_spectrums = self.thisptr.getRealPointer().getSpectrumDatas(mesh.thisptr)
         assert(cpp_spectrums.size() == len(spectrums))
@@ -1525,15 +1501,14 @@ cdef class Project:
         cpp_receptor.getRealPointer().setName(name.encode("utf-8"))
         self.thisptr.getRealPointer().addPointControl(cpp_receptor)
 
-    @cy.locals(comp=Computation)
     def add_computation(self):
         """Add a new computation to the project and return it"""
+        comp = cy.declare(Computation)
         comp = make_computation()
         self.thisptr.getRealPointer().addCalcul(comp.thisptr)
         return comp
 
-    @cy.locals(comp=Computation)
-    def select_computation(self, comp):
+    def select_computation(self, comp: Computation):
         """ set the current computation """
         self.thisptr.getRealPointer().setCurrentCalcul(comp.thisptr)
 
