@@ -120,6 +120,7 @@ class SiteNodeGeometryCleaner(object):
             shape = feature.shape.intersection(self.siteshape)
             self._add_feature_with_new_shape(feature, shape)
 
+
     def _add_or_reject_polygonal_feature(self, feature):
         """
         Implements the no overlap policy for material area and land-takes

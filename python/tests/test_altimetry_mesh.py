@@ -215,8 +215,10 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
             visu.plot_points_seq(plotter.ax, points_left, marker='<')
             visu.plot_points_seq(plotter.ax, points_right, marker='>')
             plotter.show()
-
-        self.assertEqual(faces_right, (f1, f2, f3))
+        
+        
+        self.assertEqual(faces_right, (f3, f2, f1))
+        
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_mesh_refine_no_holes(self):
