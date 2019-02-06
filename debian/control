@@ -6,23 +6,25 @@ Build-Depends:
   debhelper (>= 9.0.0),
   cmake,
   libqt4-dev,
+  libqt4-opengl,
   libqt4-opengl-dev,
   libcgal-dev,
-# under wheezy, libcgal-dev provides libCGAL_Qt4.so, under jessie it is in
-# libcgal-qt4-dev
   libcgal-qt4-dev,
-  libboost1.55-dev,
-  python,
-  python-dev,
-  python-numpy,
-  python-shapely,
-  python-scipy,
-  python-matplotlib,
-  python-tk,
+  libboost-dev,
+  libboost-doc,
+  python3,
+  python3-dev,
+  python3-numpy,
+  python3-shapely,
+  python3-scipy,
+  python3-matplotlib,
+  python3-tk,
+  python3-pandas,
+  python3-xlsxwriter,
   cython,
   swig,
 Standards-Version: 3.9.3
-X-Python-Version: 2.7
+X-Python3-Version: all
 Homepage: http://www.code-tympan.org/
 Vcs-Hg: https://bitbucket.org/TYMPAN/code_tympan
 Vcs-Browser: https://bitbucket.org/TYMPAN/code_tympan/commits/all
@@ -33,10 +35,13 @@ Depends:
   ${shlibs:Depends},
   ${misc:Depends},
   ${python:Depends},
-  python-numpy,
-  python-scipy,
-  python-shapely,
-  python-matplotlib,
+  python3-numpy,
+  python3-scipy,
+  python3-shapely,
+  python3-matplotlib,
+  python3-tk,
+  python3-pandas,
+  python3-xlsxwriter,
 Description: Noise simulation software
  Code_TYMPAN is an open source software developed by EDF R&D and dedicated to
  the calculation of industrial noise in the environment.
