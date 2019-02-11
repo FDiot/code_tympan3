@@ -296,6 +296,19 @@ signature Ray::getSignature(const typeevent& typeEv)
     return std::make_pair(SR, SD);
 }
 
+vector<unsigned int> Ray::getEventSignature()
+{	
+	vector<unsigned int> signature;
+	signature.push_back(source->getId());
+
+	for (size_t i = 0; i < events.size(); i++)
+		signature.push_back(events.at(i)->getType());
+		
+	signature.push_back(((Recepteur*)recepteur)->getId());
+
+    return signature;
+}
+
 bitSet Ray::getEventsBitSet(const typeevent& typeEv)
 {
     bitSet SD = 0;
