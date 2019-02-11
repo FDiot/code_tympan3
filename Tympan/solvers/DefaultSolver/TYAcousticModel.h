@@ -19,6 +19,7 @@
 #include "Tympan/core/interfaces.h"
 #include "Tympan/solvers/DefaultSolver/TYChemin.h"
 #include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
+#include <gtest/gtest_prod.h>
 
 class TYTrajet;
 class TYSolver;
@@ -181,6 +182,10 @@ private :
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
 private:
+    FRIEND_TEST(test_TYAcousticModel, calculAttDiffraction);
+    FRIEND_TEST(test_TYAcousticModel, calculC);
+    FRIEND_TEST(test_TYAcousticModel, limAttDiffraction);
+    FRIEND_TEST(test_TYAcousticModel, computeCheminReflexion);
     bool _useSol;
     bool _useReflex;
     bool _conditionFav;
