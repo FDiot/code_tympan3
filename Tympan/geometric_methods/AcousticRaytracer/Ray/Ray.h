@@ -433,6 +433,8 @@ public:
      void addEvent (std::shared_ptr<Event> _event){
         events.push_back(_event);
      }
+
+	 vector<unsigned int> getEventSignature();
  
 protected:
     vec3 position;                              //!< Starting point ray

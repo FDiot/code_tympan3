@@ -851,7 +851,7 @@ TEST(test_uniformsphericsampler2, one_sample){
 
 	UniformSphericSampler2 sampler=new UniformSphericSampler2((unsigned int)1);
 	EXPECT_EQ(sampler.getRealNbRays(),1);			 // one single sample
-	vec3 sample=sampler.getSample();
+	
 }
 
 // Non regression test of UniformSphericSampler2
