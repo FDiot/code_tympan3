@@ -8,6 +8,7 @@ set(${PROJECT_NAME}_VERSION_MAJOR 4)
 set(${PROJECT_NAME}_VERSION_MINOR 1)
 set(${PROJECT_NAME}_VERSION_PATCH 0)
 
+
 # This file specifies several build options
 include(tympan-build-options NO_POLICY_SCOPE)
 # Detect and handle the platform

@@ -23,9 +23,9 @@ LPSolverConfiguration SolverConfiguration::_pInstance = 0;
 
 SolverConfiguration::SolverConfiguration()
 {
-    AtmosPressure = 101300.;
+    AtmosPressure = 101325.;
     AtmosTemperature = 20.;
-    AtmosHygrometry = 60.;
+    AtmosHygrometry = 50.;
     //AnalyticC0 = 340.;
     AnalyticGradC = 0.;
     AnalyticGradV = 0.;
@@ -70,7 +70,7 @@ SolverConfiguration::SolverConfiguration()
     UseRealGround = true;
     UseLateralDiffraction = true;
     UseReflection = true;
-    PropaConditions = false;
+    PropaConditions = true;
     H1parameter = 10.;
     ModSummation = false;
 

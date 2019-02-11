@@ -22,6 +22,7 @@
 #include "Tympan/models/common/atmospheric_conditions.h"
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/common/acoustic_path.h"
+#include <gtest/gtest_prod.h>
 
 /**
  * \file TYTrajet.h
@@ -173,6 +174,8 @@ public:
 private:
     OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const AtmosphericConditions& atmos, const double& ri, const double& rj) const;
     void build_tab_rays();
+    FRIEND_TEST(test_TYTrajet, getPInterference);
+    FRIEND_TEST(test_TYTrajet, getPEnergetique);
 
 public :
     /// Business source

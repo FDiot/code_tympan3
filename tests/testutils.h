@@ -82,4 +82,71 @@ public:
     LPTYProjet project;
 };
 
+#include "Tympan/models/solver/entities.hpp"
+#include "Tympan/solvers/DefaultSolver/TYSolver.h"
+#include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/models/solver/data_model_common.hpp"
+#include "Tympan/solvers/DefaultSolver/TYAcousticModel.h"
+#include <iostream>
+
+class TYInitUserCase
+{
+public:
+
+
+    bool m_isInitGlobal;
+    double m_spectrPrecision;
+
+    //constantes globales
+    double m_gamma;
+    double m_perfectGaz;
+    double m_molareMass;
+    double m_temperature;
+    double m_absoluteZero;
+    double m_pression;
+    double m_hydromzetry;
+    double m_distance;
+    double m_tk, m_soundSpeed;
+    OSpectre m_spectreLambda;
+
+    //objets chemins
+    TYChemin m_chemin_direct;
+    TYChemin m_chemin_sol;
+    TYChemin m_chemin_ecran;
+    TYChemin m_chemin_relex;
+
+    //tableau d'�tapes
+    TYTabEtape m_tabEtape01;
+
+    //spectre source
+    OSpectreComplex m_spectre_source;
+
+    //tableau d'intersection
+    std::deque<TYSIntersection> m_tabIntersect;
+
+    //directivit�
+    OVector3D m_directivityVector;
+    tympan::SourceDirectivityInterface* m_directivity;
+
+    //points source et reception
+    OPoint3D m_pointSource;
+    OPoint3D m_pintReception;
+    OSegment3D rayonSR;
+    std::vector<tympan::AcousticSource> m_acousticSourceList;
+    std::vector<tympan::AcousticReceptor> m_acousticReceptionList;
+
+    TabPoint3D m_tabPoints;
+
+public:
+    void initGlobal(double p_distance);
+
+    OSpectre initDirectPathWay(bool p_isFlate=false);
+
+    OSpectre initGroundPathWay();
+
+    OSpectre initBlockPathWay();
+
+    OSpectre initReflexionPathWay();
+};
+
 #endif /* TY_TESTUTILS */
