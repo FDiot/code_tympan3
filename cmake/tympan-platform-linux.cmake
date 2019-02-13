@@ -4,7 +4,7 @@
 # TODO check behaviour for clang
 
 # The objective is to get rid of all the -Wno-xxx
-set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-cpp -Wno-unused-function -Wno-strict-aliasing")
+set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-cpp -Wno-unused-function -Wno-strict-aliasing -Wno-aggressive-loop-optimizations")
 # -Wno-sign-compare, -Wno-strict-aliasing : Not easy to remove warning
 # -Wno-cpp -Wno-unused-function : Not easy to remove warnings from cythonised files 
 set(WARNINGS_SETTINGS "-Werror -Wall ${IGNORED_WARNINGS} -Winvalid-pch")

@@ -17,8 +17,10 @@
 #define __TYACOUSTICPATHFINDER__
 
 #include "TYSolverDefines.h"
+#include <gtest/gtest_prod.h>
 
 class TYSolver;
+class TYTrajet;
 
 /**
  * \class TYAcousticPathFinder
@@ -45,6 +47,7 @@ public:
     virtual void init();
 
 private :
+    FRIEND_TEST(test_TYAcousticPathFinder, computePath);
     /// Reference to the solver
     TYSolver& _solver;
 
