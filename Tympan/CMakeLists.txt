@@ -245,6 +245,24 @@ target_link_libraries(tympan_solver_anime3d_lib
 )
 
 install_tympan_component(tympan_solver_anime3d_lib)
+# DefaultSolver lib for tests   #####################################################################
+file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
+    solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
+)
+
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(tympan_solver_default_lib ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_SOLVER_DEFAULT_SRCS})
+set_property(TARGET tympan_solver_default_lib PROPERTY FOLDER "Tympan/solvers/DefaultSolver")
+target_link_libraries(tympan_solver_default_lib
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+    tympan_solver_model
+    tympan_acousticraytracer
+    tympan_convexhullfinder
+)
+
+install_tympan_component(tympan_solver_default_lib)
 
 # main app #####################################################################
 

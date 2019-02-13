@@ -24,6 +24,7 @@
 #define TYPOLYLIGNE_PARCOURS
 
 #include "TYPointParcours.h"
+#include <iostream>
 
 /**
  * \brief Polylines path class used by the TYSetGeometriqueParcours class
@@ -91,4 +92,5 @@ private:
     bool verifieNaturePolylignes();
 };
 
-#endif//TYPOLYLIGNE_PARCOURS
+#endif
+//TYPOLYLIGNE_PARCOURS
