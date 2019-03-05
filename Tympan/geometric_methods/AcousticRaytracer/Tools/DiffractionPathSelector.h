@@ -185,6 +185,13 @@ public :
     */  
     void setMaximumDelta(double _maximumDelta) { this->maximumDelta = _maximumDelta; }
 
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
+
 
 protected:
     double maximumDelta; //!< Maximal path length difference between rays produced by diffraction
