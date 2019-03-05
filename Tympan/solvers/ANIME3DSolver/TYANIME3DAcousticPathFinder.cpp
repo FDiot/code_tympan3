@@ -34,6 +34,7 @@ using std::vector;
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/RandomSphericSampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformBeamSampler.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
@@ -69,7 +70,8 @@ bool TYANIME3DAcousticPathFinder::exec()
 
     vector<vec3> sources;
     vector<vec3> recepteurs;
-    unsigned int sens = getTabsSAndR(sources, recepteurs);
+	vector<tympan::VolumeFaceDirectivity*> directivities;
+    unsigned int sens = getTabsSAndR(sources, recepteurs,directivities);
 
     // Create geometry transformer
     build_geometry_transformer( sources );
@@ -81,7 +83,7 @@ bool TYANIME3DAcousticPathFinder::exec()
     appendRecepteurToSimulation(recepteurs);
 
     //Importation des sources ponctuelles actives
-    appendSourceToSimulation(sources);
+    appendSourceToSimulation(sources,directivities);
 
     //Une fois la scene convertie, on peut la post-traiter (ajouter de l'information : arretes de diffractions par ex)
     _rayTracing.getSolver()->postTreatmentScene(_rayTracing.getScene(), _rayTracing.getSources(), _rayTracing.getRecepteurs());
@@ -108,7 +110,7 @@ bool TYANIME3DAcousticPathFinder::exec()
     return true;
 }
 
-unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs)
+unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs, vector<tympan::VolumeFaceDirectivity*>& directivities)
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
 
@@ -116,13 +118,17 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
 
     // Recuperation de la position des sources du projet
     vector<vec3> srcs;
-
+	directivities = vector<tympan::VolumeFaceDirectivity*>(_aproblem.nsources(),nullptr);
+	vector<tympan::VolumeFaceDirectivity*> dirs = vector<tympan::VolumeFaceDirectivity*>(_aproblem.nsources(),nullptr);
     //Conversion des sources Tympan en source lancer de rayons
     for (unsigned int i = 0; i < _aproblem.nsources(); i++)
     {
         OPoint3D globalPos = _aproblem.source(i).position;
         vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
         srcs.push_back(pos);
+
+		dirs.at(i) = dynamic_cast<tympan::VolumeFaceDirectivity*>(_aproblem.source(i).directivity);
+		
     }
     // Recuperation de la position des recepteurs du projet
     vector<vec3> rcpts;
@@ -142,6 +148,7 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
         case 0 :
             sources = srcs;
             recepteurs = rcpts;
+			directivities = dirs;
             break;
         case 1 :
             sources = rcpts;
@@ -158,11 +165,13 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
             {
                 sources = srcs;
                 recepteurs = rcpts;
+				directivities = dirs;
                 sens = 0;
             }
         default :
             sources = srcs;
             recepteurs = rcpts;
+			directivities = dirs;
             break;
     }
     return sens;
@@ -233,7 +242,7 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
     }
 }
 
-void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources)
+void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources,vector<tympan::VolumeFaceDirectivity*>& directivities)
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     //Conversion des sources Tympan en sources lancer de rayons
@@ -243,28 +252,38 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
     for (unsigned int i = 0; i < sources.size(); i++)
     {
         Source source;
-        switch (config->Discretization)
-        {
-            case 0 :
-                source.setSampler(new RandomSphericSampler(nbRaysPerSource));
-                realNbRaysPerSource = nbRaysPerSource;
-                break;
-            case 1 :
-                source.setSampler(new UniformSphericSampler(nbRaysPerSource));
-                realNbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
-                break;
-            case 2 :
-                source.setSampler(new UniformSphericSampler2(nbRaysPerSource));
-                realNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
-                break;
-            case 3 :
-                source.setSampler(new Latitude2DSampler(config->NbRaysPerSource));
-                realNbRaysPerSource = nbRaysPerSource;
-                dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartPhi(0.);
-                dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndPhi(360.);
-                dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartTheta(0.);
-                dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndTheta(0.);
-        }
+
+		if(directivities.at(i)){ // special case when the source's directivity is a VolumeFaceDirectivity -> attach a BeamSampler with a 180° opening angle
+			vec3 dir = vec3(directivities.at(i)->get_normal()._x,directivities.at(i)->get_normal()._y,directivities.at(i)->get_normal()._z);
+
+			source.setSampler(new UniformBeamSampler(nbRaysPerSource,(decimal)M_PI,dir));
+			realNbRaysPerSource = dynamic_cast<UniformBeamSampler*>(source.getSampler())->getRealNbRays();;
+			
+		}else{					// general case -> attach the sampler setup in the configuration
+
+			switch (config->Discretization)
+			{
+				case 0 :
+					source.setSampler(new RandomSphericSampler(nbRaysPerSource));
+					realNbRaysPerSource = nbRaysPerSource;
+					break;
+				case 1 :
+					source.setSampler(new UniformSphericSampler(nbRaysPerSource));
+					realNbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
+					break;
+				case 2 :
+					source.setSampler(new UniformSphericSampler2(nbRaysPerSource));
+					realNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
+					break;
+				case 3 :
+					source.setSampler(new Latitude2DSampler(config->NbRaysPerSource));
+					realNbRaysPerSource = nbRaysPerSource;
+					dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartPhi(0.);
+					dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndPhi(360.);
+					dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartTheta(0.);
+					dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndTheta(0.);
+			}
+		}
 
         source.setPosition( transformer->fonction_h(sources[i]) );
         source.setInitialRayCount(realNbRaysPerSource);

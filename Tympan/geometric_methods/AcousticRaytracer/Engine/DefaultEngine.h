@@ -119,7 +119,8 @@ protected:
 				new_ray->setDirection(direction);
 				new_ray->setMint ( 0. );
 				new_ray->setMaxt ( 10000.);
-				pile_traitement.push(new_ray);
+				if(itsource->getSampler()->isAcceptableSample(direction))
+					pile_traitement.push(new_ray);
 			}
 		}	
 	}
@@ -193,7 +194,8 @@ protected :
 				new_ray->direction.normalize();
 				new_ray->mint = 0.;
 				new_ray->maxt = 10000.;
-				pile_traitement.push(new_ray);
+				if(itsource->getSampler()->isAcceptableSample(direction))
+					pile_traitement.push(new_ray);
 			}
 		}	
 	}

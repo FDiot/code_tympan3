@@ -7,6 +7,7 @@
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/FaceSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/CoPlanaritySelector.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/ReflectionSelector.h"
@@ -25,14 +26,20 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-int maxSources=10;
-int maxReceptors=10;
-int maxPos=1000;
-int maxRays=100;
+int NTESTS=1000;		//Number of times randomized tests should be executed
+int MAX_EVENTS=10;		//Maximum number of events when generating randomized rays
+int MAX_RETRY=100;		//Max number of trials when random sampling
 
+//returns a decimal between 0. et 1.
+decimal rand_dec(){ return decimal(rand() / (RAND_MAX + 1.));}	
 
-
-
+//returns a random unit vector by default (set normalize_vec to false if no normalization is needed)
+vec3 rand_vec3(bool normalize_vec=true){						
+	vec3 v(rand_dec(),rand_dec(),rand_dec());
+	if(normalize_vec)
+		v.normalize();
+	return v;
+}   
 
 
 /***********************************************************************
@@ -705,7 +712,7 @@ TEST(test_DiffractionPathSelector_canBeInserted, only_reflexions)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	//Set a source
 	Source* src=new Source();
@@ -850,7 +857,7 @@ TEST(test_DiffractionPathSelector_insertWithTest, only_reflexions)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	//Set a source
 	Source* src=new Source();
@@ -1196,7 +1203,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1247,7 +1254,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 
 	Event* e3=new Event();
 	e3->setShape(shapes[1]);
-	e3->setPosition(vec3(37,-7,26)); 
+	e3->setPosition(vec3(37,-17,56)); 
 	std::shared_ptr<Event> SPE3(e3);
 
 	Event* e4=new Event();
@@ -1262,7 +1269,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 
 	Event* e6=new Event();
 	e6->setShape(shapes[3]);
-	e4->setPosition(vec3(78,-51,36));
+	e6->setPosition(vec3(78,-51,36));
 	std::shared_ptr<Event> SPE6(e6);
 
 	//Assign events to the rays
@@ -1279,12 +1286,12 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	r3->getEvents()->push_back(SPE3);
 	r3->getEvents()->push_back(SPE1);
 	r3->getEvents()->push_back(SPE6);
-	r3->getEvents()->push_back(SPE4);
+	r3->getEvents()->push_back(SPE5);
 	
 	r4->getEvents()->push_back(SPE2);
 	r4->getEvents()->push_back(SPE1);
 	r4->getEvents()->push_back(SPE6);
-	r4->getEvents()->push_back(SPE5);
+	r4->getEvents()->push_back(SPE4);
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r1,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // no ray selected yet => response should be SELECTOR_ACCEPT
@@ -1300,6 +1307,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	response=selector.canBeInserted(r4,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // same primitiveId sequence as r3 but with longer length => response should be SELECTOR_REJECT
 }
+
 
 
 //Test FaceSelector.canBeInserted with the HISTORY_FACE mode
@@ -1320,7 +1328,7 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1374,7 +1382,7 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 
 	Event* e3=new Event();
 	e3->setShape(shapes[1]);
-	e3->setPosition(vec3(37,-7,26)); 
+	e3->setPosition(vec3(37,-17,56)); 
 	std::shared_ptr<Event> SPE3(e3);
 
 	Event* e4=new Event();
@@ -1389,7 +1397,7 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 
 	Event* e6=new Event();
 	e6->setShape(shapes[3]);
-	e4->setPosition(vec3(78,-51,36));
+	e5->setPosition(vec3(78,-51,36));
 	std::shared_ptr<Event> SPE6(e6);
 
 	//Assign events to the rays
@@ -1406,12 +1414,12 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 	r3->getEvents()->push_back(SPE3);
 	r3->getEvents()->push_back(SPE1);
 	r3->getEvents()->push_back(SPE6);
-	r3->getEvents()->push_back(SPE4);
+	r3->getEvents()->push_back(SPE5);
 	
 	r4->getEvents()->push_back(SPE2);
 	r4->getEvents()->push_back(SPE1);
 	r4->getEvents()->push_back(SPE6);
-	r4->getEvents()->push_back(SPE5);
+	r4->getEvents()->push_back(SPE4);
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r1,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // no ray selected yet => response should be SELECTOR_ACCEPT
@@ -1446,7 +1454,7 @@ TEST(test_FaceSelector_insertWithTest, history_primitive_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1563,7 +1571,7 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -1668,9 +1676,313 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 
 
 
+/***********************************************************************
+							 CoPlanaritySelector
+************************************************************************/
 
 
+TEST(test_CoPlanaritySelector_areBothReflections, event_types){
 
+
+	CoPlanaritySelector<Ray> selector;
+
+	// There can only be co-planarity between two specular reflections
+	EXPECT_TRUE(selector.areBothReflections(new SpecularReflexion(),new SpecularReflexion()));
+
+	EXPECT_FALSE(selector.areBothReflections(new SpecularReflexion(),new Diffraction()));
+	EXPECT_FALSE(selector.areBothReflections(new SpecularReflexion(),new Event()));
+	EXPECT_FALSE(selector.areBothReflections(new Diffraction(),new Event()));
+	EXPECT_FALSE(selector.areBothReflections(new Diffraction(),new Diffraction()));
+	EXPECT_FALSE(selector.areBothReflections(new Event(),new Event()));
+
+}
+
+
+TEST(test_CoPlanaritySelector_coPlanarityTest, different_normals)
+{
+	int test_i=0;
+	CoPlanaritySelector<Ray> selector;
+	while(test_i<NTESTS){	// Perform NTESTS rand tests
+		test_i++;
+
+		// Generate a first random unitary vector used as normal
+		vec3 n1=rand_vec3();
+
+		// Generate a second random unitary different from the first one
+		vec3 n2(n1);
+		int max_retry = MAX_RETRY;
+		while(abs(n1*n2-1)<EPSILON_4 && max_retry>0){
+			n2 = rand_vec3();
+			max_retry--;
+		}
+
+		ASSERT_TRUE(max_retry>0);
+
+		// Generate a third vector normal to the two first ones
+		vec3 v;
+		Cross(n1,n2,v);
+
+		vec3 p1=rand_vec3(false);
+		Triangle s1;
+		s1.setNormal(n1);
+		Event* e1=new SpecularReflexion();
+		e1->setPosition(p1);
+		e1->setShape(&s1);
+	
+		vec3 p2=rand_vec3(false);
+		Triangle s2;
+		s2.setNormal(n2);
+		Event* e2=new SpecularReflexion();
+		e2->setPosition(p2);
+		e2->setShape(&s2);
+
+		// Normals are different => not co-planar
+		ASSERT_FALSE(*e1->getShape()->getNormal() == *e2->getShape()->getNormal());
+		ASSERT_FALSE(selector.coPlanarityTest(e1,e2)); 
+
+	}
+}
+
+TEST(test_CoPlanaritySelector_coPlanarityTest, equal_normals_and_not_coplanar)
+{
+	int test_i=0;
+	CoPlanaritySelector<Ray> selector;
+	while(test_i<NTESTS){	// Perform NTESTS rand tests
+		test_i++;
+
+		// Generate a first random unitary vector used as normal
+		vec3 n1= rand_vec3();
+
+		// Generate a second vector not normal to the first one
+		vec3 v=rand_vec3(false);
+		int max_retry = 100;
+		while(abs(v*n1-1)<EPSILON_4 && max_retry>0){
+			v = rand_vec3(false);
+			max_retry--;
+		}
+
+		ASSERT_TRUE(max_retry>0);
+
+		vec3 p1 = rand_vec3(false);
+		Triangle s1;
+		s1.setNormal(n1);
+		Event* e1=new SpecularReflexion();
+		e1->setPosition(p1);
+		e1->setShape(&s1);
+	
+
+		Triangle s2;
+		s2.setNormal(n1);
+		Event* e2=new SpecularReflexion();
+		e2->setPosition(p1+v);
+		e2->setShape(&s2);
+
+		// Same normals but not co-planar
+		ASSERT_TRUE(*e1->getShape()->getNormal() == *e2->getShape()->getNormal());
+		ASSERT_FALSE(selector.coPlanarityTest(e1,e2)); 
+
+	}
+}
+
+TEST(test_CoPlanaritySelector_coPlanarityTest, equal_normals_and_coplanar)
+{
+	int test_i=0;
+	CoPlanaritySelector<Ray> selector;
+	while(test_i<NTESTS){	// Perform NTESTS rand tests
+		test_i++;
+
+		// Generate a first random unitary vector used as normal
+		vec3 n1=rand_vec3();
+
+		// Generate a second random unitary vector different from the first one
+		vec3 n2(n1);
+		int max_retry=MAX_RETRY;
+		while(abs(n1*n2-1)<EPSILON_4 && max_retry>0){
+			n2 = rand_vec3();
+			max_retry--;
+		}
+
+		EXPECT_GT(max_retry,0);
+
+		// Generate a third vector normal to the first two
+		vec3 v;
+		Cross(n1,n2,v);
+
+		vec3 p1= rand_vec3(false);
+
+		Triangle s1;
+		s1.setNormal(n1);
+		Event* e1=new SpecularReflexion();
+		e1->setPosition(p1);
+		e1->setShape(&s1);
+	
+
+		Triangle s2;
+		s2.setNormal(n1);
+		Event* e2=new SpecularReflexion();
+		e2->setPosition(p1+v);
+		e2->setShape(&s2);
+
+		ASSERT_TRUE(selector.coPlanarityTest(e1,e2));
+
+	}
+}
+
+
+TEST(test_CoPlanaritySelector_haveCoPlanarEvents, no_events)
+{
+
+	CoPlanaritySelector<Ray> selector;
+
+	Ray* r1=new Ray();
+	Ray* r2=new Ray();
+
+	ASSERT_FALSE(selector.haveCoPlanarEvents(r1,r2));
+
+}
+
+TEST(test_CoPlanaritySelector_haveCoPlanarEvents, no_coplanar_events)
+{
+
+	int test_i=0;
+	CoPlanaritySelector<Ray> selector;
+
+	//Set a source
+	Source src;
+	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
+	
+	
+	//Set a receptor
+	Recepteur rcpt(vec3(10,1,0),3);
+	
+
+	while(test_i<NTESTS){	// Perform NTESTS rand tests
+		test_i++;
+
+		unsigned int nb_events=rand()%MAX_EVENTS+1;
+
+		Ray* r1=new Ray();
+		Ray* r2=new Ray();
+
+		r1->setSource(&src);
+		r1->setRecepteur(&rcpt);
+		r2->setSource(&src);
+		r2->setRecepteur(&rcpt);
+
+		for(unsigned int i=0;i<nb_events;i++){
+			Event* ev1=new SpecularReflexion();
+			Event* ev2=new SpecularReflexion();
+
+			// Generate a first random unitary vector used as normal
+			vec3 n1= rand_vec3();
+
+		
+			// Generate a second vector different from the first one and not normal to it
+			vec3 v=rand_vec3(false);
+			int max_retry = 100;
+			while(abs(v*n1-1)<EPSILON_4 && max_retry>0){
+				v = rand_vec3(false);
+				max_retry--;
+			}
+
+			ASSERT_TRUE(max_retry>0);
+
+
+			vec3 p1 = rand_vec3(false);
+			Triangle s1;
+			s1.setNormal(n1);
+			ev1->setPosition(p1);
+			ev1->setShape(&s1);
+	
+
+			Triangle s2;
+			s2.setNormal(n1);
+			ev2->setPosition(p1+v);
+			ev2->setShape(&s2);
+
+			// Same normals but not co-planar
+			ASSERT_TRUE(*ev1->getShape()->getNormal() == *ev2->getShape()->getNormal());
+
+		}
+		ASSERT_FALSE(selector.haveCoPlanarEvents(r1,r2)); 
+	}
+}
+
+
+TEST(test_CoPlanaritySelector_haveCoPlanarEvents, with_coplanar_events)
+{
+
+	int test_i=0;
+	CoPlanaritySelector<Ray> selector;
+
+	//Set a source
+	Source src;
+	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
+	
+	//Set a receptor
+	Recepteur rcpt(vec3(10,1,0),3);
+	
+
+	while(test_i<NTESTS){	// Perform NTESTS rand tests
+		test_i++;
+
+		unsigned int nb_events=rand()%MAX_EVENTS+1;
+
+		Ray* r1=new Ray();
+		Ray* r2=new Ray();
+
+		r1->setSource(&src);
+		r1->setRecepteur(&rcpt);
+
+		r2->setSource(&src);
+		r2->setRecepteur(&rcpt);
+
+		for(unsigned int i=0;i<nb_events;i++){
+			Event* ev1=new SpecularReflexion();
+			Event* ev2=new SpecularReflexion();
+
+			// Generate a first random unitary vector used as normal
+			vec3 n1= rand_vec3();
+
+			// Generate a second random unitary vector different from the first one
+			vec3 n2(n1);
+			int retry=MAX_RETRY;
+			while(abs(n1*n2-1)<EPSILON_4 && retry>0){
+				n2 = rand_vec3();
+				retry--;
+			}
+
+			ASSERT_TRUE(retry>0);
+
+			// Generate a third vector normal to the first two
+			vec3 v;
+			Cross(n1,n2,v);
+
+			vec3 p1 = rand_vec3(false);
+			Triangle* s1 = new Triangle();
+			s1->setNormal(n1);
+			ev1->setPosition(p1);
+			ev1->setShape(s1);
+	
+
+			Triangle* s2= new Triangle();
+			s2->setNormal(n1);
+			ev2->setPosition(p1+v);
+			ev2->setShape(s2);
+
+			std::shared_ptr<Event> SPE1(ev1);
+			r1->getEvents()->push_back(SPE1);
+
+			std::shared_ptr<Event> SPE2(ev2);
+			r2->getEvents()->push_back(SPE2);
+			
+
+		}
+		ASSERT_TRUE(selector.haveCoPlanarEvents(r1,r2)); 
+	}
+}
 
 /***********************************************************************
 							 FermatSelector
@@ -2245,10 +2557,6 @@ TEST(test_LengthSelector_insertWithTest, greater)
 
 
 
-
-
-
-
 /***********************************************************************
 							 ReflectionSelector
 ************************************************************************/
@@ -2625,7 +2933,7 @@ TEST(test_SelectorManager, appendData)
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
-	cout<<"Random number generator initialized with seed "<<seed<<endl;
+	cout<<"[          ] Random number generator initialized with seed "<<seed<<endl;
 
 	Simulation simu;
 	Scene* scene=simu.getScene();
@@ -2660,7 +2968,7 @@ TEST(test_SelectorManager, appendData)
 	r3->setConstructId(3);
 	r4->setConstructId(4);
 
-	//Randomly generate four triangles with a different shapeId and add theme to the scene
+	//Randomly generate four triangles with a different shapeId and add them to the scene
 	std::vector<Shape*> shapes;
 	for(int i=0;i<4;i++){
 		unsigned int p1,p2,p3;
@@ -2768,30 +3076,30 @@ TEST(test_SelectorManager, appendData)
 ************************************************************************/
 
 
-//Test the method appendData of SelectorManager
+//Test the fromRadianToCarthesien method
 TEST(test_UnitConverter, fromRadianToCarthesien){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien(0,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
+	Tools::fromRadianToCarthesien(0,decimal(M_PI/4),res);
+	ASSERT_TRUE(res.compare(vec3(decimal(0.707107),decimal(0.707107),0)));
 
-	Tools::fromRadianToCarthesien((decimal)M_PI/2,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
+	Tools::fromRadianToCarthesien(decimal(M_PI/2),decimal(M_PI/4),res);
+	ASSERT_TRUE(res.compare(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien((decimal)2*M_PI/3,(decimal)5*M_PI/6,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.433,(decimal)-0.25,(decimal)0.866)));
+	Tools::fromRadianToCarthesien(decimal(2*M_PI/3),decimal(5*M_PI/6),res);
+	ASSERT_TRUE(res.compare(vec3(decimal(0.433013),decimal(-0.25),decimal(0.866025))));
 }
 
-//Test the method appendData of SelectorManager
+//Test the fromRadianToCarthesien2 method 
 TEST(test_UnitConverter, fromRadianToCarthesien2){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien2(0,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
+	Tools::fromRadianToCarthesien2(0,decimal(M_PI/4),res);
+	ASSERT_TRUE(res.compare(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien2((decimal)M_PI/2,(decimal)M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
+	Tools::fromRadianToCarthesien2(decimal(M_PI/2),decimal(M_PI/4),res);
+	ASSERT_TRUE(res.compare(vec3(decimal(0.707107),decimal(0.707107),0)));
 
-	Tools::fromRadianToCarthesien2((decimal)3*M_PI/4,(decimal)2*M_PI/3,res);
-	ASSERT_TRUE(res.barelyEqual(vec3((decimal)-0.354,(decimal)0.612,(decimal)-0.707)));
+	Tools::fromRadianToCarthesien2(decimal(3*M_PI/4),decimal(2*M_PI/3),res);
+    ASSERT_TRUE(res.compare(vec3(decimal(-0.353553),decimal(0.612372),decimal(-0.707107))));
 }

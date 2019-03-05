@@ -67,7 +67,7 @@ private :
      * \brief Contruit la liste des points sources et des points recepteurs en fonction du parametre de sens de propa (S -> R) ou (R -> S)
      * \return Renvoie 0 pour le sens S->R et 1 pour le sens R->S
      */
-    unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs);
+    unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs,vector<tympan::VolumeFaceDirectivity*>& directivities);
 
     /*!
     * \fn bool appendTriangleToScene()
@@ -86,7 +86,7 @@ private :
     * \fn void appendSourceToSimulation(TYCalcul &calcul, vector<vec3>& sources)
     * \brief Ajoute les sources ponctuelles actives a la simulation
     */
-    void appendSourceToSimulation(vector<vec3>& sources);
+    void appendSourceToSimulation(vector<vec3>& sources,vector<tympan::VolumeFaceDirectivity*>& directivities);
 
     /*!
     * \fn  void convert_Rays_to_acoustic_path(const unsigned int& sens)
