@@ -263,7 +263,13 @@ OSpectre OSpectre::toDB() const
     double dBVal = 0.0;
     for (i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        dBVal = 10.0 * log10( (_module[i]+EPSILON_15) / coef ); // EPSILON_15 has been added to avoir -infinite result
+		// avoid -infinite result
+		double val = _module[i];
+		if(val < EPSILON_15){
+			val = EPSILON_15;
+		}
+
+        dBVal = 10.0 * log10( (val) / coef );
         s._module[i] = dBVal    ;
     }
     s._etat = SPECTRE_ETAT_DB;   // Etat explicite dB
