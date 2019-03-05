@@ -25,7 +25,7 @@ cdef ovector3d2vector3d(OVector3D vect):
     vector.thisobj = vect
     return vector
 
-cdef otriangle2triangle(OTriangle* tri):
+cdef otriangle2triangle(OTriangle * tri):
     """Triangle (cython object) wrapping an OTriangle(c++)"""
     assert tri != NULL
     triangle = cy.declare(Triangle, Triangle())
@@ -46,7 +46,7 @@ cdef class Spectrum:
         """Build a Spectrum, possibly out of ndarray `values`"""
         if values is None:
             return
-        self.thisobj = OSpectre(<double *> values.data, len(values), 0)
+        self.thisobj = OSpectre( < double * > values.data, len(values), 0)
         self.thisobj.setEtat(SPECTRE_ETAT_DB)
         self.thisobj.setType(SPECTRE_TYPE_LW)
 
@@ -72,7 +72,7 @@ cdef class Spectrum:
     @property
     def values(self):
         """Values of the spectrum"""
-        cdef cyarray cy_array = <double[:self.nvalues]> self.thisobj.getTabValReel()
+        cdef cyarray cy_array = <double[:self.nvalues] > self.thisobj.getTabValReel()
         spec_val = np.array(cy_array, dtype=np.double)
         return spec_val
 
@@ -87,6 +87,10 @@ cdef class Spectrum:
     def dBA(self):
         """Balanced spectrum value in DBA (for audible frequencies)"""
         return self.thisobj.valGlobDBA()
+
+    @property
+    def dBLin(self):
+        return self.thisobj.valGlobDBLin()
 
 
 
@@ -114,6 +118,9 @@ cdef class Point3D:
         self.thisobj._x = x
         self.thisobj._y = y
         self.thisobj._z = z
+
+    def __repr__(self):
+        return '({x}, {y}, {z})'.format(x=self.x, y=self.y, z=self.z)
 
     def set_x(self, x):
         self.thisobj._x = x

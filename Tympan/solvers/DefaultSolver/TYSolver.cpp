@@ -154,7 +154,7 @@ std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
 
 bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
 {
-
+    _tabPolygon.clear();
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
 
@@ -188,6 +188,8 @@ bool TYSolver::appendTriangleToScene()
     {
         return false;
     }
+
+    _scene->clean();
 
     Material *m = new Material(); // Only for compatibility, may be suppressed;
 
