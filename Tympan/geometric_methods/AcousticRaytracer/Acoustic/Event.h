@@ -23,6 +23,7 @@
 
 enum typeevent
 {
+	UNKNOWN = -1,
     SPECULARREFLEXION = 0,
     DIFFRACTION, 
 	NOTHING
@@ -44,7 +45,8 @@ public:
         nbResponseLeft(0),
         initialNbResponse(0),
         sampler(NULL),
-        shape(_shape)
+        shape(_shape),
+		type(UNKNOWN)
     {
         name = "unknown event";
     }

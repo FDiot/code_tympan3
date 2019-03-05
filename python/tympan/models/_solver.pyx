@@ -367,6 +367,12 @@ cdef class SolverReceptor:
         assert self.thisptr != NULL
         return tycommon.opoint3d2point3d(self.thisptr.position)
 
+    @property
+    def name(self):
+        """Return the acoustic source position (as a 'Point3D' object)"""
+        assert self.thisptr != NULL
+        return tycommon.opoint3d2point3d(self.thisptr.position)
+
 
 cdef class MeshTriangle:
     thisptr = cy.declare(cy.pointer(AcousticTriangle))

@@ -192,6 +192,11 @@ cdef class Element:
         self.thisptr = SmartPtr[TYElement]()
 
     @property
+    def getID(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getID().toString().toStdString().decode()
+
+    @property
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
@@ -219,6 +224,7 @@ cdef class Element_array:
 
     def __cinit__(self):
         self.thisptr = vector[SmartPtr[TYElement]]()
+      
 
     def from_xml(self, file_name):
         # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
@@ -483,21 +489,42 @@ cdef class User_source:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getHauteur()
 
+    def getCurrentSpectre(self) :
+        assert self.thisptr.getRealPointer() != NULL
+        ospectre_ptr = cy.declare(cy.pointer(tycommon.OSpectre),
+                                      self.thisptr.getRealPointer().getCurrentSpectre().downcast_ospectre())
+        ospectre = cy.declare(tycommon.OSpectre,
+                                  deref(ospectre_ptr))
+        cyspectre = tycommon.Spectrum()
+        cyspectre = tycommon.ospectre2spectrum(ospectre)
+        return cyspectre
+
+    @property
+    def spectrum(self):
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_spectrum = cy.declare(cy.pointer(
+            TYSpectre), self.thisptr.getRealPointer().getSpectre())
+        return tycommon.ospectre2spectrum(deref(cpp_spectrum)) 
+
 
 cdef class Engine:
 
     def __cinit__(self):
         self.thisgeonodeptr = SmartPtr[TYGeometryNode] (new TYGeometryNode())
 
+    def getCurrentSpectre(self) :
+        assert self.thisptr.getRealPointer() != NULL
+        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getCurrentSpectre()) 
+     
     @property
     def getID(self):
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getID().toString().toStdString()
+        return self.thisptr.getRealPointer().getID().toString().toStdString().decode()
 
     @property
     def name(self):
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        return tyelement_name(self.thisptr.getRealPointer())
 
     def setName(self, name):
         assert self.thisptr.getRealPointer() != NULL
@@ -552,7 +579,16 @@ cdef class Building:
     @property
     def name(self):
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        return tyelement_name(self.thisptr.getRealPointer())
+
+    def getCurrentSpectre(self) :
+        assert self.thisptr.getRealPointer() != NULL
+        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getCurrentSpectre())
+
+    @property
+    def getID(self):
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getID().toString().toStdString()
 
     def setName(self, name):
         assert self.thisptr.getRealPointer() != NULL
@@ -753,6 +789,8 @@ cdef class Site:
                            self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         infra.getAllSrcs(comp.thisptr.getRealPointer(), map_elt_srcs)
         return business2microsource(map_elt_srcs)
+
+
 
     def childs(self):
         """The list of the direct childs of the Site (not recursive)
@@ -1251,6 +1289,40 @@ cdef class Result:
         return sources
 
     @property
+    def macro_sources(self):
+        """ get the list of sources known by the result """
+        tab_srcs = cy.declare(vector[SmartPtr[TYElement]],
+                              self.thisptr.getRealPointer().getSources())
+ 
+        sources = []
+        nsources = tab_srcs.size()
+
+        cpp_src = cy.declare(cy.pointer(TYUserSourcePonctuelle))
+        cpp_engine = cy.declare(cy.pointer(TYMachine))
+        cpp_building = cy.declare(cy.pointer(TYBatiment))
+
+        for elm in tab_srcs:
+
+            cpp_src = downcast_user_source_ponctuelle(elm.getRealPointer())
+            if cpp_src != NULL:
+                source = User_source()
+                source.thisptr = SmartPtr[TYUserSourcePonctuelle](cpp_src)
+                sources.append(source)            
+            else:
+                cpp_engine = downcast_machine(elm.getRealPointer())
+                if cpp_engine != NULL:
+                    engine = Engine()
+                    engine.thisptr = SmartPtr[TYMachine](cpp_engine)
+                    sources.append(engine)
+                else:
+                    cpp_building = downcast_batiment(elm.getRealPointer())
+                    building = Building()
+                    building.thisptr = SmartPtr[TYBatiment](cpp_building)
+                    sources.append(building)
+
+        return sources
+        
+    @property
     def receptors(self):
         """ get the list of receptors known by the result """
         tab_rcpts = cy.declare(vector[SmartPtr[TYElement]],
@@ -1395,6 +1467,11 @@ cdef class Receptor:
 
 cdef class UserReceptor:
     thisptr = cy.declare(SmartPtr[TYPointControl])
+
+    @property
+    def name(self):
+        """The name of the element"""
+        return tyelement_name(self.thisptr.getRealPointer())
 
 
 cdef class Computation:
