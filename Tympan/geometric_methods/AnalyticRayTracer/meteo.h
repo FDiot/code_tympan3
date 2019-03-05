@@ -49,10 +49,10 @@ public:
 
     /*!
      * \fn void setWindAngle(const double& windAngle)
-     * \brief Define wind: angle 0 means wind from north to south
+     * \brief Define wind: angle given in windrose orientation (clockwise angle with 0 for a wind from north to south) 
      */
     virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
-    /// Get wind angle in radian (0 means wind from north to south)
+    /// Get the windrose oriented wind angle in radian (clockwise angle with 0 for a wind from north to south) 
     virtual double getWindAngle() const { return DEGRES(wind_angle); }
 
     /*!
@@ -63,7 +63,7 @@ public:
 
 protected:
     double c0;              //!< Ground sound speed (z = 0)
-    double wind_angle;      //!< Wind angle in radian: 0 for a wind from north to south
+    double wind_angle;      //!< The windrose oriented wind angle in radian (clockwise angle with 0 for a wind from north to south) 
 };
 
 #endif //__METEO_H
