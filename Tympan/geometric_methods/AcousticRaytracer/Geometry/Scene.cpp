@@ -38,6 +38,8 @@ void Scene::clean()
     registeredVertices.clear();
     vertices.clear();
     globalBox.isNull = true;
+    compteurPrimitive = 0;
+    compteurFace=0;
     if (accelerator) { delete accelerator; }
 }
 
