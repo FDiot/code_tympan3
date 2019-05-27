@@ -315,7 +315,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
 
         self.assertIn("{Cut level curve}", cleaner.geom)
         geom, info = cleaner["{Cut level curve}"]
-        expected_shape = geometry.MultiLineString([[(6.5, 6), (6.5, 6.5)],
+        expected_shape = geometry.MultiLineString([[(6.5, 5.5), (6.5, 6.5)],
                                                   [(6.5, 7.5), (6.5, 8)]])
         self.assertTrue(expected_shape.equals(geom))
 
