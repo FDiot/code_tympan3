@@ -32,6 +32,7 @@
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
+#include <QString>
 class QLineEdit;
 class QGridLayout;
 class QLabel;
@@ -191,6 +192,7 @@ protected:
 
 private:
     bool _isDrawing;
+	QString _etatSpectre;
 };
 
 
