@@ -458,26 +458,16 @@ void TYSiteNode::loadTopoFile()
         return;
     }
 
-    // Creation d'un copie
-    if ((streamDest = fopen(_topoFile.c_str(), "w+b")) == NULL)
-    {
-        fclose(streamSrc);
-        return;
-    }
-
     OMessageManager& logger =  *OMessageManager::get();
     // Lecture et copie
     while (!feof(streamSrc))
     {
         if (!fread(&c, sizeof(unsigned char), 1, streamSrc))
            logger.error("An error occured during the read of ",_topoFileName.c_str());       
-        if (!fwrite(&c, sizeof(unsigned char), 1, streamDest))
-           logger.error("An error occured during the read of ",_topoFile.c_str());  
     }
 
     // Fermeture des fichiers
     fclose(streamSrc);
-    fclose(streamDest);
 
     // Mise a jour du flag.
     _isTopoFileModified = true;
