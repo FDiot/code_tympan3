@@ -69,6 +69,11 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
     // Et on conserve ce spectre par ailleurs
     _pTmpSpectre = pElement;
 
+	_pTmpSpectre->setForm(SPECTRE_FORM_TIERS);
+
+	_etatSpectre="tiersOctave";
+
+
     resize(450, 700);
     setWindowTitle(TR("id_caption"));
 
@@ -92,6 +97,7 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
 
     _radioButtonOctave = new QRadioButton();
     _radioButtonOctave->setText(TR("id_radiobutton_octave"));
+	_radioButtonOctave->setChecked(false);
 
     QGridLayout* groupBoxRadioLayout = new QGridLayout();
     groupBoxRadioLayout->addWidget(_radioButtonTiers, 0, 0);
@@ -101,7 +107,7 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
     groupBoxRadio->setTitle("");
     groupBoxRadio->setLayout(groupBoxRadioLayout);
 
-    _radioButtonTiers->setChecked((getElement()->getForm() == SPECTRE_FORM_TIERS));
+    _radioButtonTiers->setChecked(true);
 
     _groupBoxLayout->addWidget(groupBoxRadio, 0, 0, 1, 2);
 
@@ -189,6 +195,7 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
 
     setLayout(_spectreLayout);
     updateContent();
+	//changeOctave();
 }
 
 TYSpectreWidget::~TYSpectreWidget()
@@ -243,7 +250,7 @@ void TYSpectreWidget::apply()
     // On repasse le spectre en Tiers d'octave si necessaire
     if (_radioButtonOctave->isChecked())
     {
-        _pTmpSpectre->setForm(SPECTRE_FORM_OCT);
+        _pTmpSpectre->setForm(SPECTRE_FORM_TIERS);
         *_pTmpSpectre = _pTmpSpectre->toTOct();
     }
 
@@ -505,9 +512,10 @@ void TYSpectreWidget::changeOctave()
 {
     LPTYSpectre pSpectre = new TYSpectre();
     pSpectre->setType(_pTmpSpectre->getType()); // Recopie du type du spectre edite
+	bool isChanged = false;
 
     // Effectue la conversion
-    if (_radioButtonTiers->isChecked()) // Passage de 1/1 en 1/3
+    if (_radioButtonTiers->isChecked() && _etatSpectre!="tiersOctave") // Passage de 1/1 en 1/3
     {
         pSpectre->setForm(SPECTRE_FORM_OCT);
 
@@ -517,8 +525,10 @@ void TYSpectreWidget::changeOctave()
         // Passage du spectre en 1/3
         *pSpectre = pSpectre->toTOct();
 
+		_etatSpectre="tiersOctave";
+		isChanged = true;
     }
-    else // Passage de 1/3 en 1/1
+    else if(_radioButtonOctave->isChecked() && _etatSpectre!="octave")// Passage de 1/3 en 1/1
     {
         pSpectre->setForm(SPECTRE_FORM_TIERS);
 
@@ -527,10 +537,15 @@ void TYSpectreWidget::changeOctave()
 
         //Passage du spectre en 1/1
         *pSpectre = pSpectre->toOct();
+
+		_etatSpectre="octave";
+		isChanged = true;
     }
 
     // Remplissage du tableau
-    spectreToTableau(pSpectre);
+    if (isChanged){
+		spectreToTableau(pSpectre);
+	}
 }
 
 void TYSpectreWidget::changeType()
