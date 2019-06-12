@@ -36,19 +36,34 @@ build_script:
 
     cd build
 
-    echo %PATH%
-    
     set MINICONDA=C:\Miniconda34
+    
+    set PYTHONPATH=%MINICONDA% 
 
-    set PATH=%MINICONDA%;%MINICONDA%\Scripts;%MINICONDA%\Library\bin;%MINICONDA%\libs
+    set PATH=%MINICONDA%;%MINICONDA%\Scripts;%MINICONDA%\Library\bin;%MINICONDA%\libs;%MINICONDA%\DLLs;%MINICONDA%\Library\lib
 
-    set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
+    set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\tympan\build;C:\Program Files (x86)\CMake\bin
 
     echo %PATH%
 
     set TYMPAN_PYTHON_INTERP=%MINICONDA%\python.exe
+    
 
-    conda install -y -q cython numpy scipy matplotlib pandas xlsxwriter
+    conda install -y -q cmake=3.6.3
+    
+    conda install -y -q boost=1.51.0 -c logilab
+    
+    conda install -y -q cython=0.26
+    
+    conda install -y -q numpy=1.10.1
+    
+    conda install -y -q scipy=0.16.0 
+    
+    conda install -y -q matplotlib=1.5.1
+    
+    conda install -y -q pandas=0.18.1
+    
+    conda install -y -q xlsxwriter=0.9.6
 
     conda install -y -q geos=3.4.2
 
@@ -56,7 +71,7 @@ build_script:
 
     conda install -y -q swig=3.0.10
 
-    conda install -y -q gmp mpfr -c salilab
+    conda install -y -q gmp=5.0.1 mpfr=3.0.0 -c salilab
 
     conda install -y -q cgal=4.3 -c logilab
     
@@ -68,24 +83,22 @@ build_script:
     
     conda list
 
+
     cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python34.lib ..\src
 
     cmake --build . --config Release
-
-    cd ..\src\doc
     
-    set PYTHONPATH=%MINICONDA%      
+    call SetEnvTympanTests.bat
     
-    make html 
+    echo 'TOTOLERIGOLO'
+    
+    echo %PATH%
+    
+    echo %PYTHONPATH%
+    
+    echo 'dirdir'
     
     dir
     
-    cd ..\.. 
-test_script:
-- cmd: >-
-    dir
-    
-    cd build
-
     ctest -C Release --output-on-failure
     
