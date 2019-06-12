@@ -33,6 +33,7 @@ TY_EXT_GRAPHIC_INST(TYBatiment);
 TYBatiment::TYBatiment()
 {
     _name = TYNameManager::get()->generateName(getClassName());
+    setIsRayonnant(false);
 }
 
 TYBatiment::TYBatiment(const TYBatiment& other)
