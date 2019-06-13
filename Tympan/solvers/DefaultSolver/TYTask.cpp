@@ -57,4 +57,6 @@ void TYTask::main()
     ptsTop.clear();
     ptsLeft.clear();
     ptsRight.clear();
+    _tabIntersect.clear();
+
 }

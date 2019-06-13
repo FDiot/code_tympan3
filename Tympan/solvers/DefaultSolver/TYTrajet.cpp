@@ -14,6 +14,7 @@
 */
 
 #include "TYTrajet.h"
+#include "Tympan/models/solver/config.h"
 
 
 TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_) :
@@ -31,6 +32,13 @@ TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcp
 TYTrajet::TYTrajet(const TYTrajet& other) : asrc(other.asrc), arcpt(other.arcpt)
 {
     *this = other;
+    if(tympan::SolverConfiguration::get()->Anime3DKeepRays ==  false){
+        for(int i =0 ; i< _tabRays.size();i++){
+            delete _tabRays.at(i);
+            _tabRays.at(i) = nullptr;
+            }
+    _tabRays.clear();
+    }
 }
 
 TYTrajet::~TYTrajet()

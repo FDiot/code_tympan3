@@ -31,7 +31,10 @@ namespace tympan
      {
         _nb_sources = nb_sources;
 
-        data.clear();
+        if(data.size() > 0){
+            data.clear();
+        }
+
         data.reserve(nb_receptors);
 
         Spectrum nullSpectrum(0);
