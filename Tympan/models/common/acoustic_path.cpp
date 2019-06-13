@@ -56,6 +56,10 @@ acoustic_event::acoustic_event(const acoustic_event& ev)
 
 acoustic_event::~acoustic_event()
 {
+    if(previous) delete previous;
+    if(next) delete next;
+    if(endEvent) delete endEvent;
+
 }
 
 acoustic_event& acoustic_event::operator=(const acoustic_event& other)

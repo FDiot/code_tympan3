@@ -284,6 +284,8 @@ public:
      */
     void begin(unsigned int count);
 
+    void startPool();
+
     /**
      * \fn bool end();
      * \brief End solver

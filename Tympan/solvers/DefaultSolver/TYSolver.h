@@ -80,17 +80,11 @@ private:
     */
     bool appendTriangleToScene();
 
-    /**
-     * \fn size_t buildTrajects(tympan::AcousticProblemModel& aproblem)
-     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
-     */
-   size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
-
     // XXX This pointer is actually used like a C array :
     // TODO replace with a std::deque or similar container.
     std::vector<TYStructSurfIntersect> _tabPolygon; //!< Vector of TYStructSurfIntersect
 
-	std::vector<TYTrajet> _tabTrajets; //!< Vector of TYTrajet
+	std::vector<TYTrajet*> _tabTrajets; //!< Vector of TYTrajet
 
     OThreadPool* _pool;
 

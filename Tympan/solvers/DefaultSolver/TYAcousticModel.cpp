@@ -409,6 +409,9 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             chemin.setLongueur(rr);
             chemin.calcAttenuation(tabEtapes, *pSolverAtmos);
             TabChemin.push_back(chemin) ; // (3) Ajout du chemin dans le tableau des chemins de la frequence
+            tabEtapes.clear();
+            Etapes.clear();
+
         }
     }
 }
@@ -570,6 +573,13 @@ bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tym
     chemin.setLongueur(longNoReflex);
     chemin.calcAttenuation(tabNoReflex, *pSolverAtmos);
     TabChemins.push_back(chemin);
+
+    tabTwoReflex.clear();
+    tabOneReflexBefore.clear();
+    tabOneReflexAfter.clear();
+    tabNoReflex.clear();
+    Etapes.clear();
+
 
     return true;
 }
@@ -892,6 +902,7 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
                 Chemin.calcAttenuation(tabEtapes, *pSolverAtmos);
 
                 TabChemins.push_back(Chemin); // Mise en place du chemin dans la table des chemins
+                tabEtapes.clear();
             }
         }
     }
