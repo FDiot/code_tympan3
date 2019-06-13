@@ -21,12 +21,11 @@ OSlaveThread::OSlaveThread(OThreadPool* pool)
     : _pool(pool)
 {
     _bToEnd = false;
-    start();
 }
 
 OSlaveThread::~OSlaveThread()
 {
-    wait();
+    this->terminate();
 }
 
 void OSlaveThread::run()
@@ -35,13 +34,7 @@ void OSlaveThread::run()
     {
         // Wait for available task.
         TY_LOCK_SHARED_MUTEX(_pool)
-        while (_pool->_tasks.empty() && isRunning() && !_bToEnd)
-        {
-            //Maintenant (QT 4) wait unlock (atomique) le mutex et relock (atomique) le mutex
-            _pool->wait(_pool);
-        }
-
-        if (isRunning() && !_bToEnd)
+        if (isRunning() && !_bToEnd && !_pool->_tasks.empty())
         {
             // Dequeue next task.
             LPOTask task = _pool->_tasks.front();
@@ -52,14 +45,11 @@ void OSlaveThread::run()
             // Signal all that task is running.
             TY_LOCK_SHARED_MUTEX(task)
             task->_running = true;
-            task->wakeAll();
-            TY_UNLOCK_SHARED_MUTEX(task)
 
             // Run task.
             task->main();
 
             // Signal all that task is completed.
-            TY_LOCK_SHARED_MUTEX(task)
             task->_running = false;
             task->_completed = true;
             task->wakeAll();
@@ -135,7 +125,8 @@ OThreadPool::~OThreadPool()
     {
         // Wait for last task in queue to at least start running.
         LPOTask task = _tasks.back();
-        task->wait(this);
+        task->_completed = true;
+        task->_canceled = true;
     }
 
     // Now terminate all threads.
@@ -143,10 +134,10 @@ OThreadPool::~OThreadPool()
     for (i = 0 ; i < size() ; ++i)
     {
         (*this)[i]->_bToEnd = true;
+        (*this)[i]->terminate();
     }
 
     // Signal them to wake up.
-    wakeAll();
     TY_UNLOCK_SHARED_MUTEX(this)
 
     // Then delete them (the thread destructor will wait for thread completion).
@@ -165,7 +156,6 @@ void OThreadPool::push(OTask* task)
     // Push task onto queue and signal availability.
     TY_LOCK_SHARED_MUTEX(this)
     _tasks.push(task);
-    wakeOne();
     TY_UNLOCK_SHARED_MUTEX(this)
 }
 
@@ -189,6 +179,17 @@ void OThreadPool::begin(unsigned int count)
     TY_UNLOCK_SHARED_MUTEX(this);
 }
 
+void OThreadPool::startPool(){
+
+    for (int i = 0 ; i < size() ; ++i)
+    {
+        (*this)[i]->_bToEnd = false;
+        (*this)[i]->start();
+    }
+}
+
+
+
 bool OThreadPool::end()
 {
     unsigned int totalCount = getTotalCount();
@@ -198,16 +199,10 @@ bool OThreadPool::end()
     while (last < totalCount)
     {
         unsigned int current = getCount();
-        for (size_t i = 0; i < current - last; ++i)
-        {
-            if (cancel)
-            {
-                stop();
-                return false;
-            }
-        }
         last = current;
+        OSleeper::msleep(5);
     }
+    stop();
     return true;
 }
 
@@ -225,11 +220,15 @@ void OThreadPool::stop()
         // Cancel task
         TY_LOCK_SHARED_MUTEX(task)
         task->_canceled = true;
-        task->wakeAll();
         TY_UNLOCK_SHARED_MUTEX(task)
 
         // Increment counter
         _counter++;
+    }
+
+    for (int i = 0 ; i < size() ; ++i)
+    {
+        (*this)[i]->_bToEnd = true;
     }
 
     TY_UNLOCK_SHARED_MUTEX(this);

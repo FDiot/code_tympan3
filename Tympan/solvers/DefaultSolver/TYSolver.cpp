@@ -53,12 +53,21 @@ TYSolver::~TYSolver()
     {
         delete _pool;
     }
-    _pool = NULL;}
+    _pool = NULL;
+    
+    if(_tabTrajets.size() > 0)
+    {
+        _tabTrajets.clear();
+    }
+}
+
 
 
 bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
                      tympan::AcousticResultModel& aresult, tympan::LPSolverConfiguration configuration)
 {
+    int nbTrajectsForOneSource = 0;
+    int nbTrajectsTotal = 0;
     tympan::SolverConfiguration::set(configuration);
     // Use grid accelerating structure instead of KDTree (default value)
     OMessageManager::get()->warning(
@@ -66,9 +75,6 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     tympan::SolverConfiguration::get()->Accelerator = 1;
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
-
-    // build trajects and return count of
-    size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
 
     // Creation du face selector
     if (!_faceSelector) { _faceSelector = make_face_selector(); }
@@ -95,43 +101,67 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Initialisation du acoustic model
     _acousticModel->init();
 
-    // On reset la thread pool
-    _pool->begin(count);
-
-    // Lancement des calculs
-    for (unsigned int i = 0; i < count; ++i)
-    {
-        _pool->push(new TYTask(*this, aproblem.nodes(), aproblem.triangles(), aproblem.materials(), _tabTrajets[i], i + 1));
-    }
-
-    if (!_pool->end())
-    {
-        return false;
-    }
-    // Recuperation du tableau de rayon de la structure resultat
-    tab_acoustic_path& tabRays = aresult.get_path_data();
-    tabRays.clear();
-    // Displaying rays in the GUI
-    bool keepRays = tympan::SolverConfiguration::get()->Anime3DKeepRays;
-    if (keepRays == true)
-    {
-        for (unsigned int i=0; i<_tabTrajets.size(); i++)
-        {
-            for (size_t j=0; j<_tabTrajets[i].get_tab_rays().size(); j++)
-            {
-                tabRays.push_back(_tabTrajets[i].get_tab_rays()[j]);
-            }
-        }
-    }
-
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());
-    for (unsigned int i=0; i<_tabTrajets.size(); i++)
-    {
-        tympan::source_idx sidx = _tabTrajets[i].asrc_idx;
-        tympan::receptor_idx ridx = _tabTrajets[i].arcpt_idx;
+    tab_acoustic_path& tabRays = aresult.get_path_data();
+    tabRays.clear();
+    int nbSource = aproblem.nsources();
+    int nbRecepteur = aproblem.nreceptors();
 
-        matrix(ridx, sidx) = _tabTrajets[i].getSpectre();
+    //construction trajets et ajout des taches associees
+    for(unsigned int i=0; i< aproblem.nsources(); i++)
+    {
+        // On reset la thread pool
+        _pool->begin(aproblem.nreceptors());
+        //reset deque and liberate memory
+        _tabTrajets.clear();
+        nbTrajectsForOneSource =0;
+
+        for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
+        {
+            TYTrajet *trajet = new TYTrajet(const_cast<tympan::AcousticProblemModel&>(aproblem).source(i), const_cast<tympan::AcousticProblemModel&>(aproblem).receptor(j));
+            trajet->asrc_idx = i;
+            trajet->arcpt_idx = j;
+            _tabTrajets.push_back(trajet);
+
+            _pool->push(new TYTask(*this, aproblem.nodes(), aproblem.triangles(), aproblem.materials(),*_tabTrajets.at(nbTrajectsForOneSource),nbTrajectsTotal + 1));
+            nbTrajectsTotal++;
+            nbTrajectsForOneSource++;
+        }
+
+        //launch threads
+        _pool->startPool();
+
+        if (!_pool->end())
+        {
+            return false;
+        }
+
+        // Displaying rays in the GUI
+        bool keepRays = tympan::SolverConfiguration::get()->Anime3DKeepRays;
+        if (keepRays == true)
+        {
+            for (unsigned int i=0; i<_tabTrajets.size(); i++)
+            {
+                for (size_t j=0; j<_tabTrajets.at(i)->get_tab_rays().size(); j++)
+                {
+                    tabRays.push_back(_tabTrajets.at(i)->get_tab_rays()[j]);
+                }
+            }
+        }
+
+        for (unsigned int i=0; i<nbTrajectsForOneSource; i++)
+        {
+            tympan::source_idx sidx = _tabTrajets.at(i)->asrc_idx;
+            tympan::receptor_idx ridx = _tabTrajets.at(i)->arcpt_idx;
+
+            matrix(ridx, sidx) = _tabTrajets.at(i)->getSpectre();
+        }
+
+        for(int cnt = 0 ; cnt < _tabTrajets.size();cnt++)
+        {
+            delete _tabTrajets.at(cnt);
+        }
     }
 
     return true;
@@ -222,23 +252,4 @@ bool TYSolver::appendTriangleToScene()
     _scene->finish(); // Build accelerating structure
 
     return true;
-}
-
-size_t TYSolver::buildTrajects(tympan::AcousticProblemModel& aproblem)
-{
-    _tabTrajets.reserve( aproblem.nsources() * aproblem.nreceptors() );
-
-    for(unsigned int i=0; i< aproblem.nsources(); i++)
-    {
-        for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
-        {
-            TYTrajet trajet(aproblem.source(i), aproblem.receptor(j));
-            trajet.asrc_idx = i;
-            trajet.arcpt_idx = j;
-
-            _tabTrajets.push_back(trajet);
-        }
-    }
-
-	return _tabTrajets.size();
 }
