@@ -14,6 +14,8 @@
 */
 
 #include "TYChemin.h"
+#include "Tympan/models/solver/config.h"
+
 
 TYChemin::TYChemin() :  _typeChemin(CHEMIN_DIRECT), _longueur(0.0), _distance(0.0), _eq_path(nullptr)
 {
@@ -27,8 +29,11 @@ TYChemin::TYChemin(const TYChemin& other)
 
 TYChemin::~TYChemin()
 {
-    //  reset();
+    if(tympan::SolverConfiguration::get()->Anime3DKeepRays ==  false){
+        _eq_path->cleanEventsTab();
+        }
 }
+
 
 TYChemin& TYChemin::operator=(const TYChemin& other)
 {

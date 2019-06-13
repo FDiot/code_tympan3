@@ -45,12 +45,17 @@ TYCalculParcours::TYCalculParcours(int nNbSegMax, bool bVertical)
     _geoSR->AllouerPolylignes(1);
     _geoSR->_nNbPointTotal = 0;
     _geoSR->_ListePoint = new TYPointParcours[2];
+
+    _vectorPoint.clear();
+
 }
 
 TYCalculParcours::~TYCalculParcours()
 {
     SAFE_DELETE(_geoImporterDXF);
     SAFE_DELETE(_geoSR);
+    _vectorPoint.clear();
+
 }
 
 void TYCalculParcours::InitChangementVariable2D3D(bool bAxeXMoinsSignifiant)
@@ -99,20 +104,84 @@ TYCalculParcours::TYCalculParcours(TYSetGeometriqueParcours* geoImporterDXF, TYS
 
 void TYCalculParcours::AjouterSegment(double* ptA, double* ptB, bool isInfra, bool isEcran, TYSetGeometriqueParcours* geo)
 {
-    //On enregistre les coordonnees des 2 nouveaux points:
-    TYPointParcours* p1 = &(geo->_ListePoint[geo->_nNbPointTotal]);
-    p1->isInfra = isInfra;  p1->isEcran = isEcran;
-    p1->x = ptA[_indexXInOut]; p1->y = ptA[_indexYInOut]; p1->z = ptA[_indexZInOut]; p1->Identifiant = geo->_nNbPointTotal;
-    geo->_nNbPointTotal++;
+    //create point1 from ptA
+    TYPointParcours p1_temp;
+    p1_temp.isInfra = isInfra;  p1_temp.isEcran = isEcran;
+    p1_temp.x = ptA[_indexXInOut]; p1_temp.y = ptA[_indexYInOut]; p1_temp.z = ptA[_indexZInOut];
 
-    TYPointParcours* p2 = &(geo->_ListePoint[geo->_nNbPointTotal]);
-    p2->isInfra = isInfra;  p2->isEcran = isEcran;
-    p2->x = ptB[_indexXInOut]; p2->y = ptB[_indexYInOut]; p2->z = ptB[_indexZInOut]; p2->Identifiant = geo->_nNbPointTotal;
-    geo->_nNbPointTotal++;
+    //create point2 from ptB
+    TYPointParcours p2_temp;
+    p2_temp.isInfra = isInfra;  p2_temp.isEcran = isEcran;
+    p2_temp.x = ptB[_indexXInOut]; p2_temp.y = ptB[_indexYInOut]; p2_temp.z = ptB[_indexZInOut]; 
 
-    //On ajoute une polyligne a geo:
-    geo->_ListePolylines[geo->_nNbPolylines].ajouteSegment(p1, p2);
-    geo->_nNbPolylines++;
+    bool ptA_AlreadyExists = false;
+    bool ptB_AlreadyExists = false;
+
+    int indicePt1Doublon = -1;
+    int indicePt2Doublon = -1;
+
+    //verifier si ptA et ptB pas de doublons dans la liste de point
+    for(int i =_vectorPoint.size() -1 ;i>=0;i--){
+        if((_vectorPoint[i]->isEcran == p1_temp.isEcran) && (_vectorPoint[i]->isInfra == p1_temp.isInfra) && TYPointParcours::Confondus(_vectorPoint[i],&p1_temp)){
+            ptA_AlreadyExists = true;
+            indicePt1Doublon = i;
+            break;
+        }
+    }
+
+    for(int i =_vectorPoint.size() -1 ;i>=0;i--){
+        if((_vectorPoint[i]->isEcran == p2_temp.isEcran) && (_vectorPoint[i]->isInfra == p2_temp.isInfra) && TYPointParcours::Confondus(_vectorPoint[i],&p2_temp)){
+            ptB_AlreadyExists = true;
+            indicePt2Doublon = i;
+            break;
+        }
+    }
+
+    if(ptA_AlreadyExists & !ptB_AlreadyExists){//SI doublon ptA
+        TYPointParcours* p2 = &(geo->_ListePoint[geo->_nNbPointTotal]);
+        p2->isInfra = isInfra;  p2->isEcran = isEcran;
+        p2->x = ptB[_indexXInOut]; p2->y = ptB[_indexYInOut]; p2->z = ptB[_indexZInOut]; p2->Identifiant = geo->_nNbPointTotal;
+        p2->Identifiant = geo->_nNbPointTotal;
+        _vectorPoint.push_back(p2);
+        geo->_nNbPointTotal++;
+        geo->_ListePolylines[geo->_nNbPolylines].ajouteSegment(_vectorPoint[indicePt1Doublon], p2);
+        geo->_nNbPolylines++;
+        //delete p1;
+    }
+    else if(!ptA_AlreadyExists & ptB_AlreadyExists){//SI doublon ptB
+        TYPointParcours* p1 = &(geo->_ListePoint[geo->_nNbPointTotal]);
+        p1->isInfra = isInfra;  p1->isEcran = isEcran;
+        p1->x = ptA[_indexXInOut]; p1->y = ptA[_indexYInOut]; p1->z = ptA[_indexZInOut]; p1->Identifiant = geo->_nNbPointTotal;
+        p1->Identifiant = geo->_nNbPointTotal;
+        _vectorPoint.push_back(p1);
+        geo->_nNbPointTotal++;
+        geo->_ListePolylines[geo->_nNbPolylines].ajouteSegment(p1, _vectorPoint[indicePt2Doublon]);
+        geo->_nNbPolylines++;
+        //delete p2;
+        }
+    else if(ptA_AlreadyExists & ptB_AlreadyExists){//SI doublon ptA et ptB
+        geo->_ListePolylines[geo->_nNbPolylines].ajouteSegment(_vectorPoint[indicePt1Doublon], _vectorPoint[indicePt2Doublon]);
+        geo->_nNbPolylines++;
+        //delete p1,p2;
+    }
+    else{//SI aucun doublon
+        TYPointParcours* p1 = &(geo->_ListePoint[geo->_nNbPointTotal]);
+        p1->isInfra = isInfra;  p1->isEcran = isEcran;
+        p1->x = ptA[_indexXInOut]; p1->y = ptA[_indexYInOut]; p1->z = ptA[_indexZInOut]; p1->Identifiant = geo->_nNbPointTotal;
+
+        p1->Identifiant = geo->_nNbPointTotal;
+        geo->_nNbPointTotal++;
+        TYPointParcours* p2 = &(geo->_ListePoint[geo->_nNbPointTotal]);
+        p2->isInfra = isInfra;  p2->isEcran = isEcran;
+        p2->x = ptB[_indexXInOut]; p2->y = ptB[_indexYInOut]; p2->z = ptB[_indexZInOut]; p2->Identifiant = geo->_nNbPointTotal;
+        p2->Identifiant = geo->_nNbPointTotal;
+        geo->_nNbPointTotal++;
+        _vectorPoint.push_back(p1);
+        _vectorPoint.push_back(p2);
+        //On ajoute une polyligne a geo:
+        geo->_ListePolylines[geo->_nNbPolylines].ajouteSegment(p1, p2);
+        geo->_nNbPolylines++;
+    }
 }
 
 void TYCalculParcours::AjouterSegmentCoupe(double* ptA, double* ptB, bool isInfra, bool isEcran)
@@ -269,9 +338,6 @@ int TYCalculParcours::Traite(
     }
 
     //3.1 Filtrage
-    //3.1.1 Filtrage sur les points
-    _geoImporterDXF->MergePointsDoubles();
-    
     //3.1.1 Filtrage sur les polylignes
     if (!_bVertical)
     {

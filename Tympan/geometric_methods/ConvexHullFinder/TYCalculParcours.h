@@ -27,6 +27,8 @@
 
 #include "TYPointParcours.h"
 #include "TYSetGeometriqueParcours.h"
+#include <vector>
+
 
 /**
  * @brief Class for computing path used by TYAcousticPathFinder
@@ -106,6 +108,9 @@ private:
     TYSetGeometriqueParcours _geoSecondePasseDroite;
     TYSetGeometriqueParcours* _geoTrajetGauche;		//!< Paths list on the left
     TYSetGeometriqueParcours* _geoTrajetDroite;		//!< Paths list on the right
+
+    std::vector<TYPointParcours*> _vectorPoint;
+
 
 };
 
