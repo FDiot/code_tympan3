@@ -66,8 +66,15 @@ void registerSegmentsFromShapes(Shape* shape, mapSegmentShapes& currentMap)
 
 }
 
-bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOuverture)
+bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOuverture, vector<bool>& isGround)
 {
+
+	// First we test is the current segment does not belong to both a construct and the ground
+	if(!p1->isSol() && !p2->isSol() && isGround[seg.first] && isGround[seg.second]){
+		return false;
+	}
+
+
     /*
      we test if p1 vs p2 angle is greater than PI/2+angleMax
      else they are considered as colinear and no diffraction cylinder is built
@@ -126,10 +133,18 @@ bool PostTreatment::constructEdge(Scene* scene)
     // Create a list of segments common to two faces
     mapSegmentShapes segmentList;
     std::vector<Shape*> *shapes = scene->getShapes();
+	std::vector<bool> isGround(scene->getVertices()->size(),false);
 
     for (unsigned int i = 0; i < shapes->size(); i++)
     {
-        registerSegmentsFromShapes(shapes->at(i), segmentList);
+		Shape * shape = shapes->at(i);
+        registerSegmentsFromShapes(shape, segmentList);
+
+		if(shape->isSol()){
+			for(unsigned int j=0;j<shape->getLocalVertices()->size();j++){
+				isGround[shape->getLocalVertices()->at(j)]=true;
+			}
+		}
     }
 
     ss << segmentList.size() << " segments ont ete enregistres." << std::endl;
@@ -144,7 +159,7 @@ bool PostTreatment::constructEdge(Scene* scene)
             std::set<segment>::iterator itset1 = validSegment.find(it->first);
             std::set<segment>::iterator itset2 = validSegment.find(std::pair<unsigned int, unsigned int>(it->first.second, it->first.first));
             decimal angleOuverture;
-            if (itset1 == validSegment.end() && itset2 == validSegment.end() && isAcceptableEdge(it->first, it->second.at(0), it->second.at(1), angleOuverture))
+            if (itset1 == validSegment.end() && itset2 == validSegment.end() && isAcceptableEdge(it->first, it->second.at(0), it->second.at(1), angleOuverture, isGround))
             {
                 validSegment.insert(it->first);
                 Cylindre* cylindre = new Cylindre(it->second.at(0), it->second.at(1), scene->getVertices(), it->first.first, it->first.second, cylinderThick);

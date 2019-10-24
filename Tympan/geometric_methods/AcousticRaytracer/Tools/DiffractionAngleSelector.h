@@ -203,6 +203,13 @@ public :
 
 		return true;
 	}
+
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
 };
 
 #endif //DIFFRACTION_ANGLE_SELECTOR

@@ -45,6 +45,8 @@ Computations and algorithms
    :maxdepth: 1
 
    meshing
+   ray_tracing_algorithm
+   accelerators
 
 Documentation
 -------------

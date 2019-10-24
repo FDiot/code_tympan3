@@ -80,6 +80,9 @@ cdef class Spectrum:
         """Convert the spectrum to a dB scale (by default: linear)"""
         return ospectre2spectrum(self.thisobj.toDB())
 
+    def to_GPhy(self):
+        return ospectre2spectrum(self.thisobj.toGPhy())
+
     @property
     def dBA(self):
         """Balanced spectrum value in DBA (for audible frequencies)"""
@@ -88,6 +91,7 @@ cdef class Spectrum:
     @property
     def dBLin(self):
         return self.thisobj.valGlobDBLin()
+
 
 
 cdef class Triangle:

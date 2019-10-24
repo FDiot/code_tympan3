@@ -134,6 +134,13 @@ public :
     */ 
     void setOperator(OPERATOR _op) { op = _op; }
 
+	/**
+	* \brief Return the class type of the selector
+	*/
+	virtual const char* getSelectorName(){
+		return typeid(this).name();
+	}
+
 protected:
     double maxLength;	//!< Maximal length criteria
     OPERATOR op;		//!< OPERATOR used (by default LESS_OR_EQUAL, which means this Selector keeps only ray with travelled distance<=maximalLength)

@@ -113,7 +113,7 @@ public:
 
         computeN2();
     }
-    /// Return the launched rays real number
+    // Return the real number of launched rays 
     unsigned int getRealNbRays() const { return _real_nb_rays; }
 
     virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul)
@@ -124,8 +124,10 @@ public:
 private :
     inline void computeN1()
     {
-        _n1 = static_cast<unsigned int>(floor(M_PI * sqrt(static_cast<decimal>(_nb_rays)) / 8. + 0.5));
-        _n1 = 2 * _n1;
+		if(_nb_rays==1)
+			_n1=1;
+		else
+			_n1 = 2 * static_cast<unsigned int>(floor(M_PI * sqrt(static_cast<decimal>(_nb_rays)) / 8. + 0.5));
     }
 
     inline void computeThetaCalcul(unsigned int i)

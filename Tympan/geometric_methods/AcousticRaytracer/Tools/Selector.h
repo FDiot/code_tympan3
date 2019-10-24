@@ -96,6 +96,8 @@ public:
     virtual void insert(T* r) { return; }
     /// Select the ray if it respects the criteria of this Selector
     virtual bool insertWithTest(T* r) { return true; }
+	// Return the class type of the selector as a string
+	virtual const char* getSelectorName(){ return typeid(this).name();}
 
 protected:
     bool deletable; //!< Flag to know if the selector may be deleted or not

@@ -31,7 +31,7 @@ TEST(test_engine, test_genray)
 	
     def_engine.setSources(&vec_source);
 	
-    int ray_counter_ini=def_engine.getRayCounter();
+    unsigned long long ray_counter_ini=def_engine.getRayCounter();
 
 	// first call of genRay --> returns a new ray pointer
     Ray* new_ray=def_engine.genRay();
