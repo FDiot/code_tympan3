@@ -146,6 +146,7 @@ cdef extern from "Tympan/models/business/acoustic/TYSourcePonctuelle.h":
 cdef extern from "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h":
     cdef cppclass TYUserSourcePonctuelle(TYSourcePonctuelle):
         TYUserSourcePonctuelle()
+        TYSpectre* getCurrentSpectre()
         void updateCurrentRegime()
 
 
@@ -188,12 +189,14 @@ cdef extern from "Tympan/models/business/infrastructure/TYMachine.h":
     cdef cppclass TYMachine(TYAcousticVolumeNode):
         TYMachine()
         vector[TYPoint] & sommets()
+        TYSpectre& getCurrentSpectre()
 
 cdef extern from "Tympan/models/business/infrastructure/TYBatiment.h":
     cdef cppclass TYBatiment(TYAcousticVolumeNode):
         TYBatiment()
         bool getIsRayonnant()
         vector[TYPoint] & sommets()
+        TYSpectre& getCurrentSpectre()
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure(TYElement):
